@@ -3,17 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package datatypes;
 
-package main.erasmus;
-
-import java.sql.*;
-import java.sql.Connection;
-
-
-public class main {
+/**
+ *
+ * @author Seers
+ */
+public class User {
     
-    public static void main(String[] args) {
-        System.out.println("Hello World!");
-    }
-
 }
