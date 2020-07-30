@@ -17,24 +17,24 @@ public class Main {
     private Auditor auditor;
     private ProgramManager programManager;
     private PrettyPrint prettyPrint;
-    
+
     public static Main createFrom(Supplier<Main> factory) {
         return factory.get();
     }
-    
+
     public static class DefaultFactory implements Supplier<Main> {
 
         @Override
         public Main get() {
             Main instance = new Main(
-                Auditor.createFrom(new Auditor.DefaultFactory()),
-                ProgramManager.createFrom(new ProgramManager.DefaultFactory()),
-                new PrettyPrint.Builder().build(),
-                EnvironmentVariables.INSTANCE);
-            
+                    Auditor.createFrom(new Auditor.DefaultFactory()),
+                    ProgramManager.createFrom(new ProgramManager.DefaultFactory()),
+                    new PrettyPrint.Builder().build(),
+                    EnvironmentVariables.INSTANCE);
+
             return instance;
         }
-        
+
     }
 
     public Main(
@@ -50,7 +50,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        
+
         Main instance = Main.createFrom(new Main.DefaultFactory());
         instance.run();
     }
@@ -62,7 +62,7 @@ public class Main {
         Report auditReport = auditor.audit();
 
         programManager.setAuditResult(auditReport);
-        programManager.startAll();
+        programManager.startRequiredProcesses();
 
         programIsActive = true;
         while (programIsActive) {
@@ -72,7 +72,7 @@ public class Main {
             programIsActive = programManager.getProgramActiveStatus();
         }
 
-        programManager.stopAll();
+        programManager.stopAllProcesses();
     }
 
 }

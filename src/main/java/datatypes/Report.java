@@ -6,10 +6,13 @@ import javautilwrappers.BasicMap;
 public class Report {
     
     private final String[] supportedFields;
-    private BasicMap<String, Object> data;
+    private final BasicMap<String, Object> data;
     
     public Report(String ... supportedFields) {
         data = new BasicMap<>();
+        for(String key:supportedFields) {
+            data.put(key, null);
+        }
         this.supportedFields = supportedFields;
     }
 

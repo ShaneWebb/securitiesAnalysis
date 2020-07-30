@@ -2,6 +2,7 @@ package javautilwrappers;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
 
 //Thin wrapper around ArrayList. 
 public class BasicArrayList<T> implements Iterable<T> {
@@ -22,6 +23,18 @@ public class BasicArrayList<T> implements Iterable<T> {
     public T get(int index) {
         return internalArrayList.get(index);
     }
+
+    @Override
+    public int hashCode() {
+        return this.internalArrayList.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.internalArrayList.equals(obj);
+    }
+    
+    
 
     @Override
     public Iterator<T> iterator() {

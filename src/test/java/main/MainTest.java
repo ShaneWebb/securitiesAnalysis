@@ -80,9 +80,9 @@ public class MainTest {
 
         instance.run();
         verify(mockAuditor).audit();
-        verify(mockProgramManager).startAll();
+        verify(mockProgramManager).startRequiredProcesses();
         verify(mockProgramManager).acceptUserInput();
-        verify(mockProgramManager).stopAll();
+        verify(mockProgramManager).stopAllProcesses();
 
     }
 
