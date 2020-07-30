@@ -40,11 +40,6 @@ public class ProgramManagerTest {
     }
 
     @Test
-    public void testSetEnvironmentVariables() {
-
-    }
-
-    @Test
     public void testSetAuditResult() {
 
     }

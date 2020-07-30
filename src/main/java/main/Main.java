@@ -1,5 +1,6 @@
 package main;
 
+import process.ProgramManager;
 import datatypes.Report;
 import io.database.audit.Auditor;
 import datatypes.printlayout.Layout;
@@ -27,7 +28,7 @@ public class Main {
         public Main get() {
             Main instance = new Main(
                 Auditor.createFrom(new Auditor.DefaultFactory()),
-                new ProgramManager(),
+                ProgramManager.createFrom(new ProgramManager.DefaultFactory()),
                 new PrettyPrint.Builder().build(),
                 EnvironmentVariables.INSTANCE);
             
@@ -60,7 +61,6 @@ public class Main {
 
         Report auditReport = auditor.audit();
 
-        programManager.setEnvironmentVariables(environmentVariables);
         programManager.setAuditResult(auditReport);
         programManager.startAll();
 

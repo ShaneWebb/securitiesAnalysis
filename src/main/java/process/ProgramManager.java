@@ -1,39 +1,54 @@
-
-package main;
+package process;
 
 import datatypes.Report;
 import datatypes.EnvironmentVariables;
+import main.Supplier;
 
 public class ProgramManager {
 
-    public ProgramManager() {
+    public static ProgramManager createFrom(DefaultFactory defaultFactory) {
+        return defaultFactory.get();
+    }
+    
+    private final EnvironmentVariables environmentVariables;
+
+    public static class DefaultFactory implements Supplier<ProgramManager> {
+
+        public DefaultFactory() {
+        }
+
+        @Override
+        public ProgramManager get() {
+            return new ProgramManager(
+                    EnvironmentVariables.INSTANCE);
+        }
     }
 
-    void setEnvironmentVariables(EnvironmentVariables environmentVariables) {
+    public ProgramManager(EnvironmentVariables environmentVariables) {
+        this.environmentVariables = environmentVariables;
+    }
+
+    public void setAuditResult(Report auditReport) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    void setAuditResult(Report auditReport) {
+    public void startAll() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    void startAll() {
+    public Report getReports() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    Report getReports() {
+    public void acceptUserInput() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    void acceptUserInput() {
+    public boolean getProgramActiveStatus() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    boolean getProgramActiveStatus() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    void stopAll() {
+    public void stopAll() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
