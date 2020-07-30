@@ -1,6 +1,6 @@
-package learner;
+package learner.java;
 
-public enum testEnums {
+public enum TestEnums {
     APPLE, ORANGE, PEAR;
     private int value;
     

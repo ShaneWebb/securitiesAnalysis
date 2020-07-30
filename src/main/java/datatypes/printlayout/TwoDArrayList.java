@@ -24,5 +24,9 @@ public class TwoDArrayList<T> extends ArrayList<ArrayList<T>>{
     public ArrayList<ArrayList<T>> getInternalArrayList() {
         return internalArrayList;
     }
+
+    public void addRow(Layout generateLayout) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

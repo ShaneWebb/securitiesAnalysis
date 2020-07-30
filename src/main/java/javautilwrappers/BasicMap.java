@@ -3,18 +3,18 @@ package javautilwrappers;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BasicMap {
-    Map<Integer, String> internalMap;
+public class BasicMap<T, U> {
+    Map<T, U> internalMap;
     
     public BasicMap(){
         internalMap = new HashMap<>();
     }
     
-    public void put(int key, String value) {
+    public void put(T key, U value) {
         internalMap.put(key, value);
     }
     
-    public String get(int key) {
+    public U get(T key) {
         return internalMap.get(key);
     }
     

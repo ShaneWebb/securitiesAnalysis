@@ -3,6 +3,7 @@ package view;
 // TODO: Finish pretty print. 
 import datatypes.printlayout.fields.LayoutField;
 import datatypes.printlayout.*;
+import main.Main;
 
 public class PrettyPrint {
 
@@ -35,10 +36,7 @@ public class PrettyPrint {
     }
 
     //TODO: Create prettyPrinter, which accepts a displayable object. 
-    public void prettyPrinter(Displayable displayableItem) {
-        Layout itemLayout = displayableItem.generateLayout();
-        StringBuilder printlnCompatibleOutput = spool(itemLayout);
-        System.out.println(printlnCompatibleOutput);
+    public void prettyPrinter(Main main) {
 
     }
 

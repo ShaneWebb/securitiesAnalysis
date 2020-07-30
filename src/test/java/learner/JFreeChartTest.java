@@ -5,13 +5,9 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import java.util.concurrent.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import main.Helper.*;
 
 // Learner tests to see how JFreeChart works on the surface.
 public class JFreeChartTest {
@@ -21,7 +17,7 @@ public class JFreeChartTest {
     }
 
     @Test
-    @Disabled
+    @Disabled("I am a learner, and take too long to run.")
     public void makePieChartTest() {
         makeExamplePieChart();
     }
@@ -56,7 +52,7 @@ public class JFreeChartTest {
         frame.pack();
         frame.setVisible(true);
         
-        int shortPauseInSeconds = 0;
+        int shortPauseInSeconds = 5;
         Helper.pause(shortPauseInSeconds);
     }
 }
