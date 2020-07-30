@@ -9,6 +9,7 @@ import io.database.manager.handler.SQLQuery;
 import datatypes.Report;
 import main.Supplier;
 
+//TODO Refactor
 public class Auditor {
 
 //<editor-fold defaultstate="collapsed" desc="Constructors/Factories">
@@ -43,9 +44,18 @@ public class Auditor {
         ManagerSpecifier localPortfolioSpecifier = new ManagerSpecifier("Local Portfolio");
         ManagerSpecifier onlinePortfolioSpecifier = new ManagerSpecifier("Online Portfolio");
         
-        ProgramExitStatus exitStatus = externalDataManager.<ProgramExitStatus>get(exitStatusSpecifier);
-        Portfolio localPortfolio = externalDataManager.<Portfolio>get(localPortfolioSpecifier);
-        Portfolio onlinePortfolio = externalDataManager.<Portfolio>get(onlinePortfolioSpecifier);
+        ProgramExitStatus exitStatus = null;
+        Portfolio localPortfolio = null;
+        Portfolio onlinePortfolio = null;
+        
+        try {
+            exitStatus = externalDataManager.<ProgramExitStatus>get(exitStatusSpecifier);
+            localPortfolio = externalDataManager.<Portfolio>get(localPortfolioSpecifier);
+            onlinePortfolio = externalDataManager.<Portfolio>get(onlinePortfolioSpecifier);
+        } catch (ExternalDataException e) {
+            composedReport.setValue("Status", "Unable to audit!");
+            return composedReport;
+        }
         
         if (exitStatus == ProgramExitStatus.CLEAN) {
             composedReport.setValue("Audit Degree", AuditDegree.QUICK);

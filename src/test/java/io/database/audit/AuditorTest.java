@@ -2,6 +2,7 @@ package io.database.audit;
 
 import datatypes.Portfolio;
 import datatypes.Report;
+import datatypes.exceptions.ExternalDataException;
 import io.database.manager.ExternalDataManager;
 import io.database.manager.ManagerSpecifier;
 import org.junit.jupiter.api.AfterEach;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+//TODO refactor for brevity and to reduce repetition. 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
 public class AuditorTest {
@@ -60,7 +62,6 @@ public class AuditorTest {
     //TODO refactor to use parametrized test.
     @Test
     public void testAuditDegreeCleanExit() throws Exception {
-        //TODO implement equals() on ManagerSpecifier
         ManagerSpecifier exitCode = new ManagerSpecifier("EXIT CODE");
         when(mockExternalDataManager.<ProgramExitStatus>get(exitCode)).
                 thenReturn(ProgramExitStatus.CLEAN);
@@ -73,7 +74,6 @@ public class AuditorTest {
 
     @Test
     public void testAuditDegreeDirtyExit() throws Exception {
-        //TODO implement equals() on ManagerSpecifier
         ManagerSpecifier exitCode = new ManagerSpecifier("EXIT CODE");
         when(mockExternalDataManager.<ProgramExitStatus>get(exitCode)).
                 thenReturn(ProgramExitStatus.UNCLEAN);
@@ -129,7 +129,7 @@ public class AuditorTest {
     }
 
     @Test
-    public void testInconsistencyReportReturn() {
+    public void testInconsistencyReportReturn() throws Exception {
         
         ManagerSpecifier exitStatusSpecifier = new ManagerSpecifier("EXIT CODE");
         ManagerSpecifier localPortfolioSpecifier = new ManagerSpecifier("Local Portfolio");
@@ -150,7 +150,24 @@ public class AuditorTest {
         Report inconsistencies = auditReport.<Report>getValueOf("Inconsistencies");
         assertNotNull(inconsistencies);
         
+    }
+    
+    @Test
+    public void testAuditFailure() throws Exception {
+        ManagerSpecifier exitStatusSpecifier = new ManagerSpecifier("EXIT CODE");
+
+        when(mockExternalDataManager.<ProgramExitStatus>get(exitStatusSpecifier)).
+                thenThrow(new ExternalDataException("Failed to access!"));
         
+        instance = new Auditor(mockExternalDataManager);
+        Report auditReport = instance.audit();
+        String auditDegree = auditReport.<String>getValueOf("Audit Degree");
+        String status = auditReport.<String>getValueOf("Status");
+        Report inconsistencies = auditReport.<Report>getValueOf("Inconsistencies");
+        
+        assertNull(inconsistencies);
+        assertNull(auditDegree);
+        assertEquals("Unable to audit!", status);
     }
 
 }

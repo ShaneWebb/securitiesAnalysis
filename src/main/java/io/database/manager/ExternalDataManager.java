@@ -7,7 +7,7 @@ import datatypes.exceptions.ExternalDataException;
 public class ExternalDataManager {
 
     //TODO: Implement. Must throw exception if the method fails to retrieve the data.
-    public <T> T get(ManagerSpecifier specifier) {
+    public <T> T get(ManagerSpecifier specifier) throws ExternalDataException {
         return null;
     }
     
