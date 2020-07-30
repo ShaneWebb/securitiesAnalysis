@@ -129,9 +129,28 @@ public class AuditorTest {
     }
 
     @Test
-    @Disabled //Need to use real Portfolio objects to meaningfully test this.
-    public void testInconsistencyReport() {
+    public void testInconsistencyReportReturn() {
+        
+        ManagerSpecifier exitStatusSpecifier = new ManagerSpecifier("EXIT CODE");
+        ManagerSpecifier localPortfolioSpecifier = new ManagerSpecifier("Local Portfolio");
+        ManagerSpecifier onlinePortfolioSpecifier = new ManagerSpecifier("Online Portfolio");
 
+        Portfolio portfolioA = new Portfolio();
+        Portfolio portFolioB = new Portfolio();
+
+        when(mockExternalDataManager.<ProgramExitStatus>get(exitStatusSpecifier)).
+                thenReturn(ProgramExitStatus.CLEAN);
+        when(mockExternalDataManager.<Portfolio>get(localPortfolioSpecifier)).
+                thenReturn(portfolioA);
+        when(mockExternalDataManager.<Portfolio>get(onlinePortfolioSpecifier)).
+                thenReturn(portFolioB);
+
+        instance = new Auditor(mockExternalDataManager);
+        Report auditReport = instance.audit();
+        Report inconsistencies = auditReport.<Report>getValueOf("Inconsistencies");
+        assertNotNull(inconsistencies);
+        
+        
     }
 
 }
