@@ -1,4 +1,3 @@
-
 package datatypes;
 
 public class Portfolio {

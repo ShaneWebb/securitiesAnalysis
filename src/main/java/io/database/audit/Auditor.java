@@ -53,7 +53,7 @@ public class Auditor {
             localPortfolio = externalDataManager.<Portfolio>get(localPortfolioSpecifier);
             onlinePortfolio = externalDataManager.<Portfolio>get(onlinePortfolioSpecifier);
         } catch (ExternalDataException e) {
-            composedReport.setValue(AuditReportFields.STATUS, "Unable to audit!");
+            composedReport.setValue(AuditReportFields.STATUS, AuditStatus.FAILED);
             return composedReport;
         }
         
@@ -65,10 +65,10 @@ public class Auditor {
         }
         
         if(localPortfolio == onlinePortfolio) {
-            composedReport.setValue(AuditReportFields.STATUS, "Consistency Check Passed!");
+            composedReport.setValue(AuditReportFields.STATUS, AuditStatus.CONSISTENT);
         }
         else {
-            composedReport.setValue(AuditReportFields.STATUS, "Consistency Check Failed!");
+            composedReport.setValue(AuditReportFields.STATUS, AuditStatus.INCONSISTENT);
             Report inconsistencies = Portfolio.differences(localPortfolio, onlinePortfolio);
             composedReport.setValue(AuditReportFields.INCONSISTENCIES, inconsistencies);
         }

@@ -98,8 +98,8 @@ public class AuditorTest {
 
         instance = new Auditor(mockExternalDataManager);
         Report auditReport = instance.audit();
-        String status = auditReport.<String>getValueOf(AuditReportFields.STATUS);
-        assertEquals("Consistency Check Passed!", status);
+        AuditStatus status = auditReport.<AuditStatus>getValueOf(AuditReportFields.STATUS);
+        assertEquals(AuditStatus.CONSISTENT, status);
     }
 
     @Test
@@ -121,8 +121,8 @@ public class AuditorTest {
 
         instance = new Auditor(mockExternalDataManager);
         Report auditReport = instance.audit();
-        String status = auditReport.<String>getValueOf(AuditReportFields.STATUS);
-        assertEquals("Consistency Check Failed!", status);
+        AuditStatus status = auditReport.<AuditStatus>getValueOf(AuditReportFields.STATUS);
+        assertEquals(AuditStatus.INCONSISTENT, status);
     }
 
     @Test
@@ -158,13 +158,13 @@ public class AuditorTest {
         
         instance = new Auditor(mockExternalDataManager);
         Report auditReport = instance.audit();
-        String auditDegree = auditReport.<String>getValueOf(AuditReportFields.DEGREE);
-        String status = auditReport.<String>getValueOf(AuditReportFields.STATUS);
+        AuditDegree auditDegree = auditReport.<AuditDegree>getValueOf(AuditReportFields.DEGREE);
+        AuditStatus status = auditReport.<AuditStatus>getValueOf(AuditReportFields.STATUS);
         Report inconsistencies = auditReport.<Report>getValueOf(AuditReportFields.INCONSISTENCIES);
         
         assertNull(inconsistencies);
         assertNull(auditDegree);
-        assertEquals("Unable to audit!", status);
+        assertEquals(AuditStatus.FAILED, status);
     }
 
 }
