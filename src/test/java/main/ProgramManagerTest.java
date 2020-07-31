@@ -2,6 +2,7 @@ package main;
 
 import datatypes.EnvironmentVariables;
 import datatypes.Report;
+import io.database.audit.AuditReportFields;
 import java.util.stream.Stream;
 import javautilwrappers.BasicArrayList;
 import org.junit.jupiter.api.AfterEach;
@@ -59,14 +60,14 @@ public class ProgramManagerTest {
 //    }
 
     private static Stream<Arguments> startRequiredProcessesArguments() {
-        Report auditFailed = new Report("Audit Degree", "Status", "Inconsistencies"); 
-        auditFailed.setValue("Status", "Unable to audit!");
+        Report auditFailed = new Report(AuditReportFields.class); 
+        auditFailed.setValue(AuditReportFields.STATUS, "Unable to audit!");
         
-        Report auditClean = new Report("Audit Degree", "Status", "Inconsistencies"); 
-        auditClean.setValue("Status", "Consistency Check Passed!");
+        Report auditClean = new Report(AuditReportFields.class); 
+        auditClean.setValue(AuditReportFields.STATUS, "Consistency Check Passed!");
         
-        Report auditUnclean = new Report("Audit Degree", "Status", "Inconsistencies"); 
-        auditUnclean.setValue("Status", "Consistency Check Failed!");
+        Report auditUnclean = new Report(AuditReportFields.class); 
+        auditUnclean.setValue(AuditReportFields.STATUS, "Consistency Check Failed!");
 
         return Stream.of(
                 Arguments.of(auditFailed, true),

@@ -15,9 +15,10 @@ public class ClassTypeTest {
     }
 
     @Test
-    @Disabled
+    //@Disabled
     public void classTypeGenericTest() {
         MyClassWrapper<Class<? extends Enum>> newWrapper = new MyClassWrapper<>(FruitEnums.class);
+        newWrapper.getMyClassField();
     }
     
     public class MyClassWrapper <E extends Class<?>> {

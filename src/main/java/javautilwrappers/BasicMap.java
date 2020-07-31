@@ -6,6 +6,13 @@ import java.util.Map;
 public class BasicMap<T, U> {
     Map<T, U> internalMap;
     
+    public BasicMap(T[] keys) {
+        internalMap = new HashMap<>();
+        for(T key: keys){
+            internalMap.put(key, null);
+        }
+    }
+    
     public BasicMap(){
         internalMap = new HashMap<>();
     }

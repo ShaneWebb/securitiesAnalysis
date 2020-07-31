@@ -41,23 +41,12 @@ public class ReportTest {
 
     @Test
     public void testGetValueOf() {
-        System.out.println("getValueOf");
-        String status = "";
-        Report instance = null;
-        Object expResult = null;
-        Object result = instance.getValueOf(status);
-        assertEquals(expResult, result);
-        fail("The test case is a prototype.");
+
     }
 
     @Test
     public void testGetFields() {
-        System.out.println("getFields");
-        Report instance = null;
-        String[] expResult = null;
-        String[] result = instance.getFields();
-        assertArrayEquals(expResult, result);
-        fail("The test case is a prototype.");
+
     }
 
 }

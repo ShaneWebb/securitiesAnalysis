@@ -5,26 +5,23 @@ import javautilwrappers.BasicMap;
 
 public class Report {
     
-    private final String[] supportedFields;
-    private final BasicMap<String, Object> data;
+    private final Enum[] supportedFields;
+    private final BasicMap<Enum, Object> data;
     
-    public Report(String ... supportedFields) {
-        data = new BasicMap<>();
-        for(String key:supportedFields) {
-            data.put(key, null);
-        }
-        this.supportedFields = supportedFields;
+    public Report(Class<? extends Enum> fieldsClass) {
+        this.supportedFields = fieldsClass.getEnumConstants();
+        data = new BasicMap<>(this.supportedFields);
     }
 
-    public <T> T getValueOf(String field) {
+    public <T> T getValueOf(Enum field) {
         return (T) data.get(field);
     }
     
-    public <T> void setValue(String field, T value) {
+    public <T> void setValue(Enum field, T value) {
         data.put(field, value);
     }
 
-    public String[] getFields() {
+    public Enum[] getFields() {
         return supportedFields;
     }
     

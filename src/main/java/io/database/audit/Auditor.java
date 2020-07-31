@@ -38,39 +38,39 @@ public class Auditor {
 //</editor-fold>
 
     public Report audit() {
-        Report composedReport = new Report("Audit Degree", "Status", "Inconsistencies");
+        Report composedReport = new Report(AuditReportFields.class);
         
         ManagerSpecifier exitStatusSpecifier = new ManagerSpecifier("EXIT CODE");
         ManagerSpecifier localPortfolioSpecifier = new ManagerSpecifier("Local Portfolio");
         ManagerSpecifier onlinePortfolioSpecifier = new ManagerSpecifier("Online Portfolio");
         
-        ProgramExitStatus exitStatus = null;
-        Portfolio localPortfolio = null;
-        Portfolio onlinePortfolio = null;
+        ProgramExitStatus exitStatus;
+        Portfolio localPortfolio;
+        Portfolio onlinePortfolio;
         
         try {
             exitStatus = externalDataManager.<ProgramExitStatus>get(exitStatusSpecifier);
             localPortfolio = externalDataManager.<Portfolio>get(localPortfolioSpecifier);
             onlinePortfolio = externalDataManager.<Portfolio>get(onlinePortfolioSpecifier);
         } catch (ExternalDataException e) {
-            composedReport.setValue("Status", "Unable to audit!");
+            composedReport.setValue(AuditReportFields.STATUS, "Unable to audit!");
             return composedReport;
         }
         
         if (exitStatus == ProgramExitStatus.CLEAN) {
-            composedReport.setValue("Audit Degree", AuditDegree.QUICK);
+            composedReport.setValue(AuditReportFields.DEGREE, AuditDegree.QUICK);
         }
         else {
-            composedReport.setValue("Audit Degree", AuditDegree.THOROUGH);
+            composedReport.setValue(AuditReportFields.DEGREE, AuditDegree.THOROUGH);
         }
         
         if(localPortfolio == onlinePortfolio) {
-            composedReport.setValue("Status", "Consistency Check Passed!");
+            composedReport.setValue(AuditReportFields.STATUS, "Consistency Check Passed!");
         }
         else {
-            composedReport.setValue("Status", "Consistency Check Failed!");
+            composedReport.setValue(AuditReportFields.STATUS, "Consistency Check Failed!");
             Report inconsistencies = Portfolio.differences(localPortfolio, onlinePortfolio);
-            composedReport.setValue("Inconsistencies", inconsistencies);
+            composedReport.setValue(AuditReportFields.INCONSISTENCIES, inconsistencies);
         }
         
         return composedReport;
