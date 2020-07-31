@@ -1,6 +1,6 @@
-package learner.java;
+package learner.java.enums;
 
-public enum TestEnums {
+public enum FruitEnums implements SpecialEnumType {
     APPLE, ORANGE, PEAR;
     private int value;
     

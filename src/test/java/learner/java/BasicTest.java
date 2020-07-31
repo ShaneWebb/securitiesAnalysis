@@ -1,5 +1,6 @@
 package learner.java;
 
+import learner.java.enums.FruitEnums;
 import main.Helper;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -141,8 +142,8 @@ public class BasicTest {
     @Test
     @Disabled
     public void enumInstancesTest() {
-        TestEnums appleInstance1 = TestEnums.APPLE;
-        TestEnums appleInstance2 = TestEnums.APPLE;
+        FruitEnums appleInstance1 = FruitEnums.APPLE;
+        FruitEnums appleInstance2 = FruitEnums.APPLE;
         
         int instanceValOne = 0;
         appleInstance1.setValue(instanceValOne);
