@@ -1,8 +1,6 @@
 package view;
 
-// TODO: Finish pretty print. 
-import datatypes.printlayout.fields.LayoutField;
-import datatypes.printlayout.*;
+import datatypes.Report;
 import main.Main;
 
 public class PrettyPrint {
@@ -36,20 +34,8 @@ public class PrettyPrint {
     }
 
     //TODO: Create prettyPrinter, which accepts a displayable object. 
-    public void prettyPrinter(Main main) {
+    public void prettyPrinter(Report report) {
 
-    }
-
-    //TODO: Implement a spooling function, which takes a layout item and then
-    //produces a single string with newline characters that can be printed as
-    //intended by the println function. 
-    private StringBuilder spool(Layout inputItem) {
-        StringBuilder result = new StringBuilder();
-        for (LayoutField primitive : inputItem) {
-            String convertedStr = primitive.convert(border, filler);
-            result.append(convertedStr);
-        }
-        return result;
     }
 
 }

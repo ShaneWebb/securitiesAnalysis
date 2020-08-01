@@ -1,6 +1,5 @@
 package datatypes;
 
-import datatypes.printlayout.Layout;
 import javautilwrappers.BasicMap;
 
 public class Report {

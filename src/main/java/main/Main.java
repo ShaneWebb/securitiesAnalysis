@@ -3,17 +3,13 @@ package main;
 import process.ProgramManager;
 import datatypes.Report;
 import io.database.audit.Auditor;
-import datatypes.printlayout.Layout;
 import view.*;
 import datatypes.*;
-import datatypes.printlayout.TwoDArrayList;
 
 public class Main {
 
     private boolean programIsActive;
-    private Report programReport;
 
-    private EnvironmentVariables environmentVariables;
     private Auditor auditor;
     private ProgramManager programManager;
     private PrettyPrint prettyPrint;
@@ -26,11 +22,11 @@ public class Main {
 
         @Override
         public Main get() {
+            EnvironmentVariables.INSTANCE.loadFromFile("environmentvariables.txt");
             Main instance = new Main(
                     Auditor.createFrom(new Auditor.DefaultFactory()),
                     ProgramManager.createFrom(new ProgramManager.DefaultFactory()),
-                    new PrettyPrint.Builder().build(),
-                    EnvironmentVariables.INSTANCE);
+                    new PrettyPrint.Builder().build());
 
             return instance;
         }
@@ -40,13 +36,11 @@ public class Main {
     public Main(
             Auditor auditor,
             ProgramManager programManager,
-            PrettyPrint prettyPrint,
-            EnvironmentVariables environmentVariables) {
+            PrettyPrint prettyPrint) {
 
         this.auditor = auditor;
         this.programManager = programManager;
         this.prettyPrint = prettyPrint;
-        this.environmentVariables = environmentVariables;
     }
 
     public static void main(String[] args) {
@@ -57,17 +51,15 @@ public class Main {
 
     public final void run() {
 
-        this.environmentVariables = EnvironmentVariables.INSTANCE;
-
         Report auditReport = auditor.audit();
 
-        programManager.setAuditResult(auditReport);
-        programManager.startRequiredProcesses();
+        programManager.setAuditReport(auditReport);
+        programManager.startAllProcesses();
 
         programIsActive = true;
         while (programIsActive) {
-            programReport = programManager.getReports();
-            prettyPrint.prettyPrinter(this);
+            Report programReport = programManager.getReports();
+            prettyPrint.prettyPrinter(programReport);
             programManager.acceptUserInput();
             programIsActive = programManager.getProgramActiveStatus();
         }

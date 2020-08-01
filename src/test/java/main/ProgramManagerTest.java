@@ -1,8 +1,10 @@
 package main;
 
+import process.SupportedProcess;
 import datatypes.EnvironmentVariables;
 import datatypes.Report;
 import io.database.audit.AuditReportFields;
+import io.database.audit.AuditStatus;
 import java.util.stream.Stream;
 import javautilwrappers.BasicArrayList;
 import org.junit.jupiter.api.AfterEach;
@@ -17,6 +19,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -31,13 +35,34 @@ public class ProgramManagerTest {
     private AutoCloseable closeable;
     private ProgramManager instance;
 
-//    @Mock
-//    myClass someClass;
+    @Mock
+    private SupportedProcess runOnStart;
+
+    @Mock
+    private SupportedProcess doNotRunOnStart;
+
     @BeforeEach
     public void setUp() {
         closeable = MockitoAnnotations.openMocks(this);
-        ProgramManager instance = 
-                ProgramManager.createFrom(new ProgramManager.DefaultFactory());
+        when(runOnStart.runsOnStart()).thenReturn(true);
+        when(doNotRunOnStart.runsOnStart()).thenReturn(false);
+        
+        instance = ProgramManager.createFrom(new TestFactory());
+    }
+
+    private class TestFactory implements Supplier<ProgramManager> {
+
+        SupportedProcess[] supportedProcessList = {
+            runOnStart,
+            doNotRunOnStart};
+  
+        @Override
+        public ProgramManager get() {
+            return new ProgramManager(
+                    EnvironmentVariables.INSTANCE,
+                    supportedProcessList);
+        }
+
     }
 
     @AfterEach
@@ -48,52 +73,35 @@ public class ProgramManagerTest {
     public ProgramManagerTest() {
     }
 
-//    @ParameterizedTest
-//    @MethodSource("startRequiredProcessesArguments")
-//    public void testStartRequiredProcesses(
-//            Report auditReport, BasicArrayList<SupportedProcess> expectedProcesses) {
-//        instance.setAuditResult(auditReport);
-//        instance.startRequiredProcesses();
-//        
-//        BasicArrayList<SupportedProcess> runningProcesses = instance.getRunning();
-//        assertEquals(expectedProcesses, runningProcesses);        
+    @Test
+    public void testStartAllProcesses() {
+        Report auditReport = new Report(AuditReportFields.class);
+        instance.setAuditReport(auditReport);
+        instance.startAllProcesses();
+        verify(runOnStart).run();
+        verify(runOnStart).setAuditReport(auditReport);
+        verify(doNotRunOnStart, never()).run();
+        verify(doNotRunOnStart, never()).setAuditReport(auditReport);
+    }
+
+//    @Test
+//    public void testGetReports() {
+//
 //    }
-
-    private static Stream<Arguments> startRequiredProcessesArguments() {
-        Report auditFailed = new Report(AuditReportFields.class); 
-        auditFailed.setValue(AuditReportFields.STATUS, "Unable to audit!");
-        
-        Report auditClean = new Report(AuditReportFields.class); 
-        auditClean.setValue(AuditReportFields.STATUS, "Consistency Check Passed!");
-        
-        Report auditUnclean = new Report(AuditReportFields.class); 
-        auditUnclean.setValue(AuditReportFields.STATUS, "Consistency Check Failed!");
-
-        return Stream.of(
-                Arguments.of(auditFailed, true),
-                Arguments.of(auditClean, true),
-                Arguments.of(auditUnclean, true)
-        );
-    }
-
-    @Test
-    public void testGetReports() {
-
-    }
-
-    @Test
-    public void testAcceptUserInput() {
-
-    }
-
-    @Test
-    public void testGetProgramActiveStatus() {
-
-    }
-
-    @Test
-    public void testStopAll() {
-
-    }
+//
+//    @Test
+//    public void testAcceptUserInput() {
+//
+//    }
+//
+//    @Test
+//    public void testGetProgramActiveStatus() {
+//
+//    }
+//
+//    @Test
+//    public void testStopAll() {
+//
+//    }
 
 }

@@ -4,8 +4,6 @@ import datatypes.Portfolio;
 import datatypes.exceptions.ExternalDataException;
 import io.database.manager.ExternalDataManager;
 import io.database.manager.ManagerSpecifier;
-import io.database.manager.handler.SQLDatabase;
-import io.database.manager.handler.SQLQuery;
 import datatypes.Report;
 import main.Supplier;
 

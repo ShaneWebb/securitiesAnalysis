@@ -9,12 +9,8 @@ public enum EnvironmentVariables {
     
     private String credentialLoadMethod;
     private String credentialFileDirectory;
-    
-    EnvironmentVariables() {
-        loadFromFile("environmentVariables.txt");
-    }
 
-    private void loadFromFile(String fileName) {
+    public void loadFromFile(String fileName) {
         BasicMap<Integer, String> tempMap = new BasicMap<>();
         try {
             BasicFileReader reader = new BasicFileReader(fileName);

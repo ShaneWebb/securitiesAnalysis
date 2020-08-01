@@ -3,7 +3,6 @@ package main;
 import process.ProgramManager;
 import datatypes.Report;
 import datatypes.EnvironmentVariables;
-import datatypes.printlayout.Layout;
 import io.database.audit.Auditor;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterEach;
@@ -50,8 +49,7 @@ public class MainTest {
             Main instance = new Main(
                 mockAuditor,
                 mockProgramManager,
-                mockPrinter,
-                EnvironmentVariables.INSTANCE);
+                mockPrinter);
             
             return instance;
         }
@@ -80,7 +78,7 @@ public class MainTest {
 
         instance.run();
         verify(mockAuditor).audit();
-        verify(mockProgramManager).startRequiredProcesses();
+        verify(mockProgramManager).startAllProcesses();
         verify(mockProgramManager).acceptUserInput();
         verify(mockProgramManager).stopAllProcesses();
 

@@ -6,34 +6,48 @@ import main.Supplier;
 
 public class ProgramManager {
 
-    public static ProgramManager createFrom(DefaultFactory defaultFactory) {
+    public static ProgramManager createFrom(Supplier<ProgramManager> defaultFactory) {
         return defaultFactory.get();
     }
-    
+
     private final EnvironmentVariables environmentVariables;
+    private final SupportedProcess[] supportedProcessList;
+    private Report auditReport;
 
     public static class DefaultFactory implements Supplier<ProgramManager> {
 
-        public DefaultFactory() {
-        }
+        //TODO: Define default set of supported processes.
+        SupportedProcess[] supportedProcessList = {
+            new SupportedProcess()
+        };
 
         @Override
         public ProgramManager get() {
             return new ProgramManager(
-                    EnvironmentVariables.INSTANCE);
+                    EnvironmentVariables.INSTANCE,
+                    supportedProcessList);
         }
     }
 
-    public ProgramManager(EnvironmentVariables environmentVariables) {
+    public ProgramManager(
+            EnvironmentVariables environmentVariables,
+            SupportedProcess[] supportedProcessList) {
+
         this.environmentVariables = environmentVariables;
+        this.supportedProcessList = supportedProcessList;
     }
 
-    public void setAuditResult(Report auditReport) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void setAuditReport(Report auditReport) {
+        this.auditReport = auditReport;
     }
 
-    public void startRequiredProcesses() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void startAllProcesses() {
+        for(SupportedProcess process: supportedProcessList) {
+            if(process.runsOnStart()) {
+                process.setAuditReport(auditReport);
+                process.run();
+            }
+        }
     }
 
     public Report getReports() {
