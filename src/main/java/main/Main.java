@@ -58,7 +58,7 @@ public class Main {
 
         programIsActive = true;
         while (programIsActive) {
-            Report programReport = programManager.getReports();
+            Report programReport = programManager.getFullReport();
             prettyPrint.prettyPrinter(programReport);
             programManager.acceptUserInput();
             programIsActive = programManager.getProgramActiveStatus();

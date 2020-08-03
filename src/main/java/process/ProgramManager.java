@@ -45,13 +45,14 @@ public class ProgramManager {
         for(SupportedProcess process: supportedProcessList) {
             if(process.runsOnStart()) {
                 process.setAuditReport(auditReport);
-                process.run();
+                process.createThread();
             }
         }
     }
 
-    public Report getReports() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Report getFullReport() {
+        Report fullReport = new Report(FullReportFields.class);
+        return fullReport;
     }
 
     public void acceptUserInput() {

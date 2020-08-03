@@ -4,20 +4,12 @@ import process.SupportedProcess;
 import datatypes.EnvironmentVariables;
 import datatypes.Report;
 import io.database.audit.AuditReportFields;
-import io.database.audit.AuditStatus;
-import java.util.stream.Stream;
-import javautilwrappers.BasicArrayList;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -26,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import process.FullReportFields;
 import process.ProgramManager;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,18 +37,19 @@ public class ProgramManagerTest {
     @BeforeEach
     public void setUp() {
         closeable = MockitoAnnotations.openMocks(this);
-        when(runOnStart.runsOnStart()).thenReturn(true);
-        when(doNotRunOnStart.runsOnStart()).thenReturn(false);
-        
-        instance = ProgramManager.createFrom(new TestFactory());
+    }
+
+    @AfterEach
+    public void tearDown() throws Exception {
+        closeable.close();
     }
 
     private class TestFactory implements Supplier<ProgramManager> {
 
-        SupportedProcess[] supportedProcessList = {
+        private final SupportedProcess[] supportedProcessList = {
             runOnStart,
             doNotRunOnStart};
-  
+
         @Override
         public ProgramManager get() {
             return new ProgramManager(
@@ -65,29 +59,36 @@ public class ProgramManagerTest {
 
     }
 
-    @AfterEach
-    public void tearDown() throws Exception {
-        closeable.close();
-    }
-
     public ProgramManagerTest() {
     }
 
     @Test
     public void testStartAllProcesses() {
+        when(runOnStart.runsOnStart()).thenReturn(true);
+        when(doNotRunOnStart.runsOnStart()).thenReturn(false);
+        instance = ProgramManager.createFrom(new TestFactory());
         Report auditReport = new Report(AuditReportFields.class);
         instance.setAuditReport(auditReport);
+        
         instance.startAllProcesses();
-        verify(runOnStart).run();
+        
+        verify(runOnStart).createThread();
         verify(runOnStart).setAuditReport(auditReport);
-        verify(doNotRunOnStart, never()).run();
+        verify(doNotRunOnStart, never()).createThread();
         verify(doNotRunOnStart, never()).setAuditReport(auditReport);
     }
 
-//    @Test
-//    public void testGetReports() {
-//
-//    }
+    @Test //Must return a condensed, holistic report.
+    public void testGetFullReport() {
+        instance = ProgramManager.createFrom(new TestFactory());
+        Report auditReport = new Report(AuditReportFields.class);
+        instance.setAuditReport(auditReport);
+        
+        instance.startAllProcesses();
+        
+        Report fullReport = instance.getFullReport();
+        assertNotNull(fullReport);
+    }
 //
 //    @Test
 //    public void testAcceptUserInput() {

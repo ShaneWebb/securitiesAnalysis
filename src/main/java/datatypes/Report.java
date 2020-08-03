@@ -4,12 +4,17 @@ import javautilwrappers.BasicMap;
 
 public class Report {
     
-    private final Enum[] supportedFields;
+    private final Enum[] fields;
     private final BasicMap<Enum, Object> data;
     
+    public Report() {
+        fields = null;
+        data = null;
+    }
+    
     public Report(Class<? extends Enum> fieldsClass) {
-        this.supportedFields = fieldsClass.getEnumConstants();
-        data = new BasicMap<>(this.supportedFields);
+        this.fields = fieldsClass.getEnumConstants();
+        data = new BasicMap<>(this.fields);
     }
 
     public <T> T getValueOf(Enum field) {
@@ -21,7 +26,7 @@ public class Report {
     }
 
     public Enum[] getFields() {
-        return supportedFields;
+        return fields;
     }
     
 }

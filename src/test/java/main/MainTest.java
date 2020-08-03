@@ -63,7 +63,7 @@ public class MainTest {
 
         when(mockAuditor.audit()).thenReturn(mockReport);
         when(mockProgramManager.getProgramActiveStatus()).thenReturn(false);
-        when(mockProgramManager.getReports()).thenReturn(mockProgramStatus);
+        when(mockProgramManager.getFullReport()).thenReturn(mockProgramStatus);
 
     }
 
