@@ -13,6 +13,7 @@ public class ProgramManager {
     private final EnvironmentVariables environmentVariables;
     private final SupportedProcess[] supportedProcessList;
     private Report auditReport;
+    private boolean programIsActive;
 
     public static class DefaultFactory implements Supplier<ProgramManager> {
 
@@ -37,13 +38,21 @@ public class ProgramManager {
         this.supportedProcessList = supportedProcessList;
     }
 
+    public synchronized void setProgramActiveStatus(boolean programIsActive) {
+        this.programIsActive = programIsActive;
+    }
+
+    public synchronized boolean getProgramActiveStatus() {
+        return this.programIsActive;
+    }
+
     public void setAuditReport(Report auditReport) {
         this.auditReport = auditReport;
     }
 
     public void startAllProcesses() {
-        for(SupportedProcess process: supportedProcessList) {
-            if(process.runsOnStart()) {
+        for (SupportedProcess process : supportedProcessList) {
+            if (process.runsOnStart()) {
                 process.setAuditReport(auditReport);
                 process.createThread();
             }
@@ -59,12 +68,10 @@ public class ProgramManager {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public boolean getProgramActiveStatus() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public void stopAllProcesses() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for(SupportedProcess process: supportedProcessList){
+            process.stopThreads();
+        }
     }
 
 }

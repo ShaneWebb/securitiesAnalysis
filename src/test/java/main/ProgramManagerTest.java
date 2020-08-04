@@ -6,7 +6,9 @@ import datatypes.Report;
 import io.database.audit.AuditReportFields;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -69,9 +71,9 @@ public class ProgramManagerTest {
         instance = ProgramManager.createFrom(new TestFactory());
         Report auditReport = new Report(AuditReportFields.class);
         instance.setAuditReport(auditReport);
-        
+
         instance.startAllProcesses();
-        
+
         verify(runOnStart).createThread();
         verify(runOnStart).setAuditReport(auditReport);
         verify(doNotRunOnStart, never()).createThread();
@@ -83,26 +85,51 @@ public class ProgramManagerTest {
         instance = ProgramManager.createFrom(new TestFactory());
         Report auditReport = new Report(AuditReportFields.class);
         instance.setAuditReport(auditReport);
-        
+
         instance.startAllProcesses();
-        
+
         Report fullReport = instance.getFullReport();
         assertNotNull(fullReport);
     }
-//
+
+    //Note: This should be a part of the acceptance test.
 //    @Test
 //    public void testAcceptUserInput() {
-//
+//        
 //    }
-//
-//    @Test
-//    public void testGetProgramActiveStatus() {
-//
-//    }
-//
-//    @Test
-//    public void testStopAll() {
-//
-//    }
+    
+    @Test
+    public void testGetProgramActiveStatus() {
+        instance = ProgramManager.createFrom(new TestFactory());
+        Report auditReport = new Report(AuditReportFields.class);
+        instance.setAuditReport(auditReport);
+
+        instance.startAllProcesses();
+        
+        Boolean programIsActive;
+        instance.setProgramActiveStatus(false);
+        programIsActive = instance.getProgramActiveStatus();
+        assertFalse(programIsActive);
+        
+        instance.setProgramActiveStatus(true);
+        programIsActive = instance.getProgramActiveStatus();
+        assertTrue(programIsActive);
+        
+    }
+
+    @Test
+    public void testStopAll() {
+        
+        instance = ProgramManager.createFrom(new TestFactory());
+        Report auditReport = new Report(AuditReportFields.class);
+        instance.setAuditReport(auditReport);
+
+        instance.startAllProcesses();
+        instance.stopAllProcesses();
+        
+        verify(runOnStart).stopThreads();
+        verify(runOnStart).stopThreads();
+        
+    }
 
 }

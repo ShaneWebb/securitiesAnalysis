@@ -8,8 +8,6 @@ import datatypes.*;
 
 public class Main {
 
-    private boolean programIsActive;
-
     private Auditor auditor;
     private ProgramManager programManager;
     private PrettyPrint prettyPrint;
@@ -56,7 +54,7 @@ public class Main {
         programManager.setAuditReport(auditReport);
         programManager.startAllProcesses();
 
-        programIsActive = true;
+        Boolean programIsActive = true;
         while (programIsActive) {
             Report programReport = programManager.getFullReport();
             prettyPrint.prettyPrinter(programReport);

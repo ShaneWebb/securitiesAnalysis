@@ -16,4 +16,8 @@ public class SupportedProcess {
     public void createThread() {
         
     }
+
+    public void stopThreads() {
+        
+    }
 }
