@@ -8,9 +8,9 @@ import datatypes.*;
 
 public class Main {
 
-    private Auditor auditor;
-    private ProgramManager programManager;
-    private PrettyPrint prettyPrint;
+    private final Auditor auditor;
+    private final ProgramManager programManager;
+    private final PrettyPrint prettyPrint;
 
     public static Main createFrom(Supplier<Main> factory) {
         return factory.get();
@@ -42,15 +42,12 @@ public class Main {
     }
 
     public static void main(String[] args) {
-
         Main instance = Main.createFrom(new Main.DefaultFactory());
         instance.run();
     }
 
     public final void run() {
-
         Report auditReport = auditor.audit();
-
         programManager.setAuditReport(auditReport);
         programManager.startAllProcesses();
 
@@ -61,7 +58,6 @@ public class Main {
             programManager.acceptUserInput();
             programIsActive = programManager.getProgramActiveStatus();
         }
-
         programManager.stopAllProcesses();
     }
 

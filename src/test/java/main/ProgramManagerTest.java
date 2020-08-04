@@ -1,11 +1,11 @@
 package main;
 
+import io.console.ArgParseWrapper;
 import process.SupportedProcess;
 import datatypes.EnvironmentVariables;
 import datatypes.Report;
 import io.database.audit.AuditReportFields;
 import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,7 +20,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import process.FullReportFields;
 import process.ProgramManager;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +34,9 @@ public class ProgramManagerTest {
 
     @Mock
     private SupportedProcess doNotRunOnStart;
+    
+    @Mock
+    private ArgParseWrapper argParser;
 
     @BeforeEach
     public void setUp() {
@@ -56,7 +58,8 @@ public class ProgramManagerTest {
         public ProgramManager get() {
             return new ProgramManager(
                     EnvironmentVariables.INSTANCE,
-                    supportedProcessList);
+                    supportedProcessList,
+                    argParser);
         }
 
     }
@@ -92,11 +95,16 @@ public class ProgramManagerTest {
         assertNotNull(fullReport);
     }
 
-    //Note: This should be a part of the acceptance test.
-//    @Test
-//    public void testAcceptUserInput() {
-//        
-//    }
+
+    @Test //Needs to call the command line argument parser dependency. 
+    public void testAcceptUserInput() {
+        instance = ProgramManager.createFrom(new TestFactory());
+        Report auditReport = new Report(AuditReportFields.class);
+        instance.setAuditReport(auditReport);
+        instance.startAllProcesses();
+        instance.acceptUserInput();
+        verify(argParser).readConsole();
+    }
     
     @Test
     public void testGetProgramActiveStatus() {
@@ -105,31 +113,31 @@ public class ProgramManagerTest {
         instance.setAuditReport(auditReport);
 
         instance.startAllProcesses();
-        
+
         Boolean programIsActive;
         instance.setProgramActiveStatus(false);
         programIsActive = instance.getProgramActiveStatus();
         assertFalse(programIsActive);
-        
+
         instance.setProgramActiveStatus(true);
         programIsActive = instance.getProgramActiveStatus();
         assertTrue(programIsActive);
-        
+
     }
 
     @Test
     public void testStopAll() {
-        
+
         instance = ProgramManager.createFrom(new TestFactory());
         Report auditReport = new Report(AuditReportFields.class);
         instance.setAuditReport(auditReport);
 
         instance.startAllProcesses();
         instance.stopAllProcesses();
-        
-        verify(runOnStart).stopThreads();
-        verify(runOnStart).stopThreads();
-        
+
+        verify(runOnStart).stopAllThreads();
+        verify(runOnStart).stopAllThreads();
+
     }
 
 }

@@ -2,22 +2,14 @@ package process;
 
 import datatypes.Report;
 
-public class SupportedProcess {
-    private boolean runOnStart;
+public interface SupportedProcess {
+  
+    public boolean runsOnStart();
+
+    public void setAuditReport(Report auditReport);
+
+    public void createThread();
+
+    public void stopAllThreads();
     
-    public boolean runsOnStart() {
-        return runOnStart;
-    }
-
-    public void setAuditReport(Report auditReport) {
-        
-    }
-
-    public void createThread() {
-        
-    }
-
-    public void stopThreads() {
-        
-    }
 }

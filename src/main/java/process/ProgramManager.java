@@ -2,6 +2,7 @@ package process;
 
 import datatypes.Report;
 import datatypes.EnvironmentVariables;
+import io.console.ArgParseWrapper;
 import main.Supplier;
 
 public class ProgramManager {
@@ -12,30 +13,34 @@ public class ProgramManager {
 
     private final EnvironmentVariables environmentVariables;
     private final SupportedProcess[] supportedProcessList;
+    private final ArgParseWrapper argParser;
     private Report auditReport;
+    
     private boolean programIsActive;
 
     public static class DefaultFactory implements Supplier<ProgramManager> {
 
         //TODO: Define default set of supported processes.
         SupportedProcess[] supportedProcessList = {
-            new SupportedProcess()
         };
 
         @Override
         public ProgramManager get() {
             return new ProgramManager(
                     EnvironmentVariables.INSTANCE,
-                    supportedProcessList);
+                    supportedProcessList,
+                    new ArgParseWrapper());
         }
     }
 
     public ProgramManager(
             EnvironmentVariables environmentVariables,
-            SupportedProcess[] supportedProcessList) {
+            SupportedProcess[] supportedProcessList,
+            ArgParseWrapper argParser) {
 
         this.environmentVariables = environmentVariables;
         this.supportedProcessList = supportedProcessList;
+        this.argParser = argParser;
     }
 
     public synchronized void setProgramActiveStatus(boolean programIsActive) {
@@ -65,12 +70,12 @@ public class ProgramManager {
     }
 
     public void acceptUserInput() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        argParser.readConsole();
     }
 
     public void stopAllProcesses() {
         for(SupportedProcess process: supportedProcessList){
-            process.stopThreads();
+            process.stopAllThreads();
         }
     }
 
