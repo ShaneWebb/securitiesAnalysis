@@ -41,6 +41,7 @@ public class ProgramManager {
         this.environmentVariables = environmentVariables;
         this.supportedProcessList = supportedProcessList;
         this.argParser = argParser;
+        this.programIsActive = true;
     }
 
     public synchronized void setProgramActiveStatus(boolean programIsActive) {
@@ -70,6 +71,8 @@ public class ProgramManager {
     }
 
     public void acceptUserInput() {
+        //TODO: Implement readConsole to more appropriately set program state.
+        programIsActive = false;
         argParser.readConsole();
     }
 

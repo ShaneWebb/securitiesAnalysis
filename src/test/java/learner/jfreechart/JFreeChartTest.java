@@ -1,4 +1,4 @@
-package learner;
+package learner.jfreechart;
 
 import main.Helper;
 import org.jfree.chart.ChartFactory;
