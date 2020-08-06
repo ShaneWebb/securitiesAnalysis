@@ -70,10 +70,15 @@ public class ProgramManager {
         return fullReport;
     }
 
-    public void acceptUserInput() {
+    //What to do and how to do it.
+    public void runUserInputCommand() {
         //TODO: Implement readConsole to more appropriately set program state.
         programIsActive = false;
-        argParser.readConsole();
+
+        //String userInputCommand = System.in.toString();
+        //SupportedProcess process = argParser.formProcess(userInputCommand);
+        //process.execute();
+        
     }
 
     public void stopAllProcesses() {

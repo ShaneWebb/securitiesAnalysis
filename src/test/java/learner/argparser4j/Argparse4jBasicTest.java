@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import javautilwrappers.BasicArrayList;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -17,7 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class Argparse4jTest {
+public class Argparse4jBasicTest {
 
     private static interface Accumulate {
         int accumulate(Collection<Integer> ints);
@@ -54,7 +55,7 @@ public class Argparse4jTest {
     @Test
     public void example() {
         int returnMax = argParseAccumulate("1", "2", "3", "4");
-        int returnSum = argParseAccumulate("1", "2", "3", "4", "--sum");
+        int returnSum = argParseAccumulate("--sum", "1", "2", "3", "4");
         assertEquals(4, returnMax);
         assertEquals(10, returnSum);
         // argParseAccumulate("--h");

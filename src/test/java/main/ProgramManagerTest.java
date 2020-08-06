@@ -97,13 +97,13 @@ public class ProgramManagerTest {
 
 
     @Test //Needs to call the command line argument parser dependency. 
-    public void testAcceptUserInput() {
+    public void testRunUserInputCommand() {
         instance = ProgramManager.createFrom(new TestFactory());
         Report auditReport = new Report(AuditReportFields.class);
         instance.setAuditReport(auditReport);
         instance.startAllProcesses();
-        instance.acceptUserInput();
-        verify(argParser).readConsole();
+        instance.runUserInputCommand();
+        //verify(argParser).readConsole();
     }
     
     @Test

@@ -79,7 +79,7 @@ public class MainTest {
         instance.run();
         verify(mockAuditor).audit();
         verify(mockProgramManager).startAllProcesses();
-        verify(mockProgramManager).acceptUserInput();
+        verify(mockProgramManager).runUserInputCommand();
         verify(mockProgramManager).stopAllProcesses();
 
     }

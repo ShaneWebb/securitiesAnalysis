@@ -55,7 +55,7 @@ public class Main {
         while (programIsActive) {
             Report programReport = programManager.getFullReport();
             prettyPrint.prettyPrinter(programReport);
-            programManager.acceptUserInput();
+            programManager.runUserInputCommand();
             programIsActive = programManager.getProgramActiveStatus();
         }
         programManager.stopAllProcesses();
