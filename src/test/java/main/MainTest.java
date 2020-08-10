@@ -4,6 +4,9 @@ import process.ProgramManager;
 import datatypes.Report;
 import datatypes.EnvironmentVariables;
 import io.database.audit.Auditor;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +30,7 @@ public class MainTest {
 
     private AutoCloseable closeable;
     private Main instance;
+    private String inputCommand;
 
     @Mock
     private Auditor mockAuditor;
@@ -49,7 +53,8 @@ public class MainTest {
             Main instance = new Main(
                 mockAuditor,
                 mockProgramManager,
-                mockPrinter);
+                mockPrinter,
+                new Scanner(System.in));
             
             return instance;
         }
@@ -58,6 +63,11 @@ public class MainTest {
 
     @BeforeEach
     public void openMocks() {
+        
+        inputCommand = "Example Command (Does not run)";
+        InputStream in = new ByteArrayInputStream(inputCommand.getBytes());
+        System.setIn(in);
+        
         closeable = MockitoAnnotations.openMocks(this);
         instance = Main.createFrom(new TestingFactoryMain());
 
@@ -75,18 +85,12 @@ public class MainTest {
     @Test
     @Timeout(value = 50, unit = TimeUnit.MILLISECONDS)
     public void programStateTest() {
-
+        
         instance.run();
         verify(mockAuditor).audit();
         verify(mockProgramManager).startAllProcesses();
-        verify(mockProgramManager).runUserInputCommand();
+        verify(mockProgramManager).runUserInputCommand(inputCommand);
         verify(mockProgramManager).stopAllProcesses();
-
-    }
-
-    @Test
-    @Disabled //TODO: Finish me later
-    public void generateLayoutTest() {
 
     }
 

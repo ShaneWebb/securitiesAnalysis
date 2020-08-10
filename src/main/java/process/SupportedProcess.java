@@ -1,6 +1,7 @@
 package process;
 
 import datatypes.Report;
+import io.console.ArgumentParserWrapper;
 
 public interface SupportedProcess {
   
@@ -11,5 +12,7 @@ public interface SupportedProcess {
     public void createThread();
 
     public void stopAllThreads();
+
+    public void execute();
     
 }

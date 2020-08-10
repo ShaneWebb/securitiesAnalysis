@@ -13,22 +13,6 @@ public class SupportedProcessTest {
     public SupportedProcessTest() {
     }
 
-    @BeforeAll
-    public static void setUpClass() {
-    }
-
-    @AfterAll
-    public static void tearDownClass() {
-    }
-
-    @BeforeEach
-    public void setUp() {
-    }
-
-    @AfterEach
-    public void tearDown() {
-    }
-
     @Test
     public void testRunsOnStart() {
 
@@ -49,20 +33,14 @@ public class SupportedProcessTest {
 
     }
 
-    public class SupportedProcessImpl implements SupportedProcess {
+    @Test
+    public void testConfigure() {
+        
+    }
 
-        public boolean runsOnStart() {
-            return false;
-        }
+    @Test
+    public void testExecute() {
 
-        public void setAuditReport(Report auditReport) {
-        }
-
-        public void createThread() {
-        }
-
-        public void stopAllThreads() {
-        }
     }
 
 }

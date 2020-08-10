@@ -2,7 +2,7 @@ package process;
 
 import datatypes.Report;
 import datatypes.EnvironmentVariables;
-import io.console.ArgParseWrapper;
+import io.console.ArgumentParserWrapper;
 import main.Supplier;
 
 public class ProgramManager {
@@ -13,30 +13,29 @@ public class ProgramManager {
 
     private final EnvironmentVariables environmentVariables;
     private final SupportedProcess[] supportedProcessList;
-    private final ArgParseWrapper argParser;
+    private final ArgumentParserWrapper argParser;
     private Report auditReport;
-    
+
     private boolean programIsActive;
 
     public static class DefaultFactory implements Supplier<ProgramManager> {
 
         //TODO: Define default set of supported processes.
-        SupportedProcess[] supportedProcessList = {
-        };
+        SupportedProcess[] supportedProcessList = {};
 
         @Override
         public ProgramManager get() {
             return new ProgramManager(
                     EnvironmentVariables.INSTANCE,
                     supportedProcessList,
-                    new ArgParseWrapper());
+                    new ArgumentParserWrapper("Erasmus", "Main program help"));
         }
     }
 
     public ProgramManager(
             EnvironmentVariables environmentVariables,
             SupportedProcess[] supportedProcessList,
-            ArgParseWrapper argParser) {
+            ArgumentParserWrapper argParser) {
 
         this.environmentVariables = environmentVariables;
         this.supportedProcessList = supportedProcessList;
@@ -71,18 +70,23 @@ public class ProgramManager {
     }
 
     //What to do and how to do it.
-    public void runUserInputCommand() {
+    public void runUserInputCommand(String inputCommand) {
         //TODO: Implement readConsole to more appropriately set program state.
         programIsActive = false;
 
-        //String userInputCommand = System.in.toString();
-        //SupportedProcess process = argParser.formProcess(userInputCommand);
-        //process.execute();
-        
+        try {
+            String[] inputCommandParsed = inputCommand.split(" ");
+            SupportedProcess preparedProcess
+                    = argParser.getPreparedProcess(inputCommandParsed);
+            preparedProcess.execute();
+        } catch (IllegalArgumentException e) {
+            //TODO: Log perhaps?
+        }
+
     }
 
     public void stopAllProcesses() {
-        for(SupportedProcess process: supportedProcessList){
+        for (SupportedProcess process : supportedProcessList) {
             process.stopAllThreads();
         }
     }

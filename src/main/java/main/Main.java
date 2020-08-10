@@ -5,12 +5,14 @@ import datatypes.Report;
 import io.database.audit.Auditor;
 import view.*;
 import datatypes.*;
+import java.util.Scanner;
 
 public class Main {
 
     private final Auditor auditor;
     private final ProgramManager programManager;
     private final PrettyPrint prettyPrint;
+    private final Scanner scanner;
 
     public static Main createFrom(Supplier<Main> factory) {
         return factory.get();
@@ -24,7 +26,8 @@ public class Main {
             Main instance = new Main(
                     Auditor.createFrom(new Auditor.DefaultFactory()),
                     ProgramManager.createFrom(new ProgramManager.DefaultFactory()),
-                    new PrettyPrint.Builder().build());
+                    new PrettyPrint.Builder().build(),
+                    new Scanner(System.in));
 
             return instance;
         }
@@ -34,11 +37,13 @@ public class Main {
     public Main(
             Auditor auditor,
             ProgramManager programManager,
-            PrettyPrint prettyPrint) {
+            PrettyPrint prettyPrint,
+            Scanner scanner) {
 
         this.auditor = auditor;
         this.programManager = programManager;
         this.prettyPrint = prettyPrint;
+        this.scanner = scanner;
     }
 
     public static void main(String[] args) {
@@ -55,7 +60,7 @@ public class Main {
         while (programIsActive) {
             Report programReport = programManager.getFullReport();
             prettyPrint.prettyPrinter(programReport);
-            programManager.runUserInputCommand();
+            programManager.runUserInputCommand(scanner.nextLine());
             programIsActive = programManager.getProgramActiveStatus();
         }
         programManager.stopAllProcesses();
