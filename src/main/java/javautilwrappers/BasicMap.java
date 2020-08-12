@@ -13,6 +13,10 @@ public class BasicMap<T, U> {
         }
     }
     
+    public BasicMap(Map map) {
+        internalMap = new HashMap<>(map);
+    }
+    
     public BasicMap(){
         internalMap = new HashMap<>();
     }

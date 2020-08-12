@@ -2,6 +2,7 @@ package process;
 
 import datatypes.Report;
 import io.console.ArgumentParserWrapper;
+import javautilwrappers.BasicMap;
 
 public interface SupportedProcess {
   
@@ -14,5 +15,7 @@ public interface SupportedProcess {
     public void stopAllThreads();
 
     public void execute();
+
+    public void setArgs(BasicMap<String, Object> parsedArgs);
     
 }

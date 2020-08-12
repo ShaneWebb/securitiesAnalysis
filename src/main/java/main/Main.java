@@ -60,8 +60,13 @@ public class Main {
         while (programIsActive) {
             Report programReport = programManager.getFullReport();
             prettyPrint.prettyPrinter(programReport);
-            programManager.runUserInputCommand(scanner.nextLine());
-            programIsActive = programManager.getProgramActiveStatus();
+            if (scanner.hasNext()) {
+                programManager.runUserInputCommand(scanner.nextLine());
+            }
+            else {
+                programManager.runUserInputCommand(null);
+            }
+            programIsActive = ProgramManager.getProgramActiveStatus();
         }
         programManager.stopAllProcesses();
     }

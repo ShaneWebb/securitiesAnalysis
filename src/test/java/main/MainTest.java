@@ -72,7 +72,6 @@ public class MainTest {
         instance = Main.createFrom(new TestingFactoryMain());
 
         when(mockAuditor.audit()).thenReturn(mockReport);
-        when(mockProgramManager.getProgramActiveStatus()).thenReturn(false);
         when(mockProgramManager.getFullReport()).thenReturn(mockProgramStatus);
 
     }

@@ -3,6 +3,8 @@ package process;
 import datatypes.Report;
 import datatypes.EnvironmentVariables;
 import io.console.ArgumentParserWrapper;
+import io.console.SubparserWrapper;
+import javautilwrappers.BasicMap;
 import main.Supplier;
 
 public class ProgramManager {
@@ -11,24 +13,50 @@ public class ProgramManager {
         return defaultFactory.get();
     }
 
+    /**
+     * TODO: Refactor to only be dependent on ArgumentParserWrapper. The startup
+     * procedure should instead call a command, not processes directly.
+     *
+     */
     private final EnvironmentVariables environmentVariables;
     private final SupportedProcess[] supportedProcessList;
     private final ArgumentParserWrapper argParser;
     private Report auditReport;
 
-    private boolean programIsActive;
+    private static boolean programIsActive = false;
 
     public static class DefaultFactory implements Supplier<ProgramManager> {
 
-        //TODO: Define default set of supported processes.
-        SupportedProcess[] supportedProcessList = {};
+        private final SupportedProcess[] supportedProcessList;
+        private final ArgumentParserWrapper argParser;
+
+        public DefaultFactory() {
+            SupportedProcess plotter = new Plotter();
+            SupportedProcess stopper = new Stopper();
+
+            supportedProcessList = new SupportedProcess[]{
+                plotter,
+                stopper
+            };
+
+            argParser = new ArgumentParserWrapper("Erasmus", "Main program help");
+            
+            SubparserWrapper stop = argParser.addParser("Stop", "Terminate Erasmus");
+            stop.setDefault("func", stopper);
+
+            SubparserWrapper plot = argParser.addParser("Plot", "Graph Data");
+            plot.setDefault("func", plotter);
+//            plot.addArgument("--MovingAvg").
+//                .
+        }
 
         @Override
         public ProgramManager get() {
             return new ProgramManager(
                     EnvironmentVariables.INSTANCE,
                     supportedProcessList,
-                    new ArgumentParserWrapper("Erasmus", "Main program help"));
+                    argParser
+            );
         }
     }
 
@@ -40,15 +68,15 @@ public class ProgramManager {
         this.environmentVariables = environmentVariables;
         this.supportedProcessList = supportedProcessList;
         this.argParser = argParser;
-        this.programIsActive = true;
+        ProgramManager.programIsActive = true;
     }
 
-    public synchronized void setProgramActiveStatus(boolean programIsActive) {
-        this.programIsActive = programIsActive;
+    public static synchronized void setProgramActiveStatus(boolean programIsActive) {
+        ProgramManager.programIsActive = programIsActive;
     }
 
-    public synchronized boolean getProgramActiveStatus() {
-        return this.programIsActive;
+    public static synchronized boolean getProgramActiveStatus() {
+        return ProgramManager.programIsActive;
     }
 
     public void setAuditReport(Report auditReport) {
@@ -71,16 +99,16 @@ public class ProgramManager {
 
     //What to do and how to do it.
     public void runUserInputCommand(String inputCommand) {
-        //TODO: Implement readConsole to more appropriately set program state.
-        programIsActive = false;
-
         try {
             String[] inputCommandParsed = inputCommand.split(" ");
-            SupportedProcess preparedProcess
-                    = argParser.getPreparedProcess(inputCommandParsed);
-            preparedProcess.execute();
-        } catch (IllegalArgumentException e) {
-            //TODO: Log perhaps?
+            BasicMap<String, Object> parsedArgs
+                    = argParser.parseArgs(inputCommandParsed);
+            SupportedProcess process
+                    = (SupportedProcess) parsedArgs.get("func");
+            process.setArgs(parsedArgs);
+            process.execute();
+        } catch (IllegalArgumentException | NullPointerException e) {
+            //Does not need to do anything for now.
         }
 
     }

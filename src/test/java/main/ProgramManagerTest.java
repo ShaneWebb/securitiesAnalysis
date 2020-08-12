@@ -12,24 +12,19 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.mockito.stubbing.Answer;
 import process.ProgramManager;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,9 +37,6 @@ public class ProgramManagerTest {
 
     @Mock
     private SupportedProcess runOnStart, doNotRunOnStart, processOne, processTwo;
-
-    @Mock
-    private ArgumentParserWrapper argparser;
 
     @BeforeEach
     public void setUp() {
@@ -176,7 +168,8 @@ public class ProgramManagerTest {
                 Arguments.of("CommandTwo", "two"),
                 Arguments.of("Purposely!@#$ invalid command", "none"),
                 Arguments.of("", "none"),
-                Arguments.of(" ", "none")
+                Arguments.of(" ", "none"),
+                Arguments.of(null, "none")
         );
     }
 
