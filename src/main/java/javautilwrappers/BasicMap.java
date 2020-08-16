@@ -3,12 +3,12 @@ package javautilwrappers;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BasicMap<T, U> {
-    Map<T, U> internalMap;
+public class BasicMap<K, V> {
+    Map<K, V> internalMap;
     
-    public BasicMap(T[] keys) {
+    public BasicMap(K[] keys) {
         internalMap = new HashMap<>();
-        for(T key: keys){
+        for(K key: keys){
             internalMap.put(key, null);
         }
     }
@@ -21,11 +21,11 @@ public class BasicMap<T, U> {
         internalMap = new HashMap<>();
     }
     
-    public void put(T key, U value) {
-        internalMap.put(key, value);
+    public V put(K key, V value) {
+        return internalMap.put(key, value);
     }
     
-    public U get(T key) {
+    public V get(K key) {
         return internalMap.get(key);
     }
     

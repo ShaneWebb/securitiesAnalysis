@@ -1,7 +1,5 @@
 package io.console;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javautilwrappers.BasicMap;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -23,16 +21,6 @@ public class ArgumentParserWrapper {
     public SubparserWrapper addParser(String commandName, String helpText) {
         Subparser internalSubparser = internalSubParsers.addParser(commandName).help(helpText);
         return new SubparserWrapper(internalSubparser);
-    }
-
-    public <T> T get(String[] split) {
-        try {
-            Namespace result = internalParser.parseArgs(split);
-            return result.get("func");
-        } 
-        catch (ArgumentParserException ex) {
-            throw new IllegalArgumentException();
-        }
     }
 
     public BasicMap<String, Object> parseArgs(String[] inputCommandParsed) throws IllegalArgumentException {
