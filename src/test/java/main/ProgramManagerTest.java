@@ -34,8 +34,7 @@ public class ProgramManagerTest {
 
     private AutoCloseable closeable;
     private ProgramManager instance;
-    private ArgumentParserWrapper argParser;
-
+    
     @Mock
     private SupportedProcess runOnStart, doNotRunOnStart, processOne, processTwo;
 
@@ -52,11 +51,13 @@ public class ProgramManagerTest {
     private class TestFactory implements Supplier<ProgramManager> {
 
         private final BasicMap<String, SupportedProcess> supportedProcesses;
+        private final ArgumentParserWrapper argParser;
 
         TestFactory() {
             supportedProcesses = new BasicMap<>();
             supportedProcesses.put("runonstart", runOnStart);
             supportedProcesses.put("doNotRunOnStart", doNotRunOnStart);
+            argParser = new ArgumentParserWrapper("Test", "Test program help");
         }
 
         @Override

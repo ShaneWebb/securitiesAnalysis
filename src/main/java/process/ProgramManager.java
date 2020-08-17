@@ -30,21 +30,17 @@ public class ProgramManager {
         private final BasicMap<String, SupportedProcess> supportedProcesses;
         private final ArgumentParserWrapper argParser;
 
-        public DefaultFactory() {
+        public DefaultFactory() {            
+            
+            supportedProcesses = new BasicMap<>();
+            argParser = new ArgumentParserWrapper("Erasmus", "Main program help");
+            
             SupportedProcess plotter = new Plotter();
             SupportedProcess stopper = new Stopper();
             
-            supportedProcesses = new BasicMap<>();
             supportedProcesses.put("stopper", stopper);
             supportedProcesses.put("plotter", plotter);
 
-            argParser = new ArgumentParserWrapper("Erasmus", "Main program help");
-            
-            SubparserWrapper stop = argParser.addParser("Stop", "Terminate Erasmus");
-            stop.setDefault("func", stopper);
-
-            SubparserWrapper plot = argParser.addParser("Plot", "Graph Data");
-            plot.setDefault("func", plotter);
         }
 
         @Override
@@ -66,6 +62,12 @@ public class ProgramManager {
         this.supportedProcesses = supportedProcessList;
         this.argParser = argParser;
         ProgramManager.programIsActive = true;
+        
+        SubparserWrapper stop = argParser.addParser("Stop", "Terminate Erasmus");
+        stop.setDefault("func", supportedProcesses.get("stopper"));
+
+        SubparserWrapper plot = argParser.addParser("Plot", "Graph Data");
+        plot.setDefault("func", supportedProcesses.get("plotter"));
     }
 
     public static synchronized void setProgramActiveStatus(boolean programIsActive) {
