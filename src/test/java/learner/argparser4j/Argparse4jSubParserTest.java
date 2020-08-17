@@ -104,11 +104,58 @@ public class Argparse4jSubParserTest {
         Subparser parserMax = subparsers.addParser("two")
                 .setDefault("func", 2);
         try {
-            Namespace res1 = parser.parseArgs(new String[] {"one"});
-            Namespace res2 = parser.parseArgs(new String[] {"two"});
+            Namespace res1 = parser.parseArgs(new String[]{"one"});
+            Namespace res2 = parser.parseArgs(new String[]{"two"});
             assertEquals(1, (int) res1.get("func"));
             assertEquals(2, (int) res2.get("func"));
-            
+
+        } catch (ArgumentParserException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void nestedSubparserTest() {
+        ArgumentParser parser = ArgumentParsers.newFor("prog").build();
+        Subparsers subparsers = parser.addSubparsers();
+
+        Subparser parserSum = subparsers.addParser("one")
+                .setDefault("func", 1);
+
+        Subparsers parserSumSubs = parserSum.addSubparsers();
+        Subparser three = parserSumSubs.addParser("three")
+                .setDefault("func", 3);
+
+        Subparser parserMax = subparsers.addParser("two")
+                .setDefault("func", 2);
+
+        Subparsers parserMaxSubs = parserMax.addSubparsers();
+        Subparser four = parserMaxSubs.addParser("four")
+                .setDefault("func", 4);
+
+        try {
+            Namespace res1 = parser.parseArgs(new String[]{"one", "three"});
+            Namespace res2 = parser.parseArgs(new String[]{"two", "four"});
+            assertEquals(3, (int) res1.get("func"));
+            assertEquals(4, (int) res2.get("func"));
+
+            ArgumentParserException assertThrowsOne = assertThrows(ArgumentParserException.class,
+                    () -> {
+                        parser.parseArgs(new String[]{"one", "four"});
+                    }
+            );
+
+            ArgumentParserException assertThrowsTwo = assertThrows(ArgumentParserException.class,
+                    () -> {
+                        parser.parseArgs(new String[]{"two", "three"});
+                    }
+            );
+
+            assertTrue(assertThrowsOne.getMessage().
+                    equals("invalid choice: 'four' (choose from 'three')"));
+            assertTrue(assertThrowsTwo.getMessage().
+                    equals("invalid choice: 'three' (choose from 'four')"));
+
         } catch (ArgumentParserException e) {
             fail();
         }
