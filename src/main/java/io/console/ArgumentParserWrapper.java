@@ -10,8 +10,8 @@ import net.sourceforge.argparse4j.inf.Subparsers;
 
 public class ArgumentParserWrapper {
 
-    private final ArgumentParser internalParser;
-    private final Subparsers internalSubParsers;
+    ArgumentParser internalParser;
+    Subparsers internalSubParsers;
     
     public ArgumentParserWrapper(String programName, String helpText) {
         internalParser = ArgumentParsers.newFor(programName).build();
