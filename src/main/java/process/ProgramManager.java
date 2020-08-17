@@ -19,7 +19,7 @@ public class ProgramManager {
      *
      */
     private final EnvironmentVariables environmentVariables;
-    private final SupportedProcess[] supportedProcessList;
+    private final BasicMap<String, SupportedProcess> supportedProcesses;
     private final ArgumentParserWrapper argParser;
     private Report auditReport;
 
@@ -27,17 +27,16 @@ public class ProgramManager {
 
     public static class DefaultFactory implements Supplier<ProgramManager> {
 
-        private final SupportedProcess[] supportedProcessList;
+        private final BasicMap<String, SupportedProcess> supportedProcesses;
         private final ArgumentParserWrapper argParser;
 
         public DefaultFactory() {
             SupportedProcess plotter = new Plotter();
             SupportedProcess stopper = new Stopper();
-
-            supportedProcessList = new SupportedProcess[]{
-                plotter,
-                stopper
-            };
+            
+            supportedProcesses = new BasicMap<>();
+            supportedProcesses.put("stopper", stopper);
+            supportedProcesses.put("plotter", plotter);
 
             argParser = new ArgumentParserWrapper("Erasmus", "Main program help");
             
@@ -46,15 +45,13 @@ public class ProgramManager {
 
             SubparserWrapper plot = argParser.addParser("Plot", "Graph Data");
             plot.setDefault("func", plotter);
-//            plot.addArgument("--MovingAvg").
-//                .
         }
 
         @Override
         public ProgramManager get() {
             return new ProgramManager(
                     EnvironmentVariables.INSTANCE,
-                    supportedProcessList,
+                    supportedProcesses,
                     argParser
             );
         }
@@ -62,11 +59,11 @@ public class ProgramManager {
 
     public ProgramManager(
             EnvironmentVariables environmentVariables,
-            SupportedProcess[] supportedProcessList,
+            BasicMap<String, SupportedProcess> supportedProcessList,
             ArgumentParserWrapper argParser) {
 
         this.environmentVariables = environmentVariables;
-        this.supportedProcessList = supportedProcessList;
+        this.supportedProcesses = supportedProcessList;
         this.argParser = argParser;
         ProgramManager.programIsActive = true;
     }
@@ -84,7 +81,7 @@ public class ProgramManager {
     }
 
     public void startAllProcesses() {
-        for (SupportedProcess process : supportedProcessList) {
+        for (SupportedProcess process : supportedProcesses.values()) {
             if (process.runsOnStart()) {
                 process.setAuditReport(auditReport);
                 process.createThread();
@@ -114,7 +111,7 @@ public class ProgramManager {
     }
 
     public void stopAllProcesses() {
-        for (SupportedProcess process : supportedProcessList) {
+        for (SupportedProcess process : supportedProcesses.values()) {
             process.stopAllThreads();
         }
     }

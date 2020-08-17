@@ -7,6 +7,7 @@ import datatypes.Report;
 import io.console.SubparserWrapper;
 import io.database.audit.AuditReportFields;
 import java.util.stream.Stream;
+import javautilwrappers.BasicMap;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -40,7 +41,7 @@ public class ProgramManagerTest {
 
     @BeforeEach
     public void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);;
+        closeable = MockitoAnnotations.openMocks(this);
     }
 
     @AfterEach
@@ -50,15 +51,19 @@ public class ProgramManagerTest {
 
     private class TestFactory implements Supplier<ProgramManager> {
 
-        private final SupportedProcess[] supportedProcessList = {
-            runOnStart,
-            doNotRunOnStart};
+        private final BasicMap<String, SupportedProcess> supportedProcesses;
+
+        TestFactory() {
+            supportedProcesses = new BasicMap<>();
+            supportedProcesses.put("runonstart", runOnStart);
+            supportedProcesses.put("doNotRunOnStart", doNotRunOnStart);
+        }
 
         @Override
         public ProgramManager get() {
             return new ProgramManager(
                     EnvironmentVariables.INSTANCE,
-                    supportedProcessList,
+                    supportedProcesses,
                     argParser);
         }
 
@@ -104,12 +109,12 @@ public class ProgramManagerTest {
         instance.startAllProcesses();
 
         Boolean programIsActive;
-        instance.setProgramActiveStatus(false);
-        programIsActive = instance.getProgramActiveStatus();
+        ProgramManager.setProgramActiveStatus(false);
+        programIsActive = ProgramManager.getProgramActiveStatus();
         assertFalse(programIsActive);
 
-        instance.setProgramActiveStatus(true);
-        programIsActive = instance.getProgramActiveStatus();
+        ProgramManager.setProgramActiveStatus(true);
+        programIsActive = ProgramManager.getProgramActiveStatus();
         assertTrue(programIsActive);
 
     }
@@ -120,13 +125,16 @@ public class ProgramManagerTest {
 
         class LocalTestFactory implements Supplier<ProgramManager> {
 
-            private final SupportedProcess[] supportedProcessList;
+            private final BasicMap<String, SupportedProcess> supportedProcesses;
             private final ArgumentParserWrapper localArgParser;
-                    
+
             LocalTestFactory() {
-                supportedProcessList = new SupportedProcess[] {processOne, processTwo};
+                supportedProcesses = new BasicMap<>();
+                supportedProcesses.put("placeholder1", processOne);
+                supportedProcesses.put("placeholder2", processTwo);
+
                 localArgParser = new ArgumentParserWrapper("Test", "Test Help");
-                
+
                 SubparserWrapper commandOne = localArgParser.addParser("CommandOne", "Command One Help");
                 commandOne.setDefault("func", processOne);
                 SubparserWrapper commandTwo = localArgParser.addParser("CommandTwo", "Command One Help");
@@ -137,7 +145,7 @@ public class ProgramManagerTest {
             public ProgramManager get() {
                 return new ProgramManager(
                         EnvironmentVariables.INSTANCE,
-                        supportedProcessList,
+                        supportedProcesses,
                         localArgParser);
             }
 

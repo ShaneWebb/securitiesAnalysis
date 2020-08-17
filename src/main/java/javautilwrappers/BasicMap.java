@@ -1,5 +1,6 @@
 package javautilwrappers;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +28,10 @@ public class BasicMap<K, V> {
     
     public V get(K key) {
         return internalMap.get(key);
+    }
+
+    public Collection<V> values() {
+        return internalMap.values();
     }
     
 }
