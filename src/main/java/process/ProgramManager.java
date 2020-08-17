@@ -13,7 +13,7 @@ public class ProgramManager {
         return defaultFactory.get();
     }
 
-    /**
+    /*
      * TODO: Refactor to only be dependent on ArgumentParserWrapper. The startup
      * procedure should instead call a command, not processes directly.
      *
@@ -40,14 +40,15 @@ public class ProgramManager {
             };
 
             argParser = new ArgumentParserWrapper("Erasmus", "Main program help");
-            
+
             SubparserWrapper stop = argParser.addParser("Stop", "Terminate Erasmus");
             stop.setDefault("func", stopper);
 
             SubparserWrapper plot = argParser.addParser("Plot", "Graph Data");
             plot.setDefault("func", plotter);
-//            plot.addArgument("--MovingAvg").
-//                .
+            plot.addArgument("--filenames").nargs("+");
+            plot.addArgument("--all");
+                
         }
 
         @Override
