@@ -34,9 +34,12 @@ public class ProgramManagerTest {
 
     private AutoCloseable closeable;
     private ProgramManager instance;
-    
+
     @Mock
     private SupportedProcess runOnStart, doNotRunOnStart, processOne, processTwo;
+    
+    @Mock
+    private SupportedProcess plotter, stopper;
 
     @BeforeEach
     public void setUp() {
@@ -180,6 +183,34 @@ public class ProgramManagerTest {
                 Arguments.of(" ", "none"),
                 Arguments.of(null, "none")
         );
+    }
+
+    @Test
+    public void testInbuiltCommands() {
+        class LocalTestFactory implements Supplier<ProgramManager> {
+
+            private final BasicMap<String, SupportedProcess> supportedProcesses;
+            private final ArgumentParserWrapper localArgParser;
+
+            LocalTestFactory() {
+                // Rest is defined in Program Manager.
+                localArgParser = new ArgumentParserWrapper("Erasmus", "Main program help");
+                
+                //Keys must match the program manager object.
+                supportedProcesses = new BasicMap<>();
+                supportedProcesses.put("plotter", plotter);
+                supportedProcesses.put("stopper", stopper);
+            }
+
+            @Override
+            public ProgramManager get() {
+                return new ProgramManager(
+                        EnvironmentVariables.INSTANCE,
+                        supportedProcesses,
+                        localArgParser);
+            }
+        }
+        
     }
 
     @Test

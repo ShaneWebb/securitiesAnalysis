@@ -37,7 +37,6 @@ public class ProgramManager {
             
             SupportedProcess plotter = new Plotter();
             SupportedProcess stopper = new Stopper();
-            
             supportedProcesses.put("stopper", stopper);
             supportedProcesses.put("plotter", plotter);
 
