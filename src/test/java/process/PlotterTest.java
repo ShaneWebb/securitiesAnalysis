@@ -2,7 +2,7 @@
 package process;
 
 import datatypes.Report;
-import javautilwrappers.BasicMap;
+import javautilwrappers.BasicHashMap;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -79,7 +79,7 @@ public class PlotterTest {
     @Test
     public void testSetArgs() {
         System.out.println("setArgs");
-        BasicMap<String, Object> parsedArgs = null;
+        BasicHashMap<String, Object> parsedArgs = null;
         Plotter instance = new Plotter();
         instance.setArgs(parsedArgs);
         fail("The test case is a prototype.");

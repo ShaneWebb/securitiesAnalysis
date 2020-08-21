@@ -5,39 +5,39 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class BasicMap<K, V> {
-    Map<K, V> internalMap;
+public class BasicHashMap<K, V> {
+    Map<K, V> internalHashMap;
     
-    public BasicMap(K[] keys) {
-        internalMap = new HashMap<>();
+    public BasicHashMap(K[] keys) {
+        internalHashMap = new HashMap<>();
         for(K key: keys){
-            internalMap.put(key, null);
+            internalHashMap.put(key, null);
         }
     }
     
-    public BasicMap(Map map) {
-        internalMap = new HashMap<>(map);
+    public BasicHashMap(Map map) {
+        internalHashMap = new HashMap<>(map);
     }
     
-    public BasicMap(){
-        internalMap = new HashMap<>();
+    public BasicHashMap(){
+        internalHashMap = new HashMap<>();
     }
     
     public V put(K key, V value) {
-        return internalMap.put(key, value);
+        return internalHashMap.put(key, value);
     }
     
     public V get(K key) {
-        return internalMap.get(key);
+        return internalHashMap.get(key);
     }
 
     public Collection<V> values() {
-        return internalMap.values();
+        return internalHashMap.values();
     }
 
     @Override
     public int hashCode() {
-        return internalMap.hashCode();
+        return internalHashMap.hashCode();
     }
 
     @Override
@@ -51,8 +51,8 @@ public class BasicMap<K, V> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final BasicMap<?, ?> other = (BasicMap<?, ?>) obj;
-        if (!Objects.equals(this.internalMap, other.internalMap)) {
+        final BasicHashMap<?, ?> other = (BasicHashMap<?, ?>) obj;
+        if (!Objects.equals(this.internalHashMap, other.internalHashMap)) {
             return false;
         }
         return true;

@@ -1,11 +1,11 @@
 package datatypes;
 
-import javautilwrappers.BasicMap;
+import javautilwrappers.BasicHashMap;
 
 public class Report {
     
     private final Enum[] fields;
-    private final BasicMap<Enum, Object> data;
+    private final BasicHashMap<Enum, Object> data;
     
     public Report() {
         fields = null;
@@ -14,7 +14,7 @@ public class Report {
     
     public Report(Class<? extends Enum> fieldsClass) {
         this.fields = fieldsClass.getEnumConstants();
-        data = new BasicMap<>(this.fields);
+        data = new BasicHashMap<>(this.fields);
     }
 
     public <T> T getValueOf(Enum field) {

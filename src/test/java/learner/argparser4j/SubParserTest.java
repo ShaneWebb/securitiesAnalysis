@@ -45,17 +45,21 @@ public class SubParserTest {
     @Test
     public void mySubParserTest() {
         Namespace name1 = mySubParserCommand(new String[]{"CommandA", "1", "2", "3"});
+        BasicArrayList<Integer> actualNums = new BasicArrayList<>(name1.get("numbers"));
         BasicArrayList<Integer> expectedNums = new BasicArrayList<>();
         expectedNums.add(1);
         expectedNums.add(2);
         expectedNums.add(3);
-        assertEquals(expectedNums, name1.get("numbers"));
+        
+        assertEquals(expectedNums, actualNums);
 
         Namespace name2 = mySubParserCommand(new String[]{"CommandB", "Hello", "Kitty"});
+        BasicArrayList<Integer> actualStrs = new BasicArrayList<>(name2.get("strings"));
         BasicArrayList<String> expectedStrs = new BasicArrayList<>();
         expectedStrs.add("Hello");
         expectedStrs.add("Kitty");
-        assertEquals(expectedStrs, name2.get("strings"));
+        
+        assertEquals(expectedStrs, actualStrs);
 
         //Does not work as intended. 
         Namespace name3 = mySubParserCommand(

@@ -1,6 +1,6 @@
 package learner.mockito;
 
-import javautilwrappers.BasicMap;
+import javautilwrappers.BasicHashMap;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +34,7 @@ public class MockitoArgumentMatcherTest {
     @Test
     public void verifyArgs() {
         SomeClass myClass = new SomeClass(someProcess);
-        BasicMap<String, Object> args = new BasicMap<>();
+        BasicHashMap<String, Object> args = new BasicHashMap<>();
         args.put("Hello", "Kitty");
 
         myClass.myExamplemethod(args);
@@ -50,7 +50,7 @@ public class MockitoArgumentMatcherTest {
             this.supportedProcess = supportedProcess;
         }
 
-        public void myExamplemethod(BasicMap<String, Object> map) {
+        public void myExamplemethod(BasicHashMap<String, Object> map) {
             supportedProcess.setArgs(map);
         }
     }

@@ -4,6 +4,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 //Thin wrapper around ArrayList. 
@@ -14,6 +15,10 @@ public class BasicArrayList<T> extends AbstractList<T>
 
     public BasicArrayList() {
         internalArrayList = new ArrayList<>();
+    }
+    
+    public BasicArrayList(List list) {
+        internalArrayList = new ArrayList<>(list);
     }
 
     public boolean add(T item) {

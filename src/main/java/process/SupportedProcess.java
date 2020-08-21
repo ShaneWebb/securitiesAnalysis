@@ -2,7 +2,7 @@ package process;
 
 import datatypes.Report;
 import io.console.ArgParseWrapper;
-import javautilwrappers.BasicMap;
+import javautilwrappers.BasicHashMap;
 
 public interface SupportedProcess {
   
@@ -16,6 +16,6 @@ public interface SupportedProcess {
 
     public void execute();
 
-    public void setArgs(BasicMap<String, Object> parsedArgs);
+    public void setArgs(BasicHashMap<String, Object> parsedArgs);
     
 }

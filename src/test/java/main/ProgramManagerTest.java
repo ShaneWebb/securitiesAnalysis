@@ -6,7 +6,7 @@ import datatypes.EnvironmentVariables;
 import datatypes.Report;
 import io.database.audit.AuditReportFields;
 import java.util.stream.Stream;
-import javautilwrappers.BasicMap;
+import javautilwrappers.BasicHashMap;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -52,11 +52,11 @@ public class ProgramManagerTest {
 
     private class TestFactory implements Supplier<ProgramManager> {
 
-        private final BasicMap<String, SupportedProcess> supportedProcesses;
+        private final BasicHashMap<String, SupportedProcess> supportedProcesses;
         private final ArgParseWrapper argParser;
 
         TestFactory() {
-            supportedProcesses = new BasicMap<>();
+            supportedProcesses = new BasicHashMap<>();
             supportedProcesses.put("runonstart", runOnStart);
             supportedProcesses.put("doNotRunOnStart", doNotRunOnStart);
             argParser = new ArgParseWrapper("Test");
@@ -128,16 +128,16 @@ public class ProgramManagerTest {
 
         class LocalTestFactory implements Supplier<ProgramManager> {
 
-            private final BasicMap<String, SupportedProcess> supportedProcesses;
+            private final BasicHashMap<String, SupportedProcess> supportedProcesses;
             private final ArgParseWrapper localArgParser;
 
             LocalTestFactory() {
-                supportedProcesses = new BasicMap<>();
+                supportedProcesses = new BasicHashMap<>();
                 supportedProcesses.put("placeholder1", processOne);
                 supportedProcesses.put("placeholder2", processTwo);
 
                 localArgParser = new ArgParseWrapper("Test");
-                localArgParser.addSubparsers("Test sub command help");
+                localArgParser.addSubparserHelp("Test sub command help");
 
                 ArgParseWrapper commandOne = localArgParser.addParser("CommandOne", "Command One Help");
                 commandOne.setDefault("func", processOne);
@@ -189,7 +189,7 @@ public class ProgramManagerTest {
     public void testInbuiltCommands() {
         class LocalTestFactory implements Supplier<ProgramManager> {
 
-            private final BasicMap<String, SupportedProcess> supportedProcesses;
+            private final BasicHashMap<String, SupportedProcess> supportedProcesses;
             private final ArgParseWrapper localArgParser;
 
             LocalTestFactory() {
@@ -197,7 +197,7 @@ public class ProgramManagerTest {
                 localArgParser = new ArgParseWrapper("Erasmus");
                 
                 // Keys must match the program manager object.
-                supportedProcesses = new BasicMap<>();
+                supportedProcesses = new BasicHashMap<>();
                 supportedProcesses.put("plotter", plotter);
                 supportedProcesses.put("stopper", stopper);
             }

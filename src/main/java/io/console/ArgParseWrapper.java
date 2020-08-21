@@ -1,6 +1,6 @@
 package io.console;
 
-import javautilwrappers.BasicMap;
+import javautilwrappers.BasicHashMap;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Argument;
@@ -12,19 +12,21 @@ import net.sourceforge.argparse4j.inf.Subparsers;
 
 public class ArgParseWrapper {
 
-    private ArgumentParser internalParser;
-    private Subparsers internalSubparsers;
+    private final ArgumentParser internalParser;
+    private final Subparsers internalSubparsers;
 
     private ArgParseWrapper(ArgumentParser internalParser) {
         this.internalParser = internalParser;
+        internalSubparsers = internalParser.addSubparsers();
     }
     
     public ArgParseWrapper(String programName) {
         internalParser = ArgumentParsers.newFor(programName).build();
+        internalSubparsers = internalParser.addSubparsers();
     }
 
-    public ArgParseWrapper addSubparsers(String helpText) {
-        internalSubparsers = internalParser.addSubparsers().help(helpText);
+    public ArgParseWrapper addSubparserHelp(String helpText) {
+        internalParser.addSubparsers().help(helpText);
         return this;
     }
 
@@ -46,11 +48,11 @@ public class ArgParseWrapper {
         return this;
     }
 
-    public BasicMap<String, Object> parseArgs(String[] inputCommandParsed) throws IllegalArgumentException {
+    public BasicHashMap<String, Object> parseArgs(String[] inputCommandParsed) throws IllegalArgumentException {
         try {
             Namespace tempNamespace = internalParser.parseArgs(inputCommandParsed);
-            BasicMap<String, Object> basicMap
-                    = new BasicMap<>(tempNamespace.getAttrs());
+            BasicHashMap<String, Object> basicMap
+                    = new BasicHashMap<>(tempNamespace.getAttrs());
             return basicMap;
 
         } catch (ArgumentParserException ex) {

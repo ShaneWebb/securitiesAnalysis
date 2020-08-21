@@ -2,7 +2,7 @@
 package process;
 
 import datatypes.Report;
-import javautilwrappers.BasicMap;
+import javautilwrappers.BasicHashMap;
 
 public class Plotter implements SupportedProcess {
 
@@ -35,7 +35,7 @@ public class Plotter implements SupportedProcess {
     }
 
     @Override
-    public void setArgs(BasicMap<String, Object> parsedArgs) {
+    public void setArgs(BasicHashMap<String, Object> parsedArgs) {
         
     }
 

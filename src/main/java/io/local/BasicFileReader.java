@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import javautilwrappers.BasicMap;
+import javautilwrappers.BasicHashMap;
 
 //assigns variables accordingly. 
 public class BasicFileReader {
@@ -21,9 +21,9 @@ public class BasicFileReader {
         this.charset = StandardCharsets.UTF_8;
     }
     
-    public BasicMap<Integer, String> read() throws IOException {
+    public BasicHashMap<Integer, String> read() throws IOException {
         
-        BasicMap<Integer, String> fileByLine = new BasicMap<>();
+        BasicHashMap<Integer, String> fileByLine = new BasicHashMap<>();
         try (BufferedReader bufferedReader = Files.newBufferedReader(filePath, charset)) {
             int i = 1;
             String line;

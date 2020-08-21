@@ -3,7 +3,7 @@ package process;
 import datatypes.Report;
 import datatypes.EnvironmentVariables;
 import io.console.ArgParseWrapper;
-import javautilwrappers.BasicMap;
+import javautilwrappers.BasicHashMap;
 import main.Supplier;
 
 public class ProgramManager {
@@ -19,7 +19,7 @@ public class ProgramManager {
      *
      */
     private final EnvironmentVariables environmentVariables;
-    private final BasicMap<String, SupportedProcess> supportedProcesses;
+    private final BasicHashMap<String, SupportedProcess> supportedProcesses;
     private final ArgParseWrapper argParser;
     private Report auditReport;
 
@@ -27,12 +27,12 @@ public class ProgramManager {
 
     public static class DefaultFactory implements Supplier<ProgramManager> {
 
-        private final BasicMap<String, SupportedProcess> supportedProcesses;
+        private final BasicHashMap<String, SupportedProcess> supportedProcesses;
         private final ArgParseWrapper argParser;
 
         public DefaultFactory() {            
             
-            supportedProcesses = new BasicMap<>();
+            supportedProcesses = new BasicHashMap<>();
             argParser = new ArgParseWrapper("Erasmus");
             
             SupportedProcess plotter = new Plotter();
@@ -54,7 +54,7 @@ public class ProgramManager {
 
     public ProgramManager(
             EnvironmentVariables environmentVariables,
-            BasicMap<String, SupportedProcess> supportedProcessList,
+            BasicHashMap<String, SupportedProcess> supportedProcessList,
             ArgParseWrapper argParser) {
 
         this.environmentVariables = environmentVariables;
@@ -62,7 +62,7 @@ public class ProgramManager {
         this.argParser = argParser;
         ProgramManager.programIsActive = true;
         
-        argParser.addSubparsers("Sub command help");
+        argParser.addSubparserHelp("Sub command help");
         
         ArgParseWrapper stop = argParser.addParser("Stop", "Terminate Erasmus");
         stop.setDefault("func", supportedProcesses.get("stopper"));
@@ -70,11 +70,11 @@ public class ProgramManager {
         ArgParseWrapper plot = argParser.addParser("Visualize", "Visualize Data");
         plot.setDefault("func", supportedProcesses.get("plotter"));
         
-//        ArgParseWrapper basic = plot.addParser("Basic", "As is plot");
-//        
-//        ArgParseWrapper movAvg = plot.addParser("MovingAvg", "Moving Average");
-//        
-//        ArgParseWrapper bin = plot.addParser("Bin", "Price binning");
+        ArgParseWrapper basic = plot.addParser("Basic", "As is plot");
+        
+        ArgParseWrapper movAvg = plot.addParser("MovingAvg", "Moving Average");
+        
+        ArgParseWrapper bin = plot.addParser("Bin", "Price binning");
         
     }
 
@@ -108,7 +108,7 @@ public class ProgramManager {
     public void runUserInputCommand(String inputCommand) {
         try {
             String[] inputCommandParsed = inputCommand.split(" ");
-            BasicMap<String, Object> parsedArgs
+            BasicHashMap<String, Object> parsedArgs
                     = argParser.parseArgs(inputCommandParsed);
             SupportedProcess process
                     = (SupportedProcess) parsedArgs.get("func");

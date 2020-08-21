@@ -2,7 +2,7 @@ package datatypes;
 
 import io.local.BasicFileReader;
 import java.io.IOException;
-import javautilwrappers.BasicMap;
+import javautilwrappers.BasicHashMap;
 
 public enum EnvironmentVariables {
     INSTANCE();
@@ -11,7 +11,7 @@ public enum EnvironmentVariables {
     private String credentialFileDirectory;
 
     public void loadFromFile(String fileName) {
-        BasicMap<Integer, String> tempMap = new BasicMap<>();
+        BasicHashMap<Integer, String> tempMap = new BasicHashMap<>();
         try {
             BasicFileReader reader = new BasicFileReader(fileName);
             tempMap = reader.read();
