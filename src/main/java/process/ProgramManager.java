@@ -67,8 +67,15 @@ public class ProgramManager {
         ArgParseWrapper stop = argParser.addParser("Stop", "Terminate Erasmus");
         stop.setDefault("func", supportedProcesses.get("stopper"));
 
-        ArgParseWrapper plot = argParser.addParser("Plot", "Graph Data");
+        ArgParseWrapper plot = argParser.addParser("Visualize", "Visualize Data");
         plot.setDefault("func", supportedProcesses.get("plotter"));
+        
+//        ArgParseWrapper basic = plot.addParser("Basic", "As is plot");
+//        
+//        ArgParseWrapper movAvg = plot.addParser("MovingAvg", "Moving Average");
+//        
+//        ArgParseWrapper bin = plot.addParser("Bin", "Price binning");
+        
     }
 
     public static synchronized void setProgramActiveStatus(boolean programIsActive) {

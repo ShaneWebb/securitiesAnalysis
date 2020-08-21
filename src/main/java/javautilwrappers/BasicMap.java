@@ -3,6 +3,7 @@ package javautilwrappers;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class BasicMap<K, V> {
     Map<K, V> internalMap;
@@ -33,5 +34,30 @@ public class BasicMap<K, V> {
     public Collection<V> values() {
         return internalMap.values();
     }
+
+    @Override
+    public int hashCode() {
+        return internalMap.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BasicMap<?, ?> other = (BasicMap<?, ?>) obj;
+        if (!Objects.equals(this.internalMap, other.internalMap)) {
+            return false;
+        }
+        return true;
+    }
+
+    
     
 }

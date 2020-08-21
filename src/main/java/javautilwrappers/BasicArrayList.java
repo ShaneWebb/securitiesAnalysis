@@ -4,6 +4,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Objects;
 
 //Thin wrapper around ArrayList. 
 public class BasicArrayList<T> extends AbstractList<T>
@@ -34,7 +35,20 @@ public class BasicArrayList<T> extends AbstractList<T>
 
     @Override
     public boolean equals(Object obj) {
-        return this.internalArrayList.equals(obj);
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BasicArrayList<?> other = (BasicArrayList<?>) obj;
+        if (!Objects.equals(this.internalArrayList, other.internalArrayList)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -18,7 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class Argparse4jBasicTest {
+public class BasicTest {
 
     private static interface Accumulate {
         int accumulate(Collection<Integer> ints);
