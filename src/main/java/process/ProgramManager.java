@@ -2,15 +2,15 @@ package process;
 
 import datatypes.Report;
 import datatypes.EnvironmentVariables;
-import io.console.ArgumentParserWrapper;
-import io.console.SubparserWrapper;
+import io.console.ArgParseWrapper;
 import javautilwrappers.BasicMap;
 import main.Supplier;
 
 public class ProgramManager {
 
-    public static ProgramManager createFrom(Supplier<ProgramManager> defaultFactory) {
-        return defaultFactory.get();
+    public static ProgramManager createFrom(Supplier<ProgramManager> factory) {
+        ProgramManager temp = factory.get();
+        return temp;
     }
 
     /**
@@ -20,7 +20,7 @@ public class ProgramManager {
      */
     private final EnvironmentVariables environmentVariables;
     private final BasicMap<String, SupportedProcess> supportedProcesses;
-    private final ArgumentParserWrapper argParser;
+    private final ArgParseWrapper argParser;
     private Report auditReport;
 
     private static boolean programIsActive = false;
@@ -28,12 +28,12 @@ public class ProgramManager {
     public static class DefaultFactory implements Supplier<ProgramManager> {
 
         private final BasicMap<String, SupportedProcess> supportedProcesses;
-        private final ArgumentParserWrapper argParser;
+        private final ArgParseWrapper argParser;
 
         public DefaultFactory() {            
             
             supportedProcesses = new BasicMap<>();
-            argParser = new ArgumentParserWrapper("Erasmus", "Main program help");
+            argParser = new ArgParseWrapper("Erasmus");
             
             SupportedProcess plotter = new Plotter();
             SupportedProcess stopper = new Stopper();
@@ -55,17 +55,19 @@ public class ProgramManager {
     public ProgramManager(
             EnvironmentVariables environmentVariables,
             BasicMap<String, SupportedProcess> supportedProcessList,
-            ArgumentParserWrapper argParser) {
+            ArgParseWrapper argParser) {
 
         this.environmentVariables = environmentVariables;
         this.supportedProcesses = supportedProcessList;
         this.argParser = argParser;
         ProgramManager.programIsActive = true;
         
-        SubparserWrapper stop = argParser.addParser("Stop", "Terminate Erasmus");
+        argParser.addSubparsers("Sub command help");
+        
+        ArgParseWrapper stop = argParser.addParser("Stop", "Terminate Erasmus");
         stop.setDefault("func", supportedProcesses.get("stopper"));
 
-        SubparserWrapper plot = argParser.addParser("Plot", "Graph Data");
+        ArgParseWrapper plot = argParser.addParser("Plot", "Graph Data");
         plot.setDefault("func", supportedProcesses.get("plotter"));
     }
 

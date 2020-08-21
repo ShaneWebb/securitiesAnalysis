@@ -17,10 +17,10 @@ import process.SupportedProcess;
 public class MockitoArgumentMatcherTest {
 
     private AutoCloseable closeable;
-    
+
     @Mock
     private SupportedProcess someProcess;
-    
+
     @BeforeEach
     public void setUp() {
         closeable = MockitoAnnotations.openMocks(this);
@@ -30,30 +30,26 @@ public class MockitoArgumentMatcherTest {
     public void tearDown() throws Exception {
         closeable.close();
     }
-    
+
     @Test
     public void verifyArgs() {
         SomeClass myClass = new SomeClass(someProcess);
         BasicMap<String, Object> args = new BasicMap<>();
         args.put("Hello", "Kitty");
-        
+
         myClass.myExamplemethod(args);
         verify(someProcess).setArgs(args);
-        
-//        myClass.myExamplemethod(args);
-//        BasicMap<String, Object> emptyArgs = new BasicMap<>();
-//        verify(someProcess).setArgs(eq(emptyArgs));
-        
+
     }
-    
+
     public class SomeClass {
-        
+
         private SupportedProcess supportedProcess;
-        
+
         SomeClass(SupportedProcess supportedProcess) {
             this.supportedProcess = supportedProcess;
         }
-        
+
         public void myExamplemethod(BasicMap<String, Object> map) {
             supportedProcess.setArgs(map);
         }

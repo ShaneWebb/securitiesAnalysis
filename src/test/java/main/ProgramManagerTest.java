@@ -1,10 +1,9 @@
 package main;
 
-import io.console.ArgumentParserWrapper;
+import io.console.ArgParseWrapper;
 import process.SupportedProcess;
 import datatypes.EnvironmentVariables;
 import datatypes.Report;
-import io.console.SubparserWrapper;
 import io.database.audit.AuditReportFields;
 import java.util.stream.Stream;
 import javautilwrappers.BasicMap;
@@ -54,13 +53,13 @@ public class ProgramManagerTest {
     private class TestFactory implements Supplier<ProgramManager> {
 
         private final BasicMap<String, SupportedProcess> supportedProcesses;
-        private final ArgumentParserWrapper argParser;
+        private final ArgParseWrapper argParser;
 
         TestFactory() {
             supportedProcesses = new BasicMap<>();
             supportedProcesses.put("runonstart", runOnStart);
             supportedProcesses.put("doNotRunOnStart", doNotRunOnStart);
-            argParser = new ArgumentParserWrapper("Test", "Test program help");
+            argParser = new ArgParseWrapper("Test");
         }
 
         @Override
@@ -130,18 +129,19 @@ public class ProgramManagerTest {
         class LocalTestFactory implements Supplier<ProgramManager> {
 
             private final BasicMap<String, SupportedProcess> supportedProcesses;
-            private final ArgumentParserWrapper localArgParser;
+            private final ArgParseWrapper localArgParser;
 
             LocalTestFactory() {
                 supportedProcesses = new BasicMap<>();
                 supportedProcesses.put("placeholder1", processOne);
                 supportedProcesses.put("placeholder2", processTwo);
 
-                localArgParser = new ArgumentParserWrapper("Test", "Test Help");
+                localArgParser = new ArgParseWrapper("Test");
+                localArgParser.addSubparsers("Test sub command help");
 
-                SubparserWrapper commandOne = localArgParser.addParser("CommandOne", "Command One Help");
+                ArgParseWrapper commandOne = localArgParser.addParser("CommandOne", "Command One Help");
                 commandOne.setDefault("func", processOne);
-                SubparserWrapper commandTwo = localArgParser.addParser("CommandTwo", "Command One Help");
+                ArgParseWrapper commandTwo = localArgParser.addParser("CommandTwo", "Command One Help");
                 commandTwo.setDefault("func", processTwo);
             }
 
@@ -190,13 +190,13 @@ public class ProgramManagerTest {
         class LocalTestFactory implements Supplier<ProgramManager> {
 
             private final BasicMap<String, SupportedProcess> supportedProcesses;
-            private final ArgumentParserWrapper localArgParser;
+            private final ArgParseWrapper localArgParser;
 
             LocalTestFactory() {
                 // Rest is defined in Program Manager.
-                localArgParser = new ArgumentParserWrapper("Erasmus", "Main program help");
+                localArgParser = new ArgParseWrapper("Erasmus");
                 
-                //Keys must match the program manager object.
+                // Keys must match the program manager object.
                 supportedProcesses = new BasicMap<>();
                 supportedProcesses.put("plotter", plotter);
                 supportedProcesses.put("stopper", stopper);
@@ -210,6 +210,8 @@ public class ProgramManagerTest {
                         localArgParser);
             }
         }
+        
+        
         
     }
 

@@ -1,7 +1,7 @@
 package process;
 
 import datatypes.Report;
-import io.console.ArgumentParserWrapper;
+import io.console.ArgParseWrapper;
 import javautilwrappers.BasicMap;
 
 public interface SupportedProcess {
