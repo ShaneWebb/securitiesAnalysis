@@ -34,6 +34,11 @@ public class BasicHashMap<K, V> {
     public Collection<V> values() {
         return internalHashMap.values();
     }
+    
+    @Override
+    public String toString(){
+        return internalHashMap.toString();
+    }
 
     @Override
     public int hashCode() {

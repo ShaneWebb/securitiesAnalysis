@@ -26,6 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import process.ProgramManager;
+import process.Visualizations;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -38,7 +39,7 @@ public class ProgramManagerTest {
     private SupportedProcess runOnStart, doNotRunOnStart, processOne, processTwo;
     
     @Mock
-    private SupportedProcess plotter, stopper;
+    private SupportedProcess placeholder;
 
     @BeforeEach
     public void setUp() {
@@ -185,8 +186,9 @@ public class ProgramManagerTest {
         );
     }
 
-    @Test
-    public void testInbuiltCommands() {
+    @ParameterizedTest
+    @MethodSource("provideCommandAndMap")
+    public void testInbuiltCommands(String command, BasicHashMap<String, Object> map) {
         class LocalTestFactory implements Supplier<ProgramManager> {
 
             private final BasicHashMap<String, SupportedProcess> supportedProcesses;
@@ -198,8 +200,8 @@ public class ProgramManagerTest {
                 
                 // Keys must match the program manager object.
                 supportedProcesses = new BasicHashMap<>();
-                supportedProcesses.put("plotter", plotter);
-                supportedProcesses.put("stopper", stopper);
+                supportedProcesses.put("plotter", placeholder);
+                supportedProcesses.put("stopper", placeholder);
             }
 
             @Override
@@ -211,8 +213,31 @@ public class ProgramManagerTest {
             }
         }
         
+        instance = ProgramManager.createFrom(new LocalTestFactory());
+        instance.runUserInputCommand(command); map.put("func", placeholder);
+        verify(placeholder).setArgs(map);
         
+    }
+    
+    public static Stream<Arguments> provideCommandAndMap() {
+        BasicHashMap<String, Object> map1 = new BasicHashMap<>();
+        map1.put("files", "A.csv,B.csv");
+        map1.put("startDate", "8/21/1981");
+        map1.put("endDate", "1/1/2020");
+        map1.put("lineartrend", true);
+        map1.put("type", Visualizations.BASIC);
         
+        BasicHashMap<String, Object> map2 = new BasicHashMap<>();
+        map2.put("files", "C.csv,D.csv");
+        map2.put("startDate", "8/21/1981");
+        map2.put("endDate", "1/1/2020");
+        map2.put("lineartrend", false);
+        map2.put("type", Visualizations.BASIC);
+        
+        return Stream.of(
+                Arguments.of("Visualize A.csv,B.csv 8/21/1981 1/1/2020 --lineartrend Basic", map1),
+                Arguments.of("Visualize C.csv,D.csv 8/21/1981 1/1/2020 Basic", map2)
+        );
     }
 
     @Test

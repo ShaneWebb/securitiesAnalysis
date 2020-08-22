@@ -69,12 +69,27 @@ public class ProgramManager {
 
         ArgParseWrapper plot = argParser.addParser("Visualize", "Visualize Data");
         plot.setDefault("func", supportedProcesses.get("plotter"));
+        plot.addArgument("files")
+                .help("Comma separated list of CSV files.");
+        
+        plot.addArgument("startDate")
+                .help("Start date to plot");
+        
+        plot.addArgument("endDate")
+                .help("End date to plot");
+        
+        plot.addArgument("--lineartrend")
+                .help("Plot linear trendlines")
+                .actionStoreTrue();
         
         ArgParseWrapper basic = plot.addParser("Basic", "As is plot");
+        basic.setDefault("type", Visualizations.BASIC);
         
         ArgParseWrapper movAvg = plot.addParser("MovingAvg", "Moving Average");
+        movAvg.setDefault("type", Visualizations.MOVING_AVERAGE);
         
         ArgParseWrapper bin = plot.addParser("Bin", "Price binning");
+        bin.setDefault("type", Visualizations.BINNED);
         
     }
 
@@ -115,7 +130,7 @@ public class ProgramManager {
             process.setArgs(parsedArgs);
             process.execute();
         } catch (IllegalArgumentException | NullPointerException e) {
-            //Does not need to do anything for now.
+            //System.out.println(e.getMessage());
         }
 
     }

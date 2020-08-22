@@ -30,5 +30,14 @@ public class ArgWrapper {
         internalArgument = internalArgument.setDefault(defaultVal);
         return this;
     }
+
+    public ArgWrapper help(String str) {
+        internalArgument.help(str);
+        return this;
+    }
+
+    public void actionStoreTrue() {
+        internalArgument = internalArgument.action(Arguments.storeTrue());
+    }
     
 }

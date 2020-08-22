@@ -56,7 +56,8 @@ public class ArgParseWrapper {
             return basicMap;
 
         } catch (ArgumentParserException ex) {
-            throw new IllegalArgumentException();
+            String msg = ex.getMessage();
+            throw new IllegalArgumentException(msg);
         }
     }
 

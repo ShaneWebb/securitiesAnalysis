@@ -37,7 +37,7 @@ public class SubParserTest {
         try {
             return parser.parseArgs(args);
         } catch (ArgumentParserException e) {
-            parser.handleError(e);
+            //parser.handleError(e);
             return null;
         }
     }
