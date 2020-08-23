@@ -1,6 +1,6 @@
 package io.console;
 
-import javautilwrappers.BasicHashMap;
+import javautilwrappers.HashMapWrapper;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Argument;
@@ -48,11 +48,11 @@ public class ArgParseWrapper {
         return this;
     }
 
-    public BasicHashMap<String, Object> parseArgs(String[] inputCommandParsed) throws IllegalArgumentException {
+    public HashMapWrapper<String, Object> parseArgs(String[] inputCommandParsed) throws IllegalArgumentException {
         try {
             Namespace tempNamespace = internalParser.parseArgs(inputCommandParsed);
-            BasicHashMap<String, Object> basicMap
-                    = new BasicHashMap<>(tempNamespace.getAttrs());
+            HashMapWrapper<String, Object> basicMap
+                    = new HashMapWrapper<>(tempNamespace.getAttrs());
             return basicMap;
 
         } catch (ArgumentParserException ex) {

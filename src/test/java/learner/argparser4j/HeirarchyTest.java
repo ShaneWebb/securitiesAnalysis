@@ -1,7 +1,7 @@
 package learner.argparser4j;
 
 import java.util.Arrays;
-import javautilwrappers.BasicHashMap;
+import javautilwrappers.HashMapWrapper;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
@@ -32,8 +32,8 @@ public class HeirarchyTest {
         try {
             Namespace ns = parser.parseArgs(
                     new String[]{"1", "2", "A", "--numbersBottom", "1", "2"});
-            BasicHashMap<String, Object> wrappedMap = new BasicHashMap<>(ns.getAttrs());
-            BasicHashMap<String, Object> expectedMap = new BasicHashMap<>();
+            HashMapWrapper<String, Object> wrappedMap = new HashMapWrapper<>(ns.getAttrs());
+            HashMapWrapper<String, Object> expectedMap = new HashMapWrapper<>();
             expectedMap.put("numbersTop", Arrays.asList(new Integer[]{1, 2}));
             expectedMap.put("numbersBottom", Arrays.asList(new Integer[]{1, 2}));
 

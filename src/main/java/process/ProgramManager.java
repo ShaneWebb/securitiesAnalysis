@@ -3,7 +3,8 @@ package process;
 import datatypes.Report;
 import datatypes.EnvironmentVariables;
 import io.console.ArgParseWrapper;
-import javautilwrappers.BasicHashMap;
+import io.local.BasicFileReader;
+import javautilwrappers.HashMapWrapper;
 import main.Supplier;
 
 public class ProgramManager {
@@ -19,7 +20,7 @@ public class ProgramManager {
      *
      */
     private final EnvironmentVariables environmentVariables;
-    private final BasicHashMap<String, SupportedProcess> supportedProcesses;
+    private final HashMapWrapper<String, SupportedProcess> supportedProcesses;
     private final ArgParseWrapper argParser;
     private Report auditReport;
 
@@ -27,15 +28,15 @@ public class ProgramManager {
 
     public static class DefaultFactory implements Supplier<ProgramManager> {
 
-        private final BasicHashMap<String, SupportedProcess> supportedProcesses;
+        private final HashMapWrapper<String, SupportedProcess> supportedProcesses;
         private final ArgParseWrapper argParser;
 
         public DefaultFactory() {            
             
-            supportedProcesses = new BasicHashMap<>();
+            supportedProcesses = new HashMapWrapper<>();
             argParser = new ArgParseWrapper("Erasmus");
             
-            SupportedProcess plotter = new Plotter();
+            SupportedProcess plotter = new Plotter(new BasicFileReader());
             SupportedProcess stopper = new Stopper();
             supportedProcesses.put("stopper", stopper);
             supportedProcesses.put("plotter", plotter);
@@ -54,7 +55,7 @@ public class ProgramManager {
 
     public ProgramManager(
             EnvironmentVariables environmentVariables,
-            BasicHashMap<String, SupportedProcess> supportedProcessList,
+            HashMapWrapper<String, SupportedProcess> supportedProcessList,
             ArgParseWrapper argParser) {
 
         this.environmentVariables = environmentVariables;
@@ -123,14 +124,14 @@ public class ProgramManager {
     public void runUserInputCommand(String inputCommand) {
         try {
             String[] inputCommandParsed = inputCommand.split(" ");
-            BasicHashMap<String, Object> parsedArgs
+            HashMapWrapper<String, Object> parsedArgs
                     = argParser.parseArgs(inputCommandParsed);
             SupportedProcess process
                     = (SupportedProcess) parsedArgs.get("func");
             process.setArgs(parsedArgs);
             process.execute();
-        } catch (IllegalArgumentException | NullPointerException e) {
-            //System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
     }

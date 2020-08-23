@@ -6,7 +6,7 @@ import datatypes.EnvironmentVariables;
 import datatypes.Report;
 import io.database.audit.AuditReportFields;
 import java.util.stream.Stream;
-import javautilwrappers.BasicHashMap;
+import javautilwrappers.HashMapWrapper;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -53,11 +53,11 @@ public class ProgramManagerTest {
 
     private class TestFactory implements Supplier<ProgramManager> {
 
-        private final BasicHashMap<String, SupportedProcess> supportedProcesses;
+        private final HashMapWrapper<String, SupportedProcess> supportedProcesses;
         private final ArgParseWrapper argParser;
 
         TestFactory() {
-            supportedProcesses = new BasicHashMap<>();
+            supportedProcesses = new HashMapWrapper<>();
             supportedProcesses.put("runonstart", runOnStart);
             supportedProcesses.put("doNotRunOnStart", doNotRunOnStart);
             argParser = new ArgParseWrapper("Test");
@@ -125,15 +125,15 @@ public class ProgramManagerTest {
 
     @ParameterizedTest
     @MethodSource("provideCommandAndProcesses")
-    public void testRunUserInputCommand(String commandArg, String testMode) {
+    public void testRunUserInputCommand(String commandArg, String testMode) throws Exception {
 
         class LocalTestFactory implements Supplier<ProgramManager> {
 
-            private final BasicHashMap<String, SupportedProcess> supportedProcesses;
+            private final HashMapWrapper<String, SupportedProcess> supportedProcesses;
             private final ArgParseWrapper localArgParser;
 
             LocalTestFactory() {
-                supportedProcesses = new BasicHashMap<>();
+                supportedProcesses = new HashMapWrapper<>();
                 supportedProcesses.put("placeholder1", processOne);
                 supportedProcesses.put("placeholder2", processTwo);
 
@@ -188,10 +188,10 @@ public class ProgramManagerTest {
 
     @ParameterizedTest
     @MethodSource("provideCommandAndMap")
-    public void testInbuiltCommands(String command, BasicHashMap<String, Object> map) {
+    public void testInbuiltCommands(String command, HashMapWrapper<String, Object> map) {
         class LocalTestFactory implements Supplier<ProgramManager> {
 
-            private final BasicHashMap<String, SupportedProcess> supportedProcesses;
+            private final HashMapWrapper<String, SupportedProcess> supportedProcesses;
             private final ArgParseWrapper localArgParser;
 
             LocalTestFactory() {
@@ -199,7 +199,7 @@ public class ProgramManagerTest {
                 localArgParser = new ArgParseWrapper("Erasmus");
                 
                 // Keys must match the program manager object.
-                supportedProcesses = new BasicHashMap<>();
+                supportedProcesses = new HashMapWrapper<>();
                 supportedProcesses.put("plotter", placeholder);
                 supportedProcesses.put("stopper", placeholder);
             }
@@ -220,14 +220,14 @@ public class ProgramManagerTest {
     }
     
     public static Stream<Arguments> provideCommandAndMap() {
-        BasicHashMap<String, Object> map1 = new BasicHashMap<>();
+        HashMapWrapper<String, Object> map1 = new HashMapWrapper<>();
         map1.put("files", "A.csv,B.csv");
         map1.put("startDate", "8/21/1981");
         map1.put("endDate", "1/1/2020");
         map1.put("lineartrend", true);
         map1.put("type", Visualizations.BASIC);
         
-        BasicHashMap<String, Object> map2 = new BasicHashMap<>();
+        HashMapWrapper<String, Object> map2 = new HashMapWrapper<>();
         map2.put("files", "C.csv,D.csv");
         map2.put("startDate", "8/21/1981");
         map2.put("endDate", "1/1/2020");

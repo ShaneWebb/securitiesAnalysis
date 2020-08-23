@@ -1,7 +1,7 @@
 
 package learner.java;
 
-import javautilwrappers.BasicArrayList;
+import javautilwrappers.ArrayListWrapper;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Disabled;
@@ -33,7 +33,7 @@ public class InnerClassTest {
      private class InnerSuperClass {
 
          public int basicArrayListUser() {
-             BasicArrayList<Integer> localArrayList = new BasicArrayList<>();
+             ArrayListWrapper<Integer> localArrayList = new ArrayListWrapper<>();
              localArrayList.add(1);
              return localArrayList.get(0);
          }

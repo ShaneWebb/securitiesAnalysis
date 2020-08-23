@@ -1,6 +1,6 @@
 package learner.argparser4j;
 
-import javautilwrappers.BasicArrayList;
+import javautilwrappers.ArrayListWrapper;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -45,8 +45,8 @@ public class SubParserTest {
     @Test
     public void mySubParserTest() {
         Namespace name1 = mySubParserCommand(new String[]{"CommandA", "1", "2", "3"});
-        BasicArrayList<Integer> actualNums = new BasicArrayList<>(name1.get("numbers"));
-        BasicArrayList<Integer> expectedNums = new BasicArrayList<>();
+        ArrayListWrapper<Integer> actualNums = new ArrayListWrapper<>(name1.get("numbers"));
+        ArrayListWrapper<Integer> expectedNums = new ArrayListWrapper<>();
         expectedNums.add(1);
         expectedNums.add(2);
         expectedNums.add(3);
@@ -54,8 +54,8 @@ public class SubParserTest {
         assertEquals(expectedNums, actualNums);
 
         Namespace name2 = mySubParserCommand(new String[]{"CommandB", "Hello", "Kitty"});
-        BasicArrayList<Integer> actualStrs = new BasicArrayList<>(name2.get("strings"));
-        BasicArrayList<String> expectedStrs = new BasicArrayList<>();
+        ArrayListWrapper<Integer> actualStrs = new ArrayListWrapper<>(name2.get("strings"));
+        ArrayListWrapper<String> expectedStrs = new ArrayListWrapper<>();
         expectedStrs.add("Hello");
         expectedStrs.add("Kitty");
         

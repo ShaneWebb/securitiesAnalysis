@@ -1,6 +1,6 @@
 package learner.mockito;
 
-import javautilwrappers.BasicArrayList;
+import javautilwrappers.ArrayListWrapper;
 import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,7 +13,7 @@ public class MockitoTest {
 
     @Test
     public void mockTest() {
-        BasicArrayList<String> mockedList = mock(BasicArrayList.class);
+        ArrayListWrapper<String> mockedList = mock(ArrayListWrapper.class);
         mockedList.add("one");
         mockedList.remove("one");
         

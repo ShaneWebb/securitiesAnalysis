@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import javautilwrappers.BasicHashMap;
+import javautilwrappers.HashMapWrapper;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ public class FileIOTest {
         
         Path filePath = Paths.get("./src/test/testfiles/bufferedreader.txt");
         Charset charset = StandardCharsets.UTF_8;
-        BasicHashMap<Integer, String> fileByLine = new BasicHashMap<>();
+        HashMapWrapper<Integer, String> fileByLine = new HashMapWrapper<>();
         
         try (BufferedReader bufferedReader = Files.newBufferedReader(filePath, charset)) {
             

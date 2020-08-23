@@ -2,7 +2,8 @@ package datatypes;
 
 import io.local.BasicFileReader;
 import java.io.IOException;
-import javautilwrappers.BasicHashMap;
+import javautilwrappers.HashMapWrapper;
+import javautilwrappers.MapWrapper;
 
 public enum EnvironmentVariables {
     INSTANCE();
@@ -11,10 +12,10 @@ public enum EnvironmentVariables {
     private String credentialFileDirectory;
 
     public void loadFromFile(String fileName) {
-        BasicHashMap<Integer, String> tempMap = new BasicHashMap<>();
+        MapWrapper<Integer, String> tempMap = new HashMapWrapper<>();
         try {
-            BasicFileReader reader = new BasicFileReader(fileName);
-            tempMap = reader.read();
+            BasicFileReader reader = new BasicFileReader();
+            tempMap = reader.read(fileName);
         } 
         catch (IOException ex) {
             //TODO: Properly shut down program - failure to load env variables

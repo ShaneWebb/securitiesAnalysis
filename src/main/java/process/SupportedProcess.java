@@ -1,9 +1,10 @@
 package process;
 
 import datatypes.Report;
-import io.console.ArgParseWrapper;
-import javautilwrappers.BasicHashMap;
+import javautilwrappers.MapWrapper;
 
+//TODO: Refactor into multiple interfaces, since not all processes need
+//all of these features.
 public interface SupportedProcess {
   
     public boolean runsOnStart();
@@ -14,8 +15,8 @@ public interface SupportedProcess {
 
     public void stopAllThreads();
 
-    public void execute();
+    public void execute() throws Exception;
 
-    public void setArgs(BasicHashMap<String, Object> parsedArgs);
+    public void setArgs(MapWrapper<String, Object> parsedArgs);
     
 }

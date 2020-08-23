@@ -5,19 +5,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 //Thin wrapper around ArrayList. 
-public class BasicArrayList<T> extends AbstractList<T>
-        implements Collection<T> {
+public class ArrayListWrapper<T> extends AbstractListWrapper<T>
+        implements Iterable<T> {
 
-    private final ArrayList<T> internalArrayList;
 
-    public BasicArrayList() {
+    public ArrayListWrapper() {
         internalArrayList = new ArrayList<>();
     }
     
-    public BasicArrayList(List list) {
+    public ArrayListWrapper(List list) {
         internalArrayList = new ArrayList<>(list);
     }
 
@@ -33,28 +31,6 @@ public class BasicArrayList<T> extends AbstractList<T>
         return internalArrayList.get(index);
     }
 
-    @Override
-    public int hashCode() {
-        return this.internalArrayList.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final BasicArrayList<?> other = (BasicArrayList<?>) obj;
-        if (!Objects.equals(this.internalArrayList, other.internalArrayList)) {
-            return false;
-        }
-        return true;
-    }
 
     @Override
     public Iterator<T> iterator() {

@@ -2,7 +2,8 @@
 package process;
 
 import datatypes.Report;
-import javautilwrappers.BasicHashMap;
+import javautilwrappers.HashMapWrapper;
+import javautilwrappers.MapWrapper;
 
 public class Stopper implements SupportedProcess {
 
@@ -36,7 +37,7 @@ public class Stopper implements SupportedProcess {
     }
     
     @Override
-    public void setArgs(BasicHashMap<String, Object> parsedArgs) {
+    public void setArgs(MapWrapper<String, Object> parsedArgs) {
         
     }
 //</editor-fold>

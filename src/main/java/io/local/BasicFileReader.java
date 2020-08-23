@@ -6,38 +6,39 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import javautilwrappers.BasicHashMap;
+import javautilwrappers.HashMapWrapper;
+import javautilwrappers.MapWrapper;
 
 //assigns variables accordingly. 
 public class BasicFileReader {
-    
-    Path filePath;
-    Charset charset;
-    
-    public BasicFileReader(String fileName) {
-        this.filePath = Paths.get(fileName);
+
+    private Charset charset;
+
+    public BasicFileReader() {
         this.charset = StandardCharsets.UTF_8;
     }
-    
-    public BasicHashMap<Integer, String> read() throws IOException {
-        
-        BasicHashMap<Integer, String> fileByLine = new BasicHashMap<>();
-        try (BufferedReader bufferedReader = Files.newBufferedReader(filePath, charset)) {
+
+    public BasicFileReader(String fileName) {
+        this.charset = StandardCharsets.UTF_8;
+    }
+
+    public MapWrapper<Integer, String> read(String filePath1) throws IOException {
+
+        MapWrapper<Integer, String> fileByLine = new HashMapWrapper<>();
+        try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(filePath1), charset)) {
             int i = 1;
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 fileByLine.put(i, line);
                 ++i;
             }
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             throw ex;
         }
 
         return fileByLine;
-        
+
     }
-    
+
 }
