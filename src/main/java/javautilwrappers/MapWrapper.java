@@ -1,6 +1,6 @@
 package javautilwrappers;
 
-import java.util.Collection;
+import java.util.Map;
 
 public interface MapWrapper<K, V> {
 
@@ -10,13 +10,15 @@ public interface MapWrapper<K, V> {
 
     V put(K key, V value);
 
-    Collection<V> values();
+    CollectionWrapper<V> values();
 
     public interface Entry<K, V> {
 
         K getKey();
 
         V getValue();
+        
+        Map.Entry<K,V> unwrap();
     }
 
 }

@@ -2,19 +2,37 @@
 package javautilwrappers;
 
 import java.util.AbstractList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractListWrapper<T> extends AbstractList<T> {
+public abstract class AbstractListWrapper<E> implements ListWrapper<E> {
 
-    protected List<T> internalArrayList;
+    protected List<E> internalList;
 
     protected AbstractListWrapper() {
+    }
+    
+    @Override
+    public boolean add(E item) {
+        return internalList.add(item);
+    }
+
+    @Override
+    public boolean remove(E item) {
+        return internalList.remove(item);
+    }
+
+    @Override
+    public E get(int index) {
+        return internalList.get(index);
     }
 
     @Override
     public int hashCode() {
-        return this.internalArrayList.hashCode();
+        int hash = 5;
+        hash = 47 * hash + Objects.hashCode(this.internalList);
+        return hash;
     }
 
     @Override
@@ -28,11 +46,16 @@ public abstract class AbstractListWrapper<T> extends AbstractList<T> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ArrayListWrapper<?> other = (ArrayListWrapper<?>) obj;
-        if (!Objects.equals(this.internalArrayList, other.internalArrayList)) {
+        final AbstractListWrapper<?> other = (AbstractListWrapper<?>) obj;
+        if (!Objects.equals(this.internalList, other.internalList)) {
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public Iterator<E> iterator() {
+        return internalList.iterator();
     }
 
 }

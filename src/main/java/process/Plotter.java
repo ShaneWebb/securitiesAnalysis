@@ -29,10 +29,9 @@ public class Plotter implements SupportedProcess {
             parsedFiles.put(file, reader.read(file));
         }
         
-        
-//        for(MapWrapper.Entry<String, MapWrapper<Integer,String>> entry : parsedFiles.entrySet()) {
-//            entry.getKey();
-//        }
+        for(MapWrapper.Entry<String, MapWrapper<Integer,String>> entry : parsedFiles.entrySet()) {
+            System.out.println(entry.getValue());
+        }
 
         switch (visualization) {
             case BASIC:

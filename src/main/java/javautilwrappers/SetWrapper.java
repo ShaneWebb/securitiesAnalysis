@@ -1,6 +1,6 @@
 
 package javautilwrappers;
 
-public interface SetWrapper<E> extends Iterable<E> {
+public interface SetWrapper<E> extends CollectionWrapper<E> {
 
 }
