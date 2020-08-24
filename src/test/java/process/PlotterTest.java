@@ -1,9 +1,11 @@
 package process;
 
 import io.local.BasicFileReader;
+import java.io.IOException;
 import static java.util.Arrays.stream;
 import java.util.stream.Stream;
 import javautilwrappers.HashMapWrapper;
+import javautilwrappers.ItemNotFoundException;
 import javautilwrappers.MapWrapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -20,12 +22,12 @@ import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
 public class PlotterTest {
-    
+
     private AutoCloseable closeable;
-    
+
     @Mock
     private BasicFileReader reader;
-    
+
     @BeforeEach
     public void setUp() {
         closeable = MockitoAnnotations.openMocks(this);
@@ -35,7 +37,7 @@ public class PlotterTest {
     public void tearDown() throws Exception {
         closeable.close();
     }
-    
+
     @ParameterizedTest
     @MethodSource("provideExecuteArgs")
     public void testExecute(MapWrapper<String, Object> cliArgs,
@@ -44,7 +46,7 @@ public class PlotterTest {
 
         when(reader.read("A.csv")).thenReturn(aCsvData);
         when(reader.read("B.csv")).thenReturn(bCsvData);
-        
+
         Plotter testPlotter = new Plotter(reader);
         try {
             testPlotter.setArgs(cliArgs);
@@ -52,9 +54,34 @@ public class PlotterTest {
         } catch (Exception e) {
             fail(e.getMessage());
         }
-        
+
     }
-    
+
+    @ParameterizedTest
+    @MethodSource("provideExecuteArgs")
+    public void testExecuteExceptions(MapWrapper<String, Object> cliArgs,
+            MapWrapper<Integer, String> aCsvData,
+            MapWrapper<Integer, String> bCsvData) throws Exception {
+
+        when(reader.read("A.csv")).thenReturn(aCsvData);
+        when(reader.read("B.csv")).thenReturn(bCsvData);
+
+        Plotter testPlotter = new Plotter(reader);
+
+        MapWrapper<String, Object> cliArgsInvalid = new HashMapWrapper(cliArgs);
+        cliArgsInvalid.put("header", "IDoNotExist");
+
+        IOException ioException = assertThrows(IOException.class,
+                () -> {
+                    testPlotter.setArgs(cliArgsInvalid);
+                    testPlotter.execute();
+                }
+        );
+        
+        assertEquals(ItemNotFoundException.class, ioException.getCause().getClass());
+
+    }
+
     public static Stream<Arguments> provideExecuteArgs() {
         MapWrapper<String, Object> cliArgs = new HashMapWrapper<>();
         cliArgs.put("files", "A.csv,B.csv");
@@ -63,10 +90,7 @@ public class PlotterTest {
         cliArgs.put("endDate", "1/1/2020");
         cliArgs.put("lineartrend", true);
         cliArgs.put("type", Visualizations.BASIC);
-        
-        MapWrapper<String, Object> cliArgsInvalid = new HashMapWrapper(cliArgs);
-        cliArgsInvalid.put("header", "IDoNotExist");
-        
+
         MapWrapper<Integer, String> aCsvData = new HashMapWrapper<>();
         MapWrapper<Integer, String> bCsvData = new HashMapWrapper<>();
         aCsvData.put(1, "date,volume,open,close,high,low,adjclose");
@@ -75,11 +99,10 @@ public class PlotterTest {
         bCsvData.put(1, "date,volume,open,close,high,low,adjclose");
         bCsvData.put(2, "4/18/2019,146800,53.86000061,53.93999863,54.24000168,53.72999954,53.93999863");
         bCsvData.put(3, "4/17/2019,245600,54.27000046,53.95000076,54.54000092,53.20999908,53.95000076");
-        
+
         return Stream.of(
                 Arguments.of(cliArgs, aCsvData, bCsvData)
         );
     }
-    
 
 }
