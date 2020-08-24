@@ -11,6 +11,8 @@ public interface MapWrapper<K, V> {
     V put(K key, V value);
 
     CollectionWrapper<V> values();
+    
+    Map<K, V> unwrap();
 
     public interface Entry<K, V> {
 

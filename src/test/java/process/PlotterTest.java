@@ -64,6 +64,9 @@ public class PlotterTest {
         cliArgs.put("lineartrend", true);
         cliArgs.put("type", Visualizations.BASIC);
         
+        MapWrapper<String, Object> cliArgsInvalid = new HashMapWrapper(cliArgs);
+        cliArgsInvalid.put("header", "IDoNotExist");
+        
         MapWrapper<Integer, String> aCsvData = new HashMapWrapper<>();
         MapWrapper<Integer, String> bCsvData = new HashMapWrapper<>();
         aCsvData.put(1, "date,volume,open,close,high,low,adjclose");

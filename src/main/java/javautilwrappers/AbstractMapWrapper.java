@@ -49,6 +49,11 @@ public abstract class AbstractMapWrapper<K, V> implements MapWrapper<K, V> {
 
         return collection;
     }
+    
+    @Override
+    public Map<K, V> unwrap() {
+        return internalMap;
+    }
 
     //TODO: Holey moley nested class anti-pattern. Refactor.
     @Override

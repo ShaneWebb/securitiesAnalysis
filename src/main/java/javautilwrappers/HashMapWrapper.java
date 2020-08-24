@@ -14,12 +14,16 @@ public class HashMapWrapper<K, V> extends AbstractMapWrapper<K, V> {
         }
     }
     
+    public HashMapWrapper(){
+        internalMap = new HashMap<>();
+    }
+    
     public HashMapWrapper(Map<? extends K, ? extends V> map) {
         internalMap = new HashMap<>(map);
     }
     
-    public HashMapWrapper(){
-        internalMap = new HashMap<>();
+    public HashMapWrapper(MapWrapper<? extends K, ? extends V> map) {
+        internalMap = new HashMap<>(map.unwrap());
     }
     
 }
