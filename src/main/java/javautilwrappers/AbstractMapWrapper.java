@@ -22,6 +22,11 @@ public abstract class AbstractMapWrapper<K, V> implements MapWrapper<K, V> {
     public V get(K key) {
         return internalMap.get(key);
     }
+    
+    @Override
+    public V remove(K key) {
+        return internalMap.remove(key);
+    }
 
     @Override
     public CollectionWrapper<V> values() {

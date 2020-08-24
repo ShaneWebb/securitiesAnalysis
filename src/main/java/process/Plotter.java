@@ -8,11 +8,18 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javautilwrappers.ArrayListWrapper;
+import javautilwrappers.CollectionWrapper;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.ItemNotFoundException;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
+import main.Helper;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.time.Month;
 import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 
 public class Plotter implements SupportedProcess {
     
@@ -38,13 +45,13 @@ public class Plotter implements SupportedProcess {
             parsedFiles.put(file, reader.read(file));
         }
         
-        MapWrapper<String, TimeSeries> chartData = new HashMapWrapper<>();
+        ListWrapper<TimeSeries> chartData = new ArrayListWrapper<>();
         
         for(MapWrapper.Entry<String, MapWrapper<Integer,String>> file : parsedFiles.entrySet()) {
             
             try {
                 TimeSeries series = new TimeSeries(file.getKey());
-                chartData.put(file.getKey(), series);
+                chartData.add(series);
                 
                 MapWrapper<Integer, String> contents = file.getValue();
                 String fileHeader = contents.get(HEADER_LINE);
@@ -53,17 +60,43 @@ public class Plotter implements SupportedProcess {
                         new ArrayListWrapper(Arrays.asList(fileHeader.split(",")));
                 
                 int colIndex = delimitedHeaders.indexOf(header);
+                contents.remove(HEADER_LINE);
                 
-                for(MapWrapper.Entry<Integer, String> fileData: contents.entrySet()) {
-
+                int tempyear = 2000;
+                for(String fileData: contents.values()) {
+                    ListWrapper<String> delimitedData = 
+                            new ArrayListWrapper(Arrays.asList(fileData.split(",")));
                     
-                    //series.add(item);
+                    double value = Double.valueOf(delimitedData.get(colIndex));
+                    series.add(new Month(1, tempyear++), value);
                 }
+                
                 //System.out.println(entry.getValue());
             } catch (ItemNotFoundException ex) {
                 throw new IOException(ex);
             }
         }
+        
+        TimeSeriesCollection dataset = new TimeSeriesCollection();
+        for(TimeSeries series: chartData) {
+            dataset.addSeries(series);
+        }
+        
+        JFreeChart chart = ChartFactory.createTimeSeriesChart(
+                "Legal & General Unit Trust Prices", // title
+                "Date", // x-axis label
+                "Price Per Unit", // y-axis label
+                dataset, // data
+                true, // create legend?
+                true, // generate tooltips?
+                false // generate URLs?
+        );
+        
+        ChartFrame frame = new ChartFrame("Test", chart);
+        frame.pack();
+        frame.setVisible(true);
+        
+        Helper.pause(5);
 
         switch (visualization) {
             case BASIC:
