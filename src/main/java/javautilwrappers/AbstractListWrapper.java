@@ -1,7 +1,6 @@
 
 package javautilwrappers;
 
-import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -26,6 +25,15 @@ public abstract class AbstractListWrapper<E> implements ListWrapper<E> {
     @Override
     public E get(int index) {
         return internalList.get(index);
+    }
+    
+    @Override
+    public int indexOf(E item) throws ItemNotFoundException {
+        int index = internalList.indexOf(item);
+        if (index == -1) {
+            throw new ItemNotFoundException("Item not found in list!");
+        }
+        return index;
     }
 
     @Override

@@ -73,6 +73,9 @@ public class ProgramManager {
         plot.addArgument("files")
                 .help("Comma separated list of CSV files.");
         
+        plot.addArgument("header")
+                .help("Data to plot");
+                
         plot.addArgument("startDate")
                 .help("Start date to plot");
         

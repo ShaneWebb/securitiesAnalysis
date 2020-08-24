@@ -1,6 +1,8 @@
 package process;
 
 import io.local.BasicFileReader;
+import static java.util.Arrays.stream;
+import java.util.stream.Stream;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
 import org.junit.jupiter.api.AfterEach;
@@ -10,6 +12,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
@@ -31,14 +36,33 @@ public class PlotterTest {
         closeable.close();
     }
     
-    @Test
-    public void testExecute() throws Exception {
-        MapWrapper<String, Object> map1 = new HashMapWrapper<>();
-        map1.put("files", "A.csv,B.csv");
-        map1.put("startDate", "8/21/1981");
-        map1.put("endDate", "1/1/2020");
-        map1.put("lineartrend", true);
-        map1.put("type", Visualizations.BASIC);
+    @ParameterizedTest
+    @MethodSource("provideExecuteArgs")
+    public void testExecute(MapWrapper<String, Object> cliArgs,
+            MapWrapper<Integer, String> aCsvData,
+            MapWrapper<Integer, String> bCsvData) throws Exception {
+
+        when(reader.read("A.csv")).thenReturn(aCsvData);
+        when(reader.read("B.csv")).thenReturn(bCsvData);
+        
+        Plotter testPlotter = new Plotter(reader);
+        try {
+            testPlotter.setArgs(cliArgs);
+            testPlotter.execute();
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+        
+    }
+    
+    public static Stream<Arguments> provideExecuteArgs() {
+        MapWrapper<String, Object> cliArgs = new HashMapWrapper<>();
+        cliArgs.put("files", "A.csv,B.csv");
+        cliArgs.put("header", "volume");
+        cliArgs.put("startDate", "8/21/1981");
+        cliArgs.put("endDate", "1/1/2020");
+        cliArgs.put("lineartrend", true);
+        cliArgs.put("type", Visualizations.BASIC);
         
         MapWrapper<Integer, String> aCsvData = new HashMapWrapper<>();
         MapWrapper<Integer, String> bCsvData = new HashMapWrapper<>();
@@ -49,17 +73,10 @@ public class PlotterTest {
         bCsvData.put(2, "4/18/2019,146800,53.86000061,53.93999863,54.24000168,53.72999954,53.93999863");
         bCsvData.put(3, "4/17/2019,245600,54.27000046,53.95000076,54.54000092,53.20999908,53.95000076");
         
-        when(reader.read("A.csv")).thenReturn(aCsvData);
-        when(reader.read("B.csv")).thenReturn(bCsvData);
-        
-        Plotter testPlotter = new Plotter(reader);
-        try {
-            testPlotter.setArgs(map1);
-            testPlotter.execute();
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
-        
+        return Stream.of(
+                Arguments.of(cliArgs, aCsvData, bCsvData)
+        );
     }
+    
 
 }
