@@ -17,6 +17,6 @@ public interface SupportedProcess {
 
     public void execute() throws Exception;
 
-    public void setArgs(MapWrapper<String, Object> parsedArgs);
+    public void setArgs(MapWrapper<String, Object> parsedArgs) throws IllegalArgumentException;
     
 }

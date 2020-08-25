@@ -4,7 +4,12 @@ package process;
 import datatypes.Report;
 import io.local.BasicFileReader;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javautilwrappers.ArrayListWrapper;
@@ -17,6 +22,7 @@ import main.Helper;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.time.Day;
 import org.jfree.data.time.Month;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -24,11 +30,13 @@ import org.jfree.data.time.TimeSeriesCollection;
 public class Plotter implements SupportedProcess {
     
     private String files;
-    private String header, startDate, endDate;
+    private String header;
+    private Date startDate, endDate;
     private boolean showLinearTrend;
     private Visualizations visualization;
     private final BasicFileReader reader;
     private static final int HEADER_LINE = 1;
+    private static final int DATE_INDEX = 0;
 
     public Plotter(BasicFileReader reader) {
         this.reader = reader;
@@ -62,17 +70,26 @@ public class Plotter implements SupportedProcess {
                 int colIndex = delimitedHeaders.indexOf(header);
                 contents.remove(HEADER_LINE);
                 
-                int tempyear = 2000;
                 for(String fileData: contents.values()) {
                     ListWrapper<String> delimitedData = 
                             new ArrayListWrapper(Arrays.asList(fileData.split(",")));
                     
                     double value = Double.valueOf(delimitedData.get(colIndex));
-                    series.add(new Month(1, tempyear++), value);
+                    String dateStr = delimitedData.get(DATE_INDEX);
+                    
+                    DateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+                    Date parsedDate = df.parse(dateStr);
+                    
+                    if (parsedDate.compareTo(startDate) >= 0
+                            && parsedDate.compareTo(endDate) <= 0) {
+                        series.add(new Day(parsedDate), value);
+                    } else {
+                        continue;
+                    }
                 }
                 
                 //System.out.println(entry.getValue());
-            } catch (ItemNotFoundException ex) {
+            } catch (ItemNotFoundException | ParseException ex) {
                 throw new IOException(ex);
             }
         }
@@ -106,13 +123,20 @@ public class Plotter implements SupportedProcess {
     }
 
     @Override
-    public void setArgs(MapWrapper<String, Object> parsedArgs) {
+    public void setArgs(MapWrapper<String, Object> parsedArgs) 
+            throws IllegalArgumentException {
         files = (String) parsedArgs.get("files");
         header = (String) parsedArgs.get("header");
-        startDate = (String) parsedArgs.get("startDate");
-        endDate = (String) parsedArgs.get("endDate");
         showLinearTrend = (boolean) parsedArgs.get("lineartrend");
         visualization = (Visualizations) parsedArgs.get("type");
+        
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+        try {
+            startDate = df.parse((String) parsedArgs.get("startDate"));
+            endDate = df.parse((String) parsedArgs.get("endDate"));
+        } catch (ParseException ex) {
+            throw new IllegalArgumentException(ex);
+        }
     }
 
 //<editor-fold defaultstate="collapsed" desc="Unused">

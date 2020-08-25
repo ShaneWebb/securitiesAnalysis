@@ -81,6 +81,27 @@ public class PlotterTest {
         assertEquals(ItemNotFoundException.class, ioException.getCause().getClass());
 
     }
+    
+    @ParameterizedTest
+    @MethodSource("provideExecuteArgs")
+    public void testEmptySeries(MapWrapper<String, Object> cliArgs,
+            MapWrapper<Integer, String> aCsvData,
+            MapWrapper<Integer, String> bCsvData) throws Exception {
+        
+        cliArgs.put("startDate", "1/1/2100");
+        cliArgs.put("endDate", "1/1/2100");
+        
+        when(reader.read("A.csv")).thenReturn(aCsvData);
+        when(reader.read("B.csv")).thenReturn(bCsvData);
+        
+        Plotter testPlotter = new Plotter(reader);
+        try {
+            testPlotter.setArgs(cliArgs);
+            testPlotter.execute();
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
 
     public static Stream<Arguments> provideExecuteArgs() {
         MapWrapper<String, Object> cliArgs = new HashMapWrapper<>();
