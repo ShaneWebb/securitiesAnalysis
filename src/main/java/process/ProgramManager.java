@@ -101,6 +101,15 @@ public class ProgramManager {
 
         ArgParseWrapper movAvg = plot.addParser("MovingAvg", "Moving Average");
         movAvg.setDefault("type", Visualizations.MOVING_AVERAGE);
+        movAvg.addArgument("--period")
+                .help("Number of time periods for the average.")
+                .type(Integer.class)
+                .setDefault(1);
+        
+        movAvg.addArgument("--initToIgnore")
+                .help("Number of initial time periods to ignore.")
+                .type(Integer.class)
+                .setDefault(1);
 
         ArgParseWrapper bin = plot.addParser("Bin", "Price binning");
         bin.setDefault("type", Visualizations.BINNED);

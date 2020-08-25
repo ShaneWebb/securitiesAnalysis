@@ -65,32 +65,36 @@ public class Plotter implements SupportedProcess {
     @Override
     public void setArgs(MapWrapper<String, Object> parsedArgs)
             throws IllegalArgumentException {
+        
         files = (String) parsedArgs.get("files");
-        showLinearTrend = (boolean) parsedArgs.get("lineartrend");
         visualization = (Visualizations) parsedArgs.get("type");
+        showLinearTrend = (boolean) parsedArgs.get("lineartrend");
         
         chart.setHeader((String) parsedArgs.get("header"));
-        chartData.setHeader((String) parsedArgs.get("header"));
         chart.setxAxis((String) parsedArgs.get("xAxis"));
         chart.setVisualization((Visualizations) parsedArgs.get("type"));
+        chartData.setHeader((String) parsedArgs.get("header"));
         
         DateFormat df = new SimpleDateFormat(defaultCliDateFormat, Locale.ENGLISH);
         try {
-            Date startDate = df.parse((String) parsedArgs.get("startDate"));
+            String startDateStr = (String) parsedArgs.get("startDate");
+            Date startDate = df.parse(startDateStr);
             chartData.setStartDate(startDate);
-            Date endDate = df.parse((String) parsedArgs.get("endDate"));
+            
+            String endDateStr = (String) parsedArgs.get("endDate");
+            Date endDate = df.parse(endDateStr);
             chartData.setEndDate(endDate);
         } catch (ParseException ex) {
             throw new IllegalArgumentException(ex);
         }
     }
 
-//<editor-fold defaultstate="collapsed" desc="Unused">
     @Override
     public boolean runsOnStart() {
         return false;
     }
 
+//<editor-fold defaultstate="collapsed" desc="Unused">
     @Override
     public void setAuditReport(Report auditReport) {
 

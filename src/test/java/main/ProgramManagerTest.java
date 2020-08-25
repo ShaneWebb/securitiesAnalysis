@@ -239,9 +239,21 @@ public class ProgramManagerTest {
         map2.put("lineartrend", false);
         map2.put("type", Visualizations.BASIC);
         
+        MapWrapper<String, Object> map3 = new HashMapWrapper<>(map1);
+        map3.put("type", Visualizations.MOVING_AVERAGE);
+        map3.put("period", 1);
+        map3.put("initToIgnore", 1);
+        
+        MapWrapper<String, Object> map4 = new HashMapWrapper<>(map2);
+        map4.put("type", Visualizations.MOVING_AVERAGE);
+        map4.put("period", 20);
+        map4.put("initToIgnore", 20);
+        
         return Stream.of(
                 Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 --lineartrend Basic", map1),
-                Arguments.of("Visualize C.csv,D.csv volume 8/21/1981 1/1/2020 --xAxis Time Basic", map2)
+                Arguments.of("Visualize C.csv,D.csv volume 8/21/1981 1/1/2020 --xAxis Time Basic", map2),
+                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 --lineartrend MovingAvg", map3),
+                Arguments.of("Visualize C.csv,D.csv volume 8/21/1981 1/1/2020 --xAxis Time MovingAvg --period 20 --initToIgnore 20", map4)
         );
     }
 
