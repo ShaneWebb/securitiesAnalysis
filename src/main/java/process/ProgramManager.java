@@ -83,8 +83,13 @@ public class ProgramManager {
         plot.addArgument("endDate")
                 .help("End date to plot");
         
+        plot.addArgument("--xAxis")
+                .help("Label for the x-axis")
+                .setDefault("Date");
+        
         plot.addArgument("--lineartrend")
                 .help("Plot linear trendlines")
+                .setDefault(false)
                 .actionStoreTrue();
         
         ArgParseWrapper basic = plot.addParser("Basic", "As is plot");

@@ -221,25 +221,27 @@ public class ProgramManagerTest {
     }
     
     public static Stream<Arguments> provideCommandAndMap() {
-        HashMapWrapper<String, Object> map1 = new HashMapWrapper<>();
+        MapWrapper<String, Object> map1 = new HashMapWrapper<>();
         map1.put("files", "A.csv,B.csv");
         map1.put("header", "volume");
         map1.put("startDate", "8/21/1981");
         map1.put("endDate", "1/1/2020");
+        map1.put("xAxis", "Date");
         map1.put("lineartrend", true);
         map1.put("type", Visualizations.BASIC);
         
-        HashMapWrapper<String, Object> map2 = new HashMapWrapper<>();
+        MapWrapper<String, Object> map2 = new HashMapWrapper<>();
         map2.put("files", "C.csv,D.csv");
         map2.put("header", "volume");
         map2.put("startDate", "8/21/1981");
         map2.put("endDate", "1/1/2020");
+        map2.put("xAxis", "Time");
         map2.put("lineartrend", false);
         map2.put("type", Visualizations.BASIC);
         
         return Stream.of(
                 Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 --lineartrend Basic", map1),
-                Arguments.of("Visualize C.csv,D.csv volume 8/21/1981 1/1/2020 Basic", map2)
+                Arguments.of("Visualize C.csv,D.csv volume 8/21/1981 1/1/2020 --xAxis Time Basic", map2)
         );
     }
 

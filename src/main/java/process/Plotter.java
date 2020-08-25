@@ -19,7 +19,8 @@ import org.jfree.data.time.TimeSeriesCollection;
 
 public class Plotter implements SupportedProcess {
 
-    private String files, header, defaultCliDateFormat, defaultFileDateFormat;
+    private String files, header, xAxis;
+    private String defaultCliDateFormat, defaultFileDateFormat;
     private Date startDate, endDate;
     private boolean showLinearTrend;
     private Visualizations visualization;
@@ -38,16 +39,26 @@ public class Plotter implements SupportedProcess {
     @Override
     public void execute() throws IOException {
 
-        String[] delimitedFiles = files.split(",");
-        MapWrapper<String, MapWrapper<Integer, String>> parsedFiles
-                = new HashMapWrapper<>();
+        MapWrapper<String, MapWrapper<Integer, String>> parsedFiles;
+        parsedFiles = readFiles(files);
+        TimeSeriesCollection dataset = generateChartData(parsedFiles);
 
-        for (String file : delimitedFiles) {
-            parsedFiles.put(file, reader.read(file));
+        switch (visualization) {
+            case BASIC:
+                generateVisual(dataset, "Basic Plot");
+                break;
+            case MOVING_AVERAGE:
+                break;
+            case BINNED:
+                break;
         }
 
-        ListWrapper<TimeSeries> chartData = new ArrayListWrapper<>();
+        
+    }
 
+    private TimeSeriesCollection generateChartData(MapWrapper<String, MapWrapper<Integer, String>> parsedFiles) 
+            throws IOException, NumberFormatException {
+        ListWrapper<TimeSeries> chartData = new ArrayListWrapper<>();
         for (MapWrapper.Entry<String, MapWrapper<Integer, String>> file : parsedFiles.entrySet()) {
 
             try {
@@ -86,39 +97,35 @@ public class Plotter implements SupportedProcess {
                 throw new IOException(ex);
             }
         }
-
         TimeSeriesCollection dataset = new TimeSeriesCollection();
         for (TimeSeries series : chartData) {
             dataset.addSeries(series);
         }
-
-
-        switch (visualization) {
-            case BASIC:
-                break;
-            case MOVING_AVERAGE:
-                break;
-            case BINNED:
-                break;
-        }
-
-        generateVisual(dataset);
-        
+        return dataset;
     }
 
+    private MapWrapper<String, MapWrapper<Integer, String>> readFiles(String files) throws IOException {
+        String[] delimitedFiles = files.split(",");
+        MapWrapper<String, MapWrapper<Integer, String>> parsedFiles
+                = new HashMapWrapper<>();
+        for (String file : delimitedFiles) {
+            parsedFiles.put(file, reader.read(file));
+        }
+        return parsedFiles;
+    }
 
-    private void generateVisual(TimeSeriesCollection dataset) {
+    private void generateVisual(TimeSeriesCollection dataset, String title) {
         JFreeChart chart = ChartFactory.createTimeSeriesChart(
-                "Legal & General Unit Trust Prices", // title
-                "Date", // x-axis label
-                "Price Per Unit", // y-axis label
+                title, // title
+                xAxis, // x-axis label
+                header, // y-axis label
                 dataset, // data
                 true, // create legend?
                 true, // generate tooltips?
                 false // generate URLs?
         );
 
-        ChartFrame frame = new ChartFrame("Test", chart);
+        ChartFrame frame = new ChartFrame(title, chart);
         frame.pack();
         frame.setVisible(true);
 
@@ -129,6 +136,7 @@ public class Plotter implements SupportedProcess {
             throws IllegalArgumentException {
         files = (String) parsedArgs.get("files");
         header = (String) parsedArgs.get("header");
+        xAxis = (String) parsedArgs.get("xAxis");
         showLinearTrend = (boolean) parsedArgs.get("lineartrend");
         visualization = (Visualizations) parsedArgs.get("type");
 
