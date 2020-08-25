@@ -7,6 +7,7 @@ import datatypes.Report;
 import io.database.audit.AuditReportFields;
 import java.util.stream.Stream;
 import javautilwrappers.HashMapWrapper;
+import javautilwrappers.MapWrapper;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -129,7 +130,7 @@ public class ProgramManagerTest {
 
         class LocalTestFactory implements Supplier<ProgramManager> {
 
-            private final HashMapWrapper<String, SupportedProcess> supportedProcesses;
+            private final MapWrapper<String, SupportedProcess> supportedProcesses;
             private final ArgParseWrapper localArgParser;
 
             LocalTestFactory() {

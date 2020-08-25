@@ -99,6 +99,16 @@ public class Plotter implements SupportedProcess {
             dataset.addSeries(series);
         }
         
+        generateVisual(dataset);
+
+        switch (visualization) {
+            case BASIC:
+                break;
+        }
+        
+    }
+
+    private void generateVisual(TimeSeriesCollection dataset) {
         JFreeChart chart = ChartFactory.createTimeSeriesChart(
                 "Legal & General Unit Trust Prices", // title
                 "Date", // x-axis label
@@ -112,13 +122,6 @@ public class Plotter implements SupportedProcess {
         ChartFrame frame = new ChartFrame("Test", chart);
         frame.pack();
         frame.setVisible(true);
-        
-        Helper.pause(5);
-
-        switch (visualization) {
-            case BASIC:
-                break;
-        }
         
     }
 

@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.ItemNotFoundException;
 import javautilwrappers.MapWrapper;
+import main.Helper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,6 +52,7 @@ public class PlotterTest {
         try {
             testPlotter.setArgs(cliArgs);
             testPlotter.execute();
+            //Helper.pause(5);
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -101,6 +103,8 @@ public class PlotterTest {
         } catch (Exception e) {
             fail(e);
         }
+        
+        //Helper.pause(5);
     }
 
     public static Stream<Arguments> provideExecuteArgs() {

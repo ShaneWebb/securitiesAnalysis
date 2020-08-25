@@ -13,7 +13,7 @@ public class TimeLibTest {
     public void dateTest() throws Exception {
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
         Date date = df.parse("8/24/2020");
-        System.out.println(date);
+        //System.out.println(date);
     }
     
 }

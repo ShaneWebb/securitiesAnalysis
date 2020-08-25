@@ -5,6 +5,7 @@ import datatypes.EnvironmentVariables;
 import io.console.ArgParseWrapper;
 import io.local.BasicFileReader;
 import javautilwrappers.HashMapWrapper;
+import javautilwrappers.MapWrapper;
 import main.Supplier;
 
 public class ProgramManager {
@@ -20,7 +21,7 @@ public class ProgramManager {
      *
      */
     private final EnvironmentVariables environmentVariables;
-    private final HashMapWrapper<String, SupportedProcess> supportedProcesses;
+    private final MapWrapper<String, SupportedProcess> supportedProcesses;
     private final ArgParseWrapper argParser;
     private Report auditReport;
 
@@ -28,7 +29,7 @@ public class ProgramManager {
 
     public static class DefaultFactory implements Supplier<ProgramManager> {
 
-        private final HashMapWrapper<String, SupportedProcess> supportedProcesses;
+        private final MapWrapper<String, SupportedProcess> supportedProcesses;
         private final ArgParseWrapper argParser;
 
         public DefaultFactory() {            
@@ -55,7 +56,7 @@ public class ProgramManager {
 
     public ProgramManager(
             EnvironmentVariables environmentVariables,
-            HashMapWrapper<String, SupportedProcess> supportedProcessList,
+            MapWrapper<String, SupportedProcess> supportedProcessList,
             ArgParseWrapper argParser) {
 
         this.environmentVariables = environmentVariables;
