@@ -40,16 +40,18 @@ public class Plotter implements SupportedProcess {
         parsedFiles = readFiles(files);
         chartData.convertChartData(parsedFiles);
 
+        //TODO: Refactor to use polymorphism. This has to be updated
+        //in three places currently.
         switch (visualization) {
             case BASIC:
-                chart.generateVisual(chartData);
+                
                 break;
             case MOVING_AVERAGE:
                 break;
             case BINNED:
                 break;
         }
-
+        chart.generateVisual(chartData);
     }
 
     private MapWrapper<String, MapWrapper<Integer, String>> readFiles(String files) throws IOException {
@@ -87,6 +89,20 @@ public class Plotter implements SupportedProcess {
         } catch (ParseException ex) {
             throw new IllegalArgumentException(ex);
         }
+        
+        switch (visualization) {
+            case BASIC:
+                break;
+            case MOVING_AVERAGE:
+                int period = (int) parsedArgs.get("period");
+                chart.setPeriod(period);
+                int initIgnore = (int) parsedArgs.get("initToIgnore");
+                chart.setPeriod(period);
+                break;
+            case BINNED:
+                break;
+        }
+        
     }
 
     @Override

@@ -56,6 +56,23 @@ public class PlotterTest {
             MapWrapper<Integer, String> aCsvData,
             MapWrapper<Integer, String> bCsvData) throws Exception {
 
+        basicExecute(aCsvData, bCsvData, cliArgs);
+    }
+    
+    @ParameterizedTest
+    @MethodSource("provideExecuteArgs")
+    public void testExecuteMAvg(MapWrapper<String, Object> cliArgs,
+            MapWrapper<Integer, String> aCsvData,
+            MapWrapper<Integer, String> bCsvData) throws Exception {
+        
+        cliArgs.put("type", Visualizations.MOVING_AVERAGE);
+        cliArgs.put("period", 1);
+        cliArgs.put("initToIgnore", 1);
+        
+        basicExecute(aCsvData, bCsvData, cliArgs);
+    }
+
+    private void basicExecute(MapWrapper<Integer, String> aCsvData, MapWrapper<Integer, String> bCsvData, MapWrapper<String, Object> cliArgs) throws IOException {
         when(reader.read("A.csv")).thenReturn(aCsvData);
         when(reader.read("B.csv")).thenReturn(bCsvData);
 
@@ -63,11 +80,10 @@ public class PlotterTest {
         try {
             testPlotter.setArgs(cliArgs);
             testPlotter.execute();
-            //Helper.pause(5);
+            Helper.pause(5);
         } catch (Exception e) {
             fail(e.getMessage());
         }
-
     }
 
     @ParameterizedTest

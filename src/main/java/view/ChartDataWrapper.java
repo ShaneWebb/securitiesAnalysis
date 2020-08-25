@@ -12,6 +12,7 @@ import javautilwrappers.ItemNotFoundException;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.time.Day;
+import org.jfree.data.time.MovingAverage;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
@@ -26,9 +27,39 @@ public class ChartDataWrapper {
     public ChartDataWrapper() {
         this.defaultFileDateFormat = "yyyy-MM-dd";
     }
+    
+    public ChartDataWrapper(ChartDataWrapper original) {
+        this();
+        this.internalTimeSeries = original.internalTimeSeries;
+        this.header = original.header;
+        this.startDate = original.startDate;
+        this.endDate = original.endDate;
+    }
 
     public TimeSeriesCollection getInternalTimeSeries() {
         return internalTimeSeries;
+    }
+    
+    public void addMovingAverage(int period, int initIgnore) {
+        if(internalTimeSeries == null) {
+            return;
+        }
+        
+        ListWrapper<TimeSeries> seriesList = new ArrayListWrapper<>();
+        for(Object series: internalTimeSeries.getSeries()) {
+            TimeSeries existingSeries = (TimeSeries) series;
+            TimeSeries newSeries = MovingAverage.createMovingAverage(
+                    existingSeries, 
+                    existingSeries.getKey().toString() + "MAvg", 
+                    period, 
+                    initIgnore);
+            seriesList.add(newSeries);
+        }
+        
+        for(TimeSeries series: seriesList) {
+            internalTimeSeries.addSeries(series);
+        }
+        
     }
 
     public void setHeader(String header) {
