@@ -21,6 +21,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
+import view.ChartDataWrapper;
+import view.ChartWrapper;
 
 public class PlotterTest {
 
@@ -28,6 +30,15 @@ public class PlotterTest {
 
     @Mock
     private BasicFileReader reader;
+
+    private final ChartWrapper chart;
+
+    private final ChartDataWrapper chartData;
+    
+    public PlotterTest() {
+        this.chart = new ChartWrapper();
+        this.chartData = new ChartDataWrapper();
+    }
 
     @BeforeEach
     public void setUp() {
@@ -48,7 +59,7 @@ public class PlotterTest {
         when(reader.read("A.csv")).thenReturn(aCsvData);
         when(reader.read("B.csv")).thenReturn(bCsvData);
 
-        Plotter testPlotter = new Plotter(reader);
+        Plotter testPlotter = new Plotter(reader, chart, chartData);
         try {
             testPlotter.setArgs(cliArgs);
             testPlotter.execute();
@@ -68,7 +79,7 @@ public class PlotterTest {
         when(reader.read("A.csv")).thenReturn(aCsvData);
         when(reader.read("B.csv")).thenReturn(bCsvData);
 
-        Plotter testPlotter = new Plotter(reader);
+        Plotter testPlotter = new Plotter(reader, chart, chartData);
 
         MapWrapper<String, Object> cliArgsInvalid = new HashMapWrapper(cliArgs);
         cliArgsInvalid.put("header", "IDoNotExist");
@@ -79,31 +90,31 @@ public class PlotterTest {
                     testPlotter.execute();
                 }
         );
-        
+
         assertEquals(ItemNotFoundException.class, ioException.getCause().getClass());
 
     }
-    
+
     @ParameterizedTest
     @MethodSource("provideExecuteArgs")
     public void testEmptySeries(MapWrapper<String, Object> cliArgs,
             MapWrapper<Integer, String> aCsvData,
             MapWrapper<Integer, String> bCsvData) throws Exception {
-        
+
         cliArgs.put("startDate", "1/1/2100");
         cliArgs.put("endDate", "1/1/2100");
-        
+
         when(reader.read("A.csv")).thenReturn(aCsvData);
         when(reader.read("B.csv")).thenReturn(bCsvData);
-        
-        Plotter testPlotter = new Plotter(reader);
+
+        Plotter testPlotter = new Plotter(reader, chart, chartData);
         try {
             testPlotter.setArgs(cliArgs);
             testPlotter.execute();
         } catch (Exception e) {
             fail(e);
         }
-        
+
         //Helper.pause(5);
     }
 

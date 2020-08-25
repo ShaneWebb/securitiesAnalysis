@@ -6,34 +6,31 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import javautilwrappers.*;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartFrame;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.time.Day;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
+import view.ChartDataWrapper;
+import view.ChartWrapper;
 
 public class Plotter implements SupportedProcess {
 
-    private String files, header, xAxis;
-    private String defaultCliDateFormat, defaultFileDateFormat;
-    private Date startDate, endDate;
+    private String files;
+    private String defaultCliDateFormat;
     private boolean showLinearTrend;
     private Visualizations visualization;
     private final BasicFileReader reader;
+    private final ChartWrapper chart;
+    private final ChartDataWrapper chartData;
 
-    private static final int HEADER_LINE = 1;
-    private static final int X_INDEX = 0;
-
-    public Plotter(BasicFileReader reader) {
-        this.defaultFileDateFormat = "yyyy-MM-dd";
+    public Plotter(BasicFileReader reader, ChartWrapper chart, ChartDataWrapper chartData) {
         this.defaultCliDateFormat = "MM/dd/yyyy";
         this.reader = reader;
+        this.chart = chart;
+        this.chartData = chartData;
+    }
 
+    public void setDefaultCliDateFormat(String defaultCliDateFormat) {
+        this.defaultCliDateFormat = defaultCliDateFormat;
     }
 
     @Override
@@ -41,11 +38,11 @@ public class Plotter implements SupportedProcess {
 
         MapWrapper<String, MapWrapper<Integer, String>> parsedFiles;
         parsedFiles = readFiles(files);
-        TimeSeriesCollection dataset = generateChartData(parsedFiles);
+        chartData.convertChartData(parsedFiles);
 
         switch (visualization) {
             case BASIC:
-                generateVisual(dataset, "Basic Plot");
+                chart.generateVisual(chartData);
                 break;
             case MOVING_AVERAGE:
                 break;
@@ -53,55 +50,6 @@ public class Plotter implements SupportedProcess {
                 break;
         }
 
-        
-    }
-
-    private TimeSeriesCollection generateChartData(MapWrapper<String, MapWrapper<Integer, String>> parsedFiles) 
-            throws IOException, NumberFormatException {
-        ListWrapper<TimeSeries> chartData = new ArrayListWrapper<>();
-        for (MapWrapper.Entry<String, MapWrapper<Integer, String>> file : parsedFiles.entrySet()) {
-
-            try {
-                TimeSeries series = new TimeSeries(file.getKey());
-                chartData.add(series);
-
-                MapWrapper<Integer, String> contents = file.getValue();
-                String fileHeader = contents.get(HEADER_LINE);
-
-                ListWrapper<String> delimitedHeaders
-                        = new ArrayListWrapper(Arrays.asList(fileHeader.split(",")));
-
-                int colIndex = delimitedHeaders.indexOf(header);
-                contents.remove(HEADER_LINE);
-
-                for (String fileData : contents.values()) {
-                    ListWrapper<String> delimitedData
-                            = new ArrayListWrapper(Arrays.asList(fileData.split(",")));
-
-                    double value = Double.valueOf(delimitedData.get(colIndex));
-                    String dateStr = delimitedData.get(X_INDEX);
-
-                    DateFormat df = new SimpleDateFormat(defaultFileDateFormat, Locale.ENGLISH);
-                    Date parsedDate = df.parse(dateStr);
-
-                    if (parsedDate.compareTo(startDate) >= 0
-                            && parsedDate.compareTo(endDate) <= 0) {
-                        series.add(new Day(parsedDate), value);
-                    } else {
-                        continue;
-                    }
-                }
-
-                //System.out.println(entry.getValue());
-            } catch (ItemNotFoundException | ParseException ex) {
-                throw new IOException(ex);
-            }
-        }
-        TimeSeriesCollection dataset = new TimeSeriesCollection();
-        for (TimeSeries series : chartData) {
-            dataset.addSeries(series);
-        }
-        return dataset;
     }
 
     private MapWrapper<String, MapWrapper<Integer, String>> readFiles(String files) throws IOException {
@@ -114,36 +62,24 @@ public class Plotter implements SupportedProcess {
         return parsedFiles;
     }
 
-    private void generateVisual(TimeSeriesCollection dataset, String title) {
-        JFreeChart chart = ChartFactory.createTimeSeriesChart(
-                title, // title
-                xAxis, // x-axis label
-                header, // y-axis label
-                dataset, // data
-                true, // create legend?
-                true, // generate tooltips?
-                false // generate URLs?
-        );
-
-        ChartFrame frame = new ChartFrame(title, chart);
-        frame.pack();
-        frame.setVisible(true);
-
-    }
-
     @Override
     public void setArgs(MapWrapper<String, Object> parsedArgs)
             throws IllegalArgumentException {
         files = (String) parsedArgs.get("files");
-        header = (String) parsedArgs.get("header");
-        xAxis = (String) parsedArgs.get("xAxis");
         showLinearTrend = (boolean) parsedArgs.get("lineartrend");
         visualization = (Visualizations) parsedArgs.get("type");
-
+        
+        chart.setHeader((String) parsedArgs.get("header"));
+        chartData.setHeader((String) parsedArgs.get("header"));
+        chart.setxAxis((String) parsedArgs.get("xAxis"));
+        chart.setVisualization((Visualizations) parsedArgs.get("type"));
+        
         DateFormat df = new SimpleDateFormat(defaultCliDateFormat, Locale.ENGLISH);
         try {
-            startDate = df.parse((String) parsedArgs.get("startDate"));
-            endDate = df.parse((String) parsedArgs.get("endDate"));
+            Date startDate = df.parse((String) parsedArgs.get("startDate"));
+            chartData.setStartDate(startDate);
+            Date endDate = df.parse((String) parsedArgs.get("endDate"));
+            chartData.setEndDate(endDate);
         } catch (ParseException ex) {
             throw new IllegalArgumentException(ex);
         }

@@ -31,7 +31,7 @@ public abstract class AbstractListWrapper<E> implements ListWrapper<E> {
     public int indexOf(E item) throws ItemNotFoundException {
         int index = internalList.indexOf(item);
         if (index == -1) {
-            throw new ItemNotFoundException("Item not found in list!");
+            throw new ItemNotFoundException("Item not found in list: " + item);
         }
         return index;
     }

@@ -7,6 +7,8 @@ import io.local.BasicFileReader;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
 import main.Supplier;
+import view.ChartDataWrapper;
+import view.ChartWrapper;
 
 public class ProgramManager {
 
@@ -32,12 +34,14 @@ public class ProgramManager {
         private final MapWrapper<String, SupportedProcess> supportedProcesses;
         private final ArgParseWrapper argParser;
 
-        public DefaultFactory() {            
-            
+        public DefaultFactory() {
+
             supportedProcesses = new HashMapWrapper<>();
             argParser = new ArgParseWrapper("Erasmus");
-            
-            SupportedProcess plotter = new Plotter(new BasicFileReader());
+
+            SupportedProcess plotter = new Plotter(new BasicFileReader(),
+                    new ChartWrapper(),
+                    new ChartDataWrapper());
             SupportedProcess stopper = new Stopper();
             supportedProcesses.put("stopper", stopper);
             supportedProcesses.put("plotter", plotter);
@@ -63,9 +67,9 @@ public class ProgramManager {
         this.supportedProcesses = supportedProcessList;
         this.argParser = argParser;
         ProgramManager.programIsActive = true;
-        
+
         argParser.addSubparserHelp("Sub command help");
-        
+
         ArgParseWrapper stop = argParser.addParser("Stop", "Terminate Erasmus");
         stop.setDefault("func", supportedProcesses.get("stopper"));
 
@@ -73,34 +77,34 @@ public class ProgramManager {
         plot.setDefault("func", supportedProcesses.get("plotter"));
         plot.addArgument("files")
                 .help("Comma separated list of CSV files.");
-        
+
         plot.addArgument("header")
                 .help("Data to plot");
-                
+
         plot.addArgument("startDate")
                 .help("Start date to plot");
-        
+
         plot.addArgument("endDate")
                 .help("End date to plot");
-        
+
         plot.addArgument("--xAxis")
                 .help("Label for the x-axis")
                 .setDefault("Date");
-        
+
         plot.addArgument("--lineartrend")
                 .help("Plot linear trendlines")
                 .setDefault(false)
                 .actionStoreTrue();
-        
+
         ArgParseWrapper basic = plot.addParser("Basic", "As is plot");
         basic.setDefault("type", Visualizations.BASIC);
-        
+
         ArgParseWrapper movAvg = plot.addParser("MovingAvg", "Moving Average");
         movAvg.setDefault("type", Visualizations.MOVING_AVERAGE);
-        
+
         ArgParseWrapper bin = plot.addParser("Bin", "Price binning");
         bin.setDefault("type", Visualizations.BINNED);
-        
+
     }
 
     public static synchronized void setProgramActiveStatus(boolean programIsActive) {
