@@ -4,17 +4,10 @@ import view.ChartDataFactory;
 import datatypes.Report;
 import io.local.BasicFileReader;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import javautilwrappers.*;
 import view.AbstractChartData;
 import view.AbstractChart;
-import view.ChartDataWrapper;
 import view.ChartFactory;
-import view.ChartWrapper;
 
 public class Plotter implements SupportedProcess {
 
@@ -23,10 +16,8 @@ public class Plotter implements SupportedProcess {
     private AbstractChart chart;
     private AbstractChartData chartData;
 
-    public Plotter(BasicFileReader reader, AbstractChart chart, AbstractChartData chartData) {
+    public Plotter(BasicFileReader reader) {
         this.reader = reader;
-        this.chart = chart;
-        this.chartData = chartData;
     }
 
     @Override

@@ -39,9 +39,7 @@ public class ProgramManager {
             supportedProcesses = new HashMapWrapper<>();
             argParser = new ArgParseWrapper("Erasmus");
 
-            SupportedProcess plotter = new Plotter(new BasicFileReader(),
-                    new AbstractChart(),
-                    new AbstractChartData());
+            SupportedProcess plotter = new Plotter(new BasicFileReader());
             SupportedProcess stopper = new Stopper();
             supportedProcesses.put("stopper", stopper);
             supportedProcesses.put("plotter", plotter);

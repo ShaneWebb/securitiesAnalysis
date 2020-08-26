@@ -1,12 +1,21 @@
-
 package view;
 
 import javautilwrappers.MapWrapper;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.time.TimeSeriesCollection;
+import process.Visualizations;
 
-public class PieChart extends AbstractBinnedChart{
+public class PieChart extends AbstractBinnedChart {
 
-    PieChart(MapWrapper<String, Object> parsedArgs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public PieChart(MapWrapper<String, Object> parsedArgs) {
+        super(parsedArgs);
+    }
+
+    @Override
+    public void generateVisual(AbstractChartData dataset) {
+
     }
 
 }

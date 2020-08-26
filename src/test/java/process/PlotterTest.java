@@ -30,14 +30,8 @@ public class PlotterTest {
 
     @Mock
     private BasicFileReader reader;
-
-    private final AbstractChart chart;
-
-    private final AbstractChartData chartData;
     
     public PlotterTest() {
-        this.chart = new AbstractChart();
-        this.chartData = new AbstractChartData();
     }
 
     @BeforeEach
@@ -76,7 +70,7 @@ public class PlotterTest {
         when(reader.read("A.csv")).thenReturn(aCsvData);
         when(reader.read("B.csv")).thenReturn(bCsvData);
 
-        Plotter testPlotter = new Plotter(reader, chart, chartData);
+        Plotter testPlotter = new Plotter(reader);
         try {
             testPlotter.setArgs(cliArgs);
             testPlotter.execute();
@@ -95,7 +89,7 @@ public class PlotterTest {
         when(reader.read("A.csv")).thenReturn(aCsvData);
         when(reader.read("B.csv")).thenReturn(bCsvData);
 
-        Plotter testPlotter = new Plotter(reader, chart, chartData);
+        Plotter testPlotter = new Plotter(reader);
 
         MapWrapper<String, Object> cliArgsInvalid = new HashMapWrapper(cliArgs);
         cliArgsInvalid.put("header", "IDoNotExist");
@@ -123,7 +117,7 @@ public class PlotterTest {
         when(reader.read("A.csv")).thenReturn(aCsvData);
         when(reader.read("B.csv")).thenReturn(bCsvData);
 
-        Plotter testPlotter = new Plotter(reader, chart, chartData);
+        Plotter testPlotter = new Plotter(reader);
         try {
             testPlotter.setArgs(cliArgs);
             testPlotter.execute();
