@@ -63,7 +63,7 @@ public class JFreeChartTest {
     }
 
     @Test
-    @Disabled
+    //@Disabled
     public void barChartTest() {
         makeExampleBarChart();
     }

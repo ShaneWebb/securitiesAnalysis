@@ -26,6 +26,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import process.Binned;
 import process.ProgramManager;
 import process.Visualizations;
 
@@ -221,39 +222,52 @@ public class ProgramManagerTest {
     }
     
     public static Stream<Arguments> provideCommandAndMap() {
-        MapWrapper<String, Object> map1 = new HashMapWrapper<>();
-        map1.put("files", "A.csv,B.csv");
-        map1.put("header", "volume");
-        map1.put("startDate", "8/21/1981");
-        map1.put("endDate", "1/1/2020");
+        
+        MapWrapper<String, Object> map0 = new HashMapWrapper<>();
+        map0.put("files", "A.csv,B.csv");
+        map0.put("header", "volume");
+        map0.put("startDate", "8/21/1981");
+        map0.put("endDate", "1/1/2020");
+        map0.put("xAxis", "Date");
+        map0.put("lineartrend", false);
+        
+        MapWrapper<String, Object> map1 = new HashMapWrapper<>(map0);
+        map1.put("type", Visualizations.BASIC);
         map1.put("xAxis", "Date");
         map1.put("lineartrend", true);
-        map1.put("type", Visualizations.BASIC);
         
-        MapWrapper<String, Object> map2 = new HashMapWrapper<>();
-        map2.put("files", "C.csv,D.csv");
-        map2.put("header", "volume");
-        map2.put("startDate", "8/21/1981");
-        map2.put("endDate", "1/1/2020");
+        MapWrapper<String, Object> map2 = new HashMapWrapper<>(map0);
+        map2.put("type", Visualizations.BASIC);
         map2.put("xAxis", "Time");
         map2.put("lineartrend", false);
-        map2.put("type", Visualizations.BASIC);
         
-        MapWrapper<String, Object> map3 = new HashMapWrapper<>(map1);
+        MapWrapper<String, Object> map3 = new HashMapWrapper<>(map0);
         map3.put("type", Visualizations.MOVING_AVERAGE);
         map3.put("period", 1);
         map3.put("initToIgnore", 1);
         
-        MapWrapper<String, Object> map4 = new HashMapWrapper<>(map2);
+        MapWrapper<String, Object> map4 = new HashMapWrapper<>(map0);
         map4.put("type", Visualizations.MOVING_AVERAGE);
         map4.put("period", 20);
         map4.put("initToIgnore", 20);
         
+        MapWrapper<String, Object> map5 = new HashMapWrapper<>(map0);
+        map5.put("type", Visualizations.BINNED);
+        map5.put("displayType", Binned.BAR);
+        map5.put("bins", 10);
+        
+        MapWrapper<String, Object> map6 = new HashMapWrapper<>(map0);
+        map6.put("type", Visualizations.BINNED);
+        map6.put("displayType", Binned.PIE);
+        map6.put("bins", 10);
+        
         return Stream.of(
                 Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 --lineartrend Basic", map1),
-                Arguments.of("Visualize C.csv,D.csv volume 8/21/1981 1/1/2020 --xAxis Time Basic", map2),
-                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 --lineartrend MovingAvg", map3),
-                Arguments.of("Visualize C.csv,D.csv volume 8/21/1981 1/1/2020 --xAxis Time MovingAvg --period 20 --initToIgnore 20", map4)
+                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 --xAxis Time Basic", map2),
+                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 MovingAvg", map3),
+                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 MovingAvg --period 20 --initToIgnore 20", map4),
+                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 Bin BAR 10", map5),
+                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 Bin PIE 10", map6)
         );
     }
 

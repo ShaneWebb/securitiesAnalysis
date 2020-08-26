@@ -44,7 +44,6 @@ public class Plotter implements SupportedProcess {
         //in three places currently.
         switch (visualization) {
             case BASIC:
-                
                 break;
             case MOVING_AVERAGE:
                 break;

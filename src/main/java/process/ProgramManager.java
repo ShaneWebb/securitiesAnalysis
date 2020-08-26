@@ -113,6 +113,12 @@ public class ProgramManager {
 
         ArgParseWrapper bin = plot.addParser("Bin", "Price binning");
         bin.setDefault("type", Visualizations.BINNED);
+        bin.addArgument("displayType")
+                .help("Way to display the binned data.")
+                .type(Binned.class);
+        bin.addArgument("bins")
+                .help("Number of bins to split the data into.")
+                .type(Integer.class);
 
     }
 
