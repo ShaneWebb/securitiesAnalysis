@@ -14,7 +14,7 @@ public class BarChart extends AbstractBinnedChart {
     }
 
     @Override
-    public void generateVisual(AbstractChartData dataset) {
+    public void generateVisual(ChartDataWrapper dataset) {
         
     }
 

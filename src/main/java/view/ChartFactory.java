@@ -20,16 +20,12 @@ public class ChartFactory {
                 return chart;
             case BINNED:
                 DisplayTypeBinned displayType = (DisplayTypeBinned) parsedArgs.get("displayType");
-//                switch (displayType) {
-//                    case BAR:
-//                        return new BarChart(parsedArgs);
-//                    case PIE:
-//                        return new PieChart(parsedArgs);
-//                }
-//                chart2.setDisplayType(displayType);
-//                int bins = ;
-//                chart2.setBins(bins);
-                return null;
+                switch (displayType) {
+                    case BAR:
+                        return new BarChart(parsedArgs);
+                    case PIE:
+                        return new PieChart(parsedArgs);
+                }
         }
         return null;
     }

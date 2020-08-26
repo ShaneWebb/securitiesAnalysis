@@ -45,11 +45,11 @@ public class TimeSeriesChart extends AbstractChart {
     }
 
     @Override
-    public void generateVisual(AbstractChartData dataset) {
+    public void generateVisual(ChartDataWrapper dataset) {
         if (showMovingAvg) {
-            dataset.addMovingAverage(period, initIgnore);
+            ((TimeSeriesData) dataset).addMovingAverage(period, initIgnore);
         }
-        TimeSeriesCollection data = dataset.getInternalTimeSeries();
+        TimeSeriesCollection data = ((TimeSeriesData) dataset).getInternalTimeSeries();
         JFreeChart chart = ChartFactory.createTimeSeriesChart(visualization.toString(), // title
                 xAxis, // x-axis label
                 header, // y-axis label
