@@ -7,8 +7,8 @@ import io.local.BasicFileReader;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
 import main.Supplier;
-import view.ChartDataWrapper;
-import view.ChartWrapper;
+import view.AbstractChartData;
+import view.AbstractChart;
 
 public class ProgramManager {
 
@@ -40,8 +40,8 @@ public class ProgramManager {
             argParser = new ArgParseWrapper("Erasmus");
 
             SupportedProcess plotter = new Plotter(new BasicFileReader(),
-                    new ChartWrapper(),
-                    new ChartDataWrapper());
+                    new AbstractChart(),
+                    new AbstractChartData());
             SupportedProcess stopper = new Stopper();
             supportedProcesses.put("stopper", stopper);
             supportedProcesses.put("plotter", plotter);
@@ -115,7 +115,7 @@ public class ProgramManager {
         bin.setDefault("type", Visualizations.BINNED);
         bin.addArgument("displayType")
                 .help("Way to display the binned data.")
-                .type(Binned.class);
+                .type(DisplayTypeBinned.class);
         bin.addArgument("bins")
                 .help("Number of bins to split the data into.")
                 .type(Integer.class);

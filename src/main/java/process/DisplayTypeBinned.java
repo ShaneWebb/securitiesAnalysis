@@ -1,5 +1,5 @@
 package process;
 
-public enum Binned {
+public enum DisplayTypeBinned {
     PIE, BAR;
 }

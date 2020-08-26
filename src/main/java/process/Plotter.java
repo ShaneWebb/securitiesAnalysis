@@ -1,5 +1,6 @@
 package process;
 
+import view.ChartDataFactory;
 import datatypes.Report;
 import io.local.BasicFileReader;
 import java.io.IOException;
@@ -9,7 +10,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import javautilwrappers.*;
+import view.AbstractChartData;
+import view.AbstractChart;
 import view.ChartDataWrapper;
+import view.ChartFactory;
 import view.ChartWrapper;
 
 public class Plotter implements SupportedProcess {
@@ -19,10 +23,10 @@ public class Plotter implements SupportedProcess {
     private boolean showLinearTrend;
     private Visualizations visualization;
     private final BasicFileReader reader;
-    private final ChartWrapper chart;
-    private final ChartDataWrapper chartData;
+    private final AbstractChart chart;
+    private final AbstractChartData chartData;
 
-    public Plotter(BasicFileReader reader, ChartWrapper chart, ChartDataWrapper chartData) {
+    public Plotter(BasicFileReader reader, AbstractChart chart, AbstractChartData chartData) {
         this.defaultCliDateFormat = "MM/dd/yyyy";
         this.reader = reader;
         this.chart = chart;
@@ -39,17 +43,6 @@ public class Plotter implements SupportedProcess {
         MapWrapper<String, MapWrapper<Integer, String>> parsedFiles;
         parsedFiles = readFiles(files);
         chartData.convertChartData(parsedFiles);
-
-        //TODO: Refactor to use polymorphism. This has to be updated
-        //in three places currently.
-        switch (visualization) {
-            case BASIC:
-                break;
-            case MOVING_AVERAGE:
-                break;
-            case BINNED:
-                break;
-        }
         chart.generateVisual(chartData);
     }
 
@@ -67,13 +60,18 @@ public class Plotter implements SupportedProcess {
     public void setArgs(MapWrapper<String, Object> parsedArgs)
             throws IllegalArgumentException {
         
-        files = (String) parsedArgs.get("files");
+        
+//        ChartWrapper tempChart = ChartFactory.createFrom(parsedArgs);
+//        ChartDataWrapper tempChartData = ChartDataFactory.createFrom(parsedArgs);
+                
         visualization = (Visualizations) parsedArgs.get("type");
+        files = (String) parsedArgs.get("files");
         showLinearTrend = (boolean) parsedArgs.get("lineartrend");
         
         chart.setHeader((String) parsedArgs.get("header"));
         chart.setxAxis((String) parsedArgs.get("xAxis"));
         chart.setVisualization((Visualizations) parsedArgs.get("type"));
+        
         chartData.setHeader((String) parsedArgs.get("header"));
         
         DateFormat df = new SimpleDateFormat(defaultCliDateFormat, Locale.ENGLISH);
@@ -89,6 +87,8 @@ public class Plotter implements SupportedProcess {
             throw new IllegalArgumentException(ex);
         }
         
+        
+        
         switch (visualization) {
             case BASIC:
                 break;
@@ -96,9 +96,13 @@ public class Plotter implements SupportedProcess {
                 int period = (int) parsedArgs.get("period");
                 chart.setPeriod(period);
                 int initIgnore = (int) parsedArgs.get("initToIgnore");
-                chart.setPeriod(period);
+                chart.setPeriod(initIgnore);
                 break;
             case BINNED:
+                DisplayTypeBinned displayType = (DisplayTypeBinned) parsedArgs.get("displayType");
+                chart.setDisplayType(displayType);
+                int bins = (int) parsedArgs.get("bins");
+                chart.setBins(bins);
                 break;
         }
         

@@ -21,8 +21,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
-import view.ChartDataWrapper;
-import view.ChartWrapper;
+import view.AbstractChartData;
+import view.AbstractChart;
 
 public class PlotterTest {
 
@@ -31,13 +31,13 @@ public class PlotterTest {
     @Mock
     private BasicFileReader reader;
 
-    private final ChartWrapper chart;
+    private final AbstractChart chart;
 
-    private final ChartDataWrapper chartData;
+    private final AbstractChartData chartData;
     
     public PlotterTest() {
-        this.chart = new ChartWrapper();
-        this.chartData = new ChartDataWrapper();
+        this.chart = new AbstractChart();
+        this.chartData = new AbstractChartData();
     }
 
     @BeforeEach

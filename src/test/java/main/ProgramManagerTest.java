@@ -26,7 +26,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import process.Binned;
+import process.DisplayTypeBinned;
 import process.ProgramManager;
 import process.Visualizations;
 
@@ -253,12 +253,12 @@ public class ProgramManagerTest {
         
         MapWrapper<String, Object> map5 = new HashMapWrapper<>(map0);
         map5.put("type", Visualizations.BINNED);
-        map5.put("displayType", Binned.BAR);
+        map5.put("displayType", DisplayTypeBinned.BAR);
         map5.put("bins", 10);
         
         MapWrapper<String, Object> map6 = new HashMapWrapper<>(map0);
         map6.put("type", Visualizations.BINNED);
-        map6.put("displayType", Binned.PIE);
+        map6.put("displayType", DisplayTypeBinned.PIE);
         map6.put("bins", 10);
         
         return Stream.of(
