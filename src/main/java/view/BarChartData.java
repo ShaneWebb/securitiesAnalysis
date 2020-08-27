@@ -4,6 +4,7 @@ package view;
 import java.io.IOException;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.general.AbstractDataset;
+import org.jfree.data.general.Dataset;
 
 public class BarChartData extends AbstractBinnedData {
 
@@ -17,7 +18,7 @@ public class BarChartData extends AbstractBinnedData {
     }
 
     @Override
-    public AbstractDataset unwrap() {
+    public Dataset unwrap() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

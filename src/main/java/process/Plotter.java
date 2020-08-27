@@ -1,12 +1,12 @@
 package process;
 
-import view.ChartDataFactory;
+import view.ChartDataWrapperFactory;
 import datatypes.Report;
 import io.local.BasicFileReader;
 import java.io.IOException;
 import javautilwrappers.*;
 import view.ChartDataWrapper;
-import view.ChartFactory;
+import view.ChartWrapperFactory;
 import view.ChartWrapper;
 
 public class Plotter implements SupportedProcess {
@@ -44,8 +44,8 @@ public class Plotter implements SupportedProcess {
             throws IllegalArgumentException {
 
         files = (String) parsedArgs.get("files");
-        chart = ChartFactory.createFrom(parsedArgs);
-        chartData = ChartDataFactory.createFrom(parsedArgs);
+        chart = ChartWrapperFactory.createFrom(parsedArgs);
+        chartData = ChartDataWrapperFactory.createFrom(parsedArgs);
 
     }
 

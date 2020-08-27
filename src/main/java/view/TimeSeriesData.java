@@ -12,6 +12,7 @@ import javautilwrappers.ItemNotFoundException;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.general.AbstractDataset;
+import org.jfree.data.general.Dataset;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.MovingAverage;
 import org.jfree.data.time.TimeSeries;
@@ -74,7 +75,7 @@ public class TimeSeriesData extends AbstractChartData {
                     double value = Double.valueOf(delimitedData.get(colIndex));
                     String dateStr = delimitedData.get(X_INDEX);
 
-                    DateFormat df = new SimpleDateFormat(defaultFileDateFormat, Locale.ENGLISH);
+                    DateFormat df = new SimpleDateFormat(FILE_DATE_FORMAT, Locale.ENGLISH);
                     Date parsedDate = df.parse(dateStr);
 
                     if (parsedDate.compareTo(startDate) >= 0
@@ -99,7 +100,7 @@ public class TimeSeriesData extends AbstractChartData {
     }
 
     @Override
-    public AbstractDataset unwrap() {
+    public Dataset unwrap() {
         return this.internalTimeSeriesCollection;
     }
 

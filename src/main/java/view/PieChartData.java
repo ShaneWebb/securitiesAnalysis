@@ -4,6 +4,7 @@ package view;
 import java.io.IOException;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.general.AbstractDataset;
+import org.jfree.data.general.Dataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 public class PieChartData extends AbstractBinnedData {
@@ -21,7 +22,7 @@ public class PieChartData extends AbstractBinnedData {
     }
 
     @Override
-    public AbstractDataset unwrap() {
+    public Dataset unwrap() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

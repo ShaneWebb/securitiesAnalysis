@@ -10,14 +10,15 @@ import javautilwrappers.MapWrapper;
 public abstract class AbstractChartData implements ChartDataWrapper {
 
     
-    protected String header, defaultFileDateFormat;
+    protected String header;
     protected Date startDate, endDate;
     protected static final int HEADER_LINE = 1;
     protected static final int X_INDEX = 0;
-    protected static final String CLI_DATE_FORMAT = "MM/dd/yyyy";
+    protected final String CLI_DATE_FORMAT, FILE_DATE_FORMAT;
     
     public AbstractChartData(MapWrapper<String, Object> parsedArgs) {
-        this.defaultFileDateFormat = "yyyy-MM-dd";
+        this.FILE_DATE_FORMAT = "yyyy-MM-dd";
+        this.CLI_DATE_FORMAT = "MM/dd/yyyy";
         this.header = (String) parsedArgs.get("header");
 
         DateFormat df = new SimpleDateFormat(CLI_DATE_FORMAT, Locale.ENGLISH);
