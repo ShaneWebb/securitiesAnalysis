@@ -1,6 +1,8 @@
 package view;
 
 import javautilwrappers.MapWrapper;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
 
 public class PieChart extends AbstractBinnedChart {
 
@@ -11,6 +13,15 @@ public class PieChart extends AbstractBinnedChart {
     @Override
     public void generateVisual(ChartDataWrapper dataset) {
 
+        DefaultPieDataset data = (DefaultPieDataset) dataset.unwrap();
+        JFreeChart chart = org.jfree.chart.ChartFactory.createPieChart(
+                visualization.toString(),
+                data, // data
+                true, // create legend?
+                true, // generate tooltips?
+                false // generate URLs?
+        );
+        super.displayInFrame(chart);
     }
 
 }

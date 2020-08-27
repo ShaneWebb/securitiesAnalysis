@@ -6,7 +6,7 @@ import process.Visualizations;
 
 public class ChartFactory {
 
-    public static AbstractChart createFrom(MapWrapper<String, Object> parsedArgs) {
+    public static ChartWrapper createFrom(MapWrapper<String, Object> parsedArgs) {
 
         Visualizations visualization = (Visualizations) parsedArgs.get("type");
         switch (visualization) {

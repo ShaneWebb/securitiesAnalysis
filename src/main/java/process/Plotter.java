@@ -5,16 +5,16 @@ import datatypes.Report;
 import io.local.BasicFileReader;
 import java.io.IOException;
 import javautilwrappers.*;
-import view.AbstractChartData;
-import view.AbstractChart;
+import view.ChartDataWrapper;
 import view.ChartFactory;
+import view.ChartWrapper;
 
 public class Plotter implements SupportedProcess {
 
     private String files;
     private final BasicFileReader reader;
-    private AbstractChart chart;
-    private AbstractChartData chartData;
+    private ChartWrapper chart;
+    private ChartDataWrapper chartData;
 
     public Plotter(BasicFileReader reader) {
         this.reader = reader;

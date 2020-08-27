@@ -11,6 +11,7 @@ import javautilwrappers.ArrayListWrapper;
 import javautilwrappers.ItemNotFoundException;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
+import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.MovingAverage;
 import org.jfree.data.time.TimeSeries;
@@ -97,7 +98,8 @@ public class TimeSeriesData extends AbstractChartData {
         return this;
     }
 
-    public TimeSeriesCollection getInternalTimeSeries() {
+    @Override
+    public AbstractDataset unwrap() {
         return this.internalTimeSeriesCollection;
     }
 

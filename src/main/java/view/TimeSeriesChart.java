@@ -49,7 +49,7 @@ public class TimeSeriesChart extends AbstractChart {
         if (showMovingAvg) {
             ((TimeSeriesData) dataset).addMovingAverage(period, initIgnore);
         }
-        TimeSeriesCollection data = ((TimeSeriesData) dataset).getInternalTimeSeries();
+        TimeSeriesCollection data =  (TimeSeriesCollection) dataset.unwrap();
         JFreeChart chart = ChartFactory.createTimeSeriesChart(visualization.toString(), // title
                 xAxis, // x-axis label
                 header, // y-axis label
@@ -58,8 +58,7 @@ public class TimeSeriesChart extends AbstractChart {
                 true, // generate tooltips?
                 false // generate URLs?
         );
-        ChartFrame frame = new ChartFrame(visualization.toString(), chart);
-        frame.pack();
-        frame.setVisible(true);
+        super.displayInFrame(chart);
     }
+
 }

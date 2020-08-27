@@ -7,8 +7,6 @@ import io.local.BasicFileReader;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
 import main.Supplier;
-import view.AbstractChartData;
-import view.AbstractChart;
 
 public class ProgramManager {
 

@@ -4,8 +4,10 @@ import main.Helper;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.MultiplePiePlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.util.TableOrder;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.time.Month;
@@ -70,19 +72,28 @@ public class JFreeChartTest {
 
     private void makeExampleBarChart() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        dataset.addValue(1.0, "Row 1", "Column 1");
-        dataset.addValue(5.0, "Row 1", "Column 2");
-        dataset.addValue(3.0, "Row 1", "Column 3");
+        dataset.addValue(20.0, "Row 1", "Column 1");
+        dataset.addValue(50.0, "Row 1", "Column 2");
+        dataset.addValue(20.0, "Row 1", "Column 3");
         dataset.addValue(2.0, "Row 2", "Column 1");
         dataset.addValue(3.0, "Row 2", "Column 2");
         dataset.addValue(2.0, "Row 2", "Column 3");
 
-        JFreeChart chart = ChartFactory.createBarChart(
-                "Bar Chart Demo", // chart title
-                "Category", // domain axis label
-                "Value", // range axis label
+//        JFreeChart chart = ChartFactory.createBarChart(
+//                "Bar Chart Demo", // chart title
+//                "Category", // domain axis label
+//                "Value", // range axis label
+//                dataset, // data
+//                PlotOrientation.VERTICAL, // orientation
+//                true, // include legend
+//                true, // tooltips?
+//                false // URLs?
+//        );
+
+        JFreeChart chart = ChartFactory.createMultiplePieChart(
+                "Demo", // chart title
                 dataset, // data
-                PlotOrientation.VERTICAL, // orientation
+                TableOrder.BY_ROW, // orientation
                 true, // include legend
                 true, // tooltips?
                 false // URLs?
@@ -183,19 +194,18 @@ public class JFreeChartTest {
                 "test",
                 6,
                 0);
-        
+
         TimeSeries s2m = MovingAverage.createMovingAverage(
                 s2,
                 "test",
                 6,
                 0);
-        
+
         TimeSeriesCollection dataset = new TimeSeriesCollection();
         dataset.addSeries(s1);
         dataset.addSeries(s2);
         dataset.addSeries(s1m);
         dataset.addSeries(s2m);
-
 
         JFreeChart chart = ChartFactory.createTimeSeriesChart(
                 "Legal & General Unit Trust Prices", // title
@@ -206,9 +216,8 @@ public class JFreeChartTest {
                 true, // generate tooltips?
                 false // generate URLs?
         );
-        
-//        Plot plot = chart.getPlot();
 
+//        Plot plot = chart.getPlot();
         ChartFrame frame = new ChartFrame("Test", chart);
         frame.pack();
         frame.setVisible(true);
