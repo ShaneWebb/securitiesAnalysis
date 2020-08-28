@@ -13,7 +13,7 @@ public interface ChartDataWrapper {
 
     Dataset unwrap();
     
-    void addSubData(ChartSubDataWrapper data);
+    void addSubDataToInternalCollection(ChartSubDataWrapper data);
     
     
 }

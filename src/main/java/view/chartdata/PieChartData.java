@@ -3,6 +3,7 @@ package view.chartdata;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Date;
 import javautilwrappers.ItemNotFoundException;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.general.AbstractDataset;
@@ -24,7 +25,7 @@ public class PieChartData extends AbstractBinnedData {
     }
 
     @Override
-    public void addSubData(ChartSubDataWrapper data) {
+    public void addSubDataToInternalCollection(ChartSubDataWrapper data) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -36,6 +37,13 @@ public class PieChartData extends AbstractBinnedData {
     @Override
     protected ChartSubDataWrapper ChartSubDataFactory(MapWrapper.Entry<String, MapWrapper<Integer, String>> file) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    protected void addToSeriesIfValid(MapWrapper<String, Object> seriesData, ChartSubDataWrapper series) {
+        Date candidateDate = (Date) seriesData.get("date");
+        if (candidateDate.compareTo(startDate) >= 0 && candidateDate.compareTo(endDate) <= 0) {
+            series.add(seriesData);
+        }
     }
 
 }

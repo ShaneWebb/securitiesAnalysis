@@ -52,13 +52,18 @@ public abstract class AbstractChartData implements ChartDataWrapper {
         return this;
     }
 
+    //Must implement method for specific chart to parse a data line properly.
     protected abstract MapWrapper<String, Object> parseSingleCsvLine(String csvLine, int colIndex) throws ParseException, NumberFormatException;
 
+    //Must create the correct sub data structure.
     protected abstract ChartSubDataWrapper ChartSubDataFactory(MapWrapper.Entry<String, MapWrapper<Integer, String>> file);
 
+    //Must implement a method to determine what data gets added to the chart.
+    protected abstract void addToSeriesIfValid(MapWrapper<String, Object> seriesData, ChartSubDataWrapper series);
+    
     protected final void assembleData(ListWrapper<ChartSubDataWrapper> chartData) {
         for (ChartSubDataWrapper series : chartData) {
-            this.addSubData(series);
+            this.addSubDataToInternalCollection(series);
         }
     }
 
@@ -97,14 +102,6 @@ public abstract class AbstractChartData implements ChartDataWrapper {
                 = new ArrayListWrapper(Arrays.asList(fileHeader.split(",")));
         int colIndex = delimitedHeaders.indexOf(header);
         return colIndex;
-    }
-
-    private void addToSeriesIfValid(MapWrapper<String, Object> seriesData, ChartSubDataWrapper series) {
-        Date candidateDate = (Date) seriesData.get("date");
-        if (candidateDate.compareTo(startDate) >= 0
-                && candidateDate.compareTo(endDate) <= 0) {
-            series.add(seriesData);
-        }
     }
 
 }

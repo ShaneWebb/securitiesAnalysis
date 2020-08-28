@@ -1,9 +1,12 @@
 
 package view.chartdata;
 
+import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
 
 public class AbstractBinnedSubData implements ChartSubDataWrapper{
+    
+    protected ListWrapper<MapWrapper<String, Object>> internalSubData;
     
     @Override
     public void add(MapWrapper data) {

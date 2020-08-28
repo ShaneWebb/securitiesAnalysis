@@ -58,12 +58,12 @@ public class TimeSeriesData extends AbstractChartData {
         double value = Double.valueOf(delimitedData.get(colIndex));
         Date parsedDate = createDate(delimitedData);
         
-        MapWrapper<String, Object> seriesData = new HashMapWrapper<>();
-        seriesData.put("date", parsedDate); //Important: Must provide this. 
-        seriesData.put("day", new Day(parsedDate));
-        seriesData.put("value", value);
+        MapWrapper<String, Object> trialSeriesData = new HashMapWrapper<>();
+        trialSeriesData.put("date", parsedDate); //Important: Must provide this. 
+        trialSeriesData.put("day", new Day(parsedDate));
+        trialSeriesData.put("value", value);
         
-        return seriesData;
+        return trialSeriesData;
     }
 
     @Override
@@ -72,8 +72,16 @@ public class TimeSeriesData extends AbstractChartData {
     }
 
     @Override
-    public void addSubData(ChartSubDataWrapper data) {
+    public void addSubDataToInternalCollection(ChartSubDataWrapper data) {
         this.internalTimeSeriesCollection.addSeries((TimeSeries)data.unwrap());
+    }
+
+    @Override //Any data within the start and end will be plotted.
+    protected void addToSeriesIfValid(MapWrapper<String, Object> seriesData, ChartSubDataWrapper series) {
+        Date candidateDate = (Date) seriesData.get("date");
+        if (candidateDate.compareTo(startDate) >= 0 && candidateDate.compareTo(endDate) <= 0) {
+            series.add(seriesData);
+        }
     }
 
 }

@@ -52,7 +52,8 @@ public class TimeSeriesChart extends AbstractChart {
             ((TimeSeriesData) dataset).addMovingAverage(period, initIgnore);
         }
         TimeSeriesCollection data =  (TimeSeriesCollection) dataset.unwrap();
-        JFreeChart chart = ChartFactory.createTimeSeriesChart(visualization.toString(), // title
+        JFreeChart chart = ChartFactory.createTimeSeriesChart(
+                visualization.toString(), // title
                 xAxis, // x-axis label
                 header, // y-axis label
                 data, // data
