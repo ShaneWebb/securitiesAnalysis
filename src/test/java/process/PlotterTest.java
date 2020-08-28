@@ -66,7 +66,10 @@ public class PlotterTest {
         basicExecute(aCsvData, bCsvData, cliArgs);
     }
 
-    private void basicExecute(MapWrapper<Integer, String> aCsvData, MapWrapper<Integer, String> bCsvData, MapWrapper<String, Object> cliArgs) throws IOException {
+    private void basicExecute(
+            MapWrapper<Integer, String> aCsvData, 
+            MapWrapper<Integer, String> bCsvData, 
+            MapWrapper<String, Object> cliArgs) throws IOException {
         when(reader.read("A.csv")).thenReturn(aCsvData);
         when(reader.read("B.csv")).thenReturn(bCsvData);
 
