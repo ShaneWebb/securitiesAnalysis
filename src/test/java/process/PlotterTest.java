@@ -21,8 +21,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
-import view.AbstractChartData;
-import view.AbstractChart;
+import view.chartdata.AbstractChartData;
+import view.chart.AbstractChart;
 
 public class PlotterTest {
 
@@ -77,7 +77,7 @@ public class PlotterTest {
         try {
             testPlotter.setArgs(cliArgs);
             testPlotter.execute();
-            //Helper.pause(5);
+            Helper.pause(5);
         } catch (Exception e) {
             fail(e.getMessage());
         }

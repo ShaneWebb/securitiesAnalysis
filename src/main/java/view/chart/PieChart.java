@@ -1,5 +1,6 @@
-package view;
+package view.chart;
 
+import view.chartdata.ChartDataWrapper;
 import javautilwrappers.MapWrapper;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;

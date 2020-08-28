@@ -1,5 +1,5 @@
 
-package view;
+package view.chartdata;
 
 import javautilwrappers.MapWrapper;
 

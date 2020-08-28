@@ -1,5 +1,7 @@
-package view;
+package view.chart;
 
+import view.chartdata.ChartDataWrapper;
+import view.chartdata.TimeSeriesData;
 import javautilwrappers.MapWrapper;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;

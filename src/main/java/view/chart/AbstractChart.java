@@ -1,4 +1,4 @@
-package view;
+package view.chart;
 
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;

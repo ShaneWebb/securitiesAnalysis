@@ -1,4 +1,4 @@
-package view;
+package view.chartdata;
 
 import javautilwrappers.MapWrapper;
 import process.DisplayTypeBinned;

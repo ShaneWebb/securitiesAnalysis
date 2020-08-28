@@ -1,13 +1,13 @@
 package process;
 
-import view.ChartDataWrapperFactory;
+import view.chartdata.ChartDataWrapperFactory;
 import datatypes.Report;
 import io.local.BasicFileReader;
 import java.io.IOException;
 import javautilwrappers.*;
-import view.ChartDataWrapper;
-import view.ChartWrapperFactory;
-import view.ChartWrapper;
+import view.chartdata.ChartDataWrapper;
+import view.chart.ChartWrapperFactory;
+import view.chart.ChartWrapper;
 
 public class Plotter implements SupportedProcess {
 

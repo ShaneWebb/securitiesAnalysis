@@ -1,7 +1,9 @@
 
-package view;
+package view.chartdata;
 
 import java.io.IOException;
+import java.text.ParseException;
+import javautilwrappers.ItemNotFoundException;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.general.Dataset;
@@ -17,12 +19,22 @@ public class PieChartData extends AbstractBinnedData {
     }
 
     @Override
-    public AbstractChartData convertChartData(MapWrapper<String, MapWrapper<Integer, String>> parsedFiles) throws IOException, NumberFormatException {
+    public Dataset unwrap() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Dataset unwrap() {
+    public void addSubData(ChartSubDataWrapper data) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected MapWrapper<String, Object> parseSingleCsvLine(String fileData, int colIndex) throws ParseException, NumberFormatException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected ChartSubDataWrapper ChartSubDataFactory(MapWrapper.Entry<String, MapWrapper<Integer, String>> file) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

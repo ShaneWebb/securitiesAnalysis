@@ -1,5 +1,5 @@
 
-package view;
+package view.chartdata;
 
 import javautilwrappers.MapWrapper;
 import org.jfree.data.time.Day;
@@ -11,6 +11,10 @@ public class TimeSeriesSubData implements ChartSubDataWrapper {
     
     public TimeSeriesSubData(TimeSeries internalSeries) {
         this.internalSeries = internalSeries;
+    }
+    
+    public TimeSeriesSubData(String key) {
+        this.internalSeries = new TimeSeries(key);
     }
     
     @Override
