@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import process.DisplayTypeBinned;
 import process.Visualizations;
-import view.chartdata.AbstractBinnedData.RangeFinder;
 import view.chartdata.BarChartData;
 
 public class BarChartTest {
@@ -43,7 +42,7 @@ public class BarChartTest {
     }
 
     @Test
-    //@Disabled("Takes too long")
+    @Disabled("Takes too long")
     public void testGenerateVisual() {
         chart.generateVisual(data);
         Helper.pause(10);

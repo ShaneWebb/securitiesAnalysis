@@ -34,20 +34,34 @@ public class BarChartData extends AbstractBinnedData {
         ListWrapper<MapWrapper<String, Object>> internalSubData
                 = (ListWrapper<MapWrapper<String, Object>>) data.unwrap();
 
+        
         RangeFinder finder = rangeFinderFactory(internalSubData);
-        
-        ListWrapper<MapWrapper<String, Object>> processedSubData = 
-                new ArrayListWrapper<>();
-        
-        
-        
-        for(MapWrapper<String, Object> item: internalSubData) {
-            finder.getRange(1);
+        MapWrapper<String, Integer> rangesMap = new HashMapWrapper<>();
+        for (MapWrapper<String, Object> item : internalSubData) {
+            String range = finder.getRange((int)((double)item.get("value")));
+            Integer count = rangesMap.get(range);
+            if (count == null) {
+                rangesMap.put(range, 1);
+            } else {
+                rangesMap.put(range, ++count);
+            }
         }
         
+        ListWrapper<MapWrapper<String, Object>> processedSubData
+                = new ArrayListWrapper<>();
+        
+        String fileName = ((BarChartSubData) data).getFileName();
+        for(MapWrapper.Entry<String, Integer> entry: rangesMap.entrySet()) {
+            MapWrapper<String, Object> tempMap = new HashMapWrapper<>();
+            tempMap.put("row", entry.getKey());
+            tempMap.put("col", fileName);
+            tempMap.put("value", entry.getValue());
+            processedSubData.add(tempMap);
+        }
+
         for (MapWrapper<String, Object> item : processedSubData) {
             this.internalDataset.addValue(
-                    (Double) item.get("value"),
+                    (Integer) item.get("value"),
                     (String) item.get("row"),
                     (String) item.get("col"));
         }
@@ -56,12 +70,12 @@ public class BarChartData extends AbstractBinnedData {
 
     public RangeFinder rangeFinderFactory(ListWrapper<MapWrapper<String, Object>> internalSubData) {
         double max = Double.NEGATIVE_INFINITY, min = Double.POSITIVE_INFINITY;
-        for(MapWrapper<String, Object> item: internalSubData) {
+        for (MapWrapper<String, Object> item : internalSubData) {
             double trialValue = (Double) item.get("value");
-            if(trialValue > max) {
+            if (trialValue > max) {
                 max = trialValue;
             }
-            if(trialValue < min) {
+            if (trialValue < min) {
                 min = trialValue;
             }
         }
@@ -86,5 +100,5 @@ public class BarChartData extends AbstractBinnedData {
         trialSeriesData.put("value", value);
         return trialSeriesData;
     }
-    
+
 }

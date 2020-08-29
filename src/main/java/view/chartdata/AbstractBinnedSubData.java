@@ -9,6 +9,10 @@ public class AbstractBinnedSubData implements ChartSubDataWrapper{
     
     protected final ListWrapper<MapWrapper<String, Object>> internalSubData;
     protected final String fileName;
+
+    public String getFileName() {
+        return fileName;
+    }
     
     public AbstractBinnedSubData(String fileName) {
         this.internalSubData = new ArrayListWrapper<>();
@@ -17,7 +21,6 @@ public class AbstractBinnedSubData implements ChartSubDataWrapper{
     
     @Override
     public final void add(MapWrapper data) {
-        data.put("col", fileName);
         this.internalSubData.add(data);
     }
 

@@ -2,27 +2,20 @@ package process;
 
 import io.local.BasicFileReader;
 import java.io.IOException;
-import static java.util.Arrays.stream;
 import java.util.stream.Stream;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.ItemNotFoundException;
 import javautilwrappers.MapWrapper;
 import main.Helper;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
-import view.chartdata.AbstractChartData;
-import view.chart.AbstractChart;
 
 public class PlotterTest {
 
@@ -77,7 +70,7 @@ public class PlotterTest {
         try {
             testPlotter.setArgs(cliArgs);
             testPlotter.execute();
-            Helper.pause(5);
+            //Helper.pause(5);
         } catch (Exception e) {
             fail(e.getMessage());
         }
