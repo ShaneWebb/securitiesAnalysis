@@ -8,17 +8,18 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import process.DisplayTypeBinned;
 import process.Visualizations;
+import view.chartdata.AbstractBinnedData.Limits;
 import view.chartdata.BarChartData;
 
 public class BarChartTest {
 
-    public BarChartTest() {
-    }
+    private final DefaultCategoryDataset dataset;
+    private final MapWrapper<String, Object> map0;
+    private final ChartWrapper chart;
+    private final BarChartData data;
 
-    @Test
-    //@Disabled("Takes too long")
-    public void testGenerateVisual() {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+    public BarChartTest() {
+        dataset = new DefaultCategoryDataset();
         dataset.addValue(20.0, "Row 1", "Column 1");
         dataset.addValue(50.0, "Row 1", "Column 2");
         dataset.addValue(20.0, "Row 1", "Column 3");
@@ -26,7 +27,7 @@ public class BarChartTest {
         dataset.addValue(3.0, "Row 2", "Column 2");
         dataset.addValue(2.0, "Row 2", "Column 3");
 
-        MapWrapper<String, Object> map0 = new HashMapWrapper<>();
+        map0 = new HashMapWrapper<>();
         map0.put("files", "A.csv,B.csv");
         map0.put("header", "volume");
         map0.put("startDate", "8/21/1981");
@@ -37,11 +38,21 @@ public class BarChartTest {
         map0.put("displayType", DisplayTypeBinned.BAR);
         map0.put("bins", 10);
 
-        ChartWrapper chart = new BarChart(map0);
-        BarChartData data = new BarChartData(map0, dataset);
-        
+        chart = new BarChart(map0);
+        data = new BarChartData(map0, dataset);
+    }
+
+    @Test
+    //@Disabled("Takes too long")
+    public void testGenerateVisual() {
         chart.generateVisual(data);
         Helper.pause(10);
+    }
+    
+    @Test
+    public void rangeFindTest() {
+        Limits limits = new Limits(0, 500, 10);
+        System.out.println(limits.getRange(500));
     }
 
 }

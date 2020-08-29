@@ -35,8 +35,25 @@ public class BarChartData extends AbstractBinnedData {
                 = (ListWrapper<MapWrapper<String, Object>>) data.unwrap();
 
         //Must bin here. 
+        double max = Double.NEGATIVE_INFINITY, min = Double.POSITIVE_INFINITY;
+        for(MapWrapper<String, Object> item: internalSubData) {
+            double trialValue = (Double) item.get("value");
+            if(trialValue > max) {
+                max = trialValue;
+            }
+            if(trialValue < min) {
+                min = trialValue;
+            }
+        }
         
-        for (MapWrapper<String, Object> item : internalSubData) {
+        ListWrapper<MapWrapper<String, Object>> processedSubData = 
+                new ArrayListWrapper<>();
+        
+        for(MapWrapper<String, Object> item: internalSubData) {
+            
+        }
+        
+        for (MapWrapper<String, Object> item : processedSubData) {
             this.internalDataset.addValue(
                     (Double) item.get("value"),
                     (String) item.get("row"),

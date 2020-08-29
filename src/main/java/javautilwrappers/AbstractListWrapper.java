@@ -13,6 +13,11 @@ public abstract class AbstractListWrapper<E> implements ListWrapper<E> {
     }
     
     @Override
+    public List<E> unwrap() {
+        return this.internalList;
+    }
+    
+    @Override
     public boolean add(E item) {
         return internalList.add(item);
     }
