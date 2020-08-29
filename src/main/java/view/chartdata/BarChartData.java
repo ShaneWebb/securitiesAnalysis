@@ -39,6 +39,11 @@ public class BarChartData extends AbstractBinnedData {
         MapWrapper<String, Integer> rangesMap = new HashMapWrapper<>();
         for (MapWrapper<String, Object> item : internalSubData) {
             String range = finder.getRange((int)((double)item.get("value")));
+            if(range == null) {
+                //The mathematical calculation will very rarely fail to bin
+                //a value due to rounding error.
+                continue;
+            }
             Integer count = rangesMap.get(range);
             if (count == null) {
                 rangesMap.put(range, 1);
