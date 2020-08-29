@@ -34,7 +34,27 @@ public class BarChartData extends AbstractBinnedData {
         ListWrapper<MapWrapper<String, Object>> internalSubData
                 = (ListWrapper<MapWrapper<String, Object>>) data.unwrap();
 
-        //Must bin here. 
+        RangeFinder finder = rangeFinderFactory(internalSubData);
+        
+        ListWrapper<MapWrapper<String, Object>> processedSubData = 
+                new ArrayListWrapper<>();
+        
+        
+        
+        for(MapWrapper<String, Object> item: internalSubData) {
+            finder.getRange(1);
+        }
+        
+        for (MapWrapper<String, Object> item : processedSubData) {
+            this.internalDataset.addValue(
+                    (Double) item.get("value"),
+                    (String) item.get("row"),
+                    (String) item.get("col"));
+        }
+
+    }
+
+    public RangeFinder rangeFinderFactory(ListWrapper<MapWrapper<String, Object>> internalSubData) {
         double max = Double.NEGATIVE_INFINITY, min = Double.POSITIVE_INFINITY;
         for(MapWrapper<String, Object> item: internalSubData) {
             double trialValue = (Double) item.get("value");
@@ -45,21 +65,8 @@ public class BarChartData extends AbstractBinnedData {
                 min = trialValue;
             }
         }
-        
-        ListWrapper<MapWrapper<String, Object>> processedSubData = 
-                new ArrayListWrapper<>();
-        
-        for(MapWrapper<String, Object> item: internalSubData) {
-            
-        }
-        
-        for (MapWrapper<String, Object> item : processedSubData) {
-            this.internalDataset.addValue(
-                    (Double) item.get("value"),
-                    (String) item.get("row"),
-                    (String) item.get("col"));
-        }
-
+        RangeFinder finder = new RangeFinder(min, max, bins);
+        return finder;
     }
 
     @Override
@@ -78,14 +85,6 @@ public class BarChartData extends AbstractBinnedData {
         trialSeriesData.put("date", parsedDate); //Important: Must provide this. 
         trialSeriesData.put("value", value);
         return trialSeriesData;
-    }
-
-    @Override //Must check start and end date.
-    protected void addToSeriesIfValid(MapWrapper<String, Object> trialData, ChartSubDataWrapper subData) {
-        Date candidateDate = (Date) trialData.get("date");
-        if (candidateDate.compareTo(startDate) >= 0 && candidateDate.compareTo(endDate) <= 0) {
-            subData.add(trialData);
-        }
     }
     
 }

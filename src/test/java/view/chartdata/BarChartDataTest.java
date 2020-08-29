@@ -5,7 +5,6 @@ import javautilwrappers.HashMapWrapper;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.Dataset;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,9 +27,9 @@ public class BarChartDataTest {
     private final BarChartData data;
     private final DefaultCategoryDataset dataset;
     private final MapWrapper<String, Object> map0;
-    
+
     private AutoCloseable closeable;
-    
+
     @Mock
     private ChartSubDataWrapper subdatawrapper;
 
@@ -73,6 +72,7 @@ public class BarChartDataTest {
     }
 
     @Test
+    @Disabled
     public void testAddSubDataToInternalCollection() {
         ListWrapper<MapWrapper<String, Object>> internalSubData
                 = new ArrayListWrapper<>();
@@ -81,23 +81,32 @@ public class BarChartDataTest {
         item.put("row", "Row 1");
         item.put("col", "Column 1");
         internalSubData.add(item);
-        
+
         when(subdatawrapper.unwrap()).thenReturn(internalSubData);
-        
+
         data.addSubDataToInternalCollection(subdatawrapper);
         assertEquals(100.0, ((DefaultCategoryDataset) data.unwrap()).getValue("Row 1", "Column 1"));
 
     }
 
     @Test
-    @Disabled
-    public void testChartSubDataFactory() {
-
-    }
-
-    @Test
-    @Disabled
-    public void testParseSingleCsvLine() throws Exception {
+    public void rangeFindTest() {
+        AbstractBinnedData.RangeFinder limits = new AbstractBinnedData.RangeFinder(0, 500, 10);
+        String[] expectedResults = {
+            "0 - 50",
+            "50 - 100",
+            "100 - 150",
+            "150 - 200",
+            "200 - 250",
+            "250 - 300",
+            "300 - 350",
+            "350 - 400",
+            "400 - 450",
+            "450 - 500",
+            "450 - 500"};
+        for (int i = 0; i <= 500; i += 50) {
+            assertEquals(expectedResults[i/50],limits.getRange(i));
+        }
 
     }
 

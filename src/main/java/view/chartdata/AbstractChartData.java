@@ -58,8 +58,13 @@ public abstract class AbstractChartData implements ChartDataWrapper {
     //Must create the correct sub data structure.
     protected abstract ChartSubDataWrapper ChartSubDataFactory(MapWrapper.Entry<String, MapWrapper<Integer, String>> file);
 
-    //Must implement a method to determine what data gets added to the chart.
-    protected abstract void addToSeriesIfValid(MapWrapper<String, Object> trialData, ChartSubDataWrapper series);
+    //May override to adjust selection criterion.
+    protected void addToSeriesIfValid(MapWrapper<String, Object> trialData, ChartSubDataWrapper subData) {
+        Date candidateDate = (Date) trialData.get("date");
+        if (candidateDate.compareTo(startDate) >= 0 && candidateDate.compareTo(endDate) <= 0) {
+            subData.add(trialData);
+        }
+    }
     
     protected final void assembleData(ListWrapper<ChartSubDataWrapper> chartData) {
         for (ChartSubDataWrapper series : chartData) {

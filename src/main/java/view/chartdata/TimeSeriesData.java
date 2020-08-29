@@ -60,14 +60,6 @@ public class TimeSeriesData extends AbstractChartData {
         return trialSeriesData;
     }
 
-    @Override //Any data within the start and end will be plotted.
-    protected void addToSeriesIfValid(MapWrapper<String, Object> seriesData, ChartSubDataWrapper series) {
-        Date candidateDate = (Date) seriesData.get("date");
-        if (candidateDate.compareTo(startDate) >= 0 && candidateDate.compareTo(endDate) <= 0) {
-            series.add(seriesData);
-        }
-    }
-    
     @Override
     public Dataset unwrap() {
         return this.internalTimeSeriesCollection;

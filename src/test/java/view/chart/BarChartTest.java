@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import process.DisplayTypeBinned;
 import process.Visualizations;
-import view.chartdata.AbstractBinnedData.Limits;
+import view.chartdata.AbstractBinnedData.RangeFinder;
 import view.chartdata.BarChartData;
 
 public class BarChartTest {
@@ -47,12 +47,6 @@ public class BarChartTest {
     public void testGenerateVisual() {
         chart.generateVisual(data);
         Helper.pause(10);
-    }
-    
-    @Test
-    public void rangeFindTest() {
-        Limits limits = new Limits(0, 500, 10);
-        System.out.println(limits.getRange(500));
     }
 
 }

@@ -18,20 +18,12 @@ public abstract class AbstractBinnedData extends AbstractChartData {
         this.bins = (int) parsedArgs.get("bins");
     }
 
-    @Override
-    protected void addToSeriesIfValid(MapWrapper<String, Object> seriesData, ChartSubDataWrapper series) {
-        Date candidateDate = (Date) seriesData.get("date");
-        if (candidateDate.compareTo(startDate) >= 0 && candidateDate.compareTo(endDate) <= 0) {
-            series.add(seriesData);
-        }
-    }
-
-    public static class Limits {
+    public static class RangeFinder {
 
         private final int lower, upper, interval, bins;
         private final NavigableMap<Integer, MapWrapper<String, Object>> lookupMap;
 
-        public Limits(double lower, double upper, int bins) {
+        public RangeFinder(double lower, double upper, int bins) {
             this.lookupMap = new TreeMap<>();
             this.interval = (int) (upper - lower) / bins;
             this.lower = (int) lower;
