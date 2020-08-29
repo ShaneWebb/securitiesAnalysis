@@ -39,10 +39,11 @@ public class PieChartData extends AbstractBinnedData {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    protected void addToSeriesIfValid(MapWrapper<String, Object> seriesData, ChartSubDataWrapper series) {
-        Date candidateDate = (Date) seriesData.get("date");
+    @Override
+    protected void addToSeriesIfValid(MapWrapper<String, Object> trialData, ChartSubDataWrapper series) {
+        Date candidateDate = (Date) trialData.get("date");
         if (candidateDate.compareTo(startDate) >= 0 && candidateDate.compareTo(endDate) <= 0) {
-            series.add(seriesData);
+            series.add(trialData);
         }
     }
 

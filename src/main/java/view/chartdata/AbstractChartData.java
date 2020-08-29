@@ -59,7 +59,7 @@ public abstract class AbstractChartData implements ChartDataWrapper {
     protected abstract ChartSubDataWrapper ChartSubDataFactory(MapWrapper.Entry<String, MapWrapper<Integer, String>> file);
 
     //Must implement a method to determine what data gets added to the chart.
-    protected abstract void addToSeriesIfValid(MapWrapper<String, Object> seriesData, ChartSubDataWrapper series);
+    protected abstract void addToSeriesIfValid(MapWrapper<String, Object> trialData, ChartSubDataWrapper series);
     
     protected final void assembleData(ListWrapper<ChartSubDataWrapper> chartData) {
         for (ChartSubDataWrapper series : chartData) {

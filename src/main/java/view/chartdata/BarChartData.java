@@ -1,8 +1,10 @@
-
 package view.chartdata;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
+import javautilwrappers.ArrayListWrapper;
+import javautilwrappers.HashMapWrapper;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -14,7 +16,7 @@ public class BarChartData extends AbstractBinnedData {
         super(parsedArgs);
         this.internalDataset = new DefaultCategoryDataset();
     }
-    
+
     public BarChartData(
             MapWrapper<String, Object> parsedArgs,
             DefaultCategoryDataset internalDataset) {
@@ -29,10 +31,12 @@ public class BarChartData extends AbstractBinnedData {
 
     @Override
     public void addSubDataToInternalCollection(ChartSubDataWrapper data) {
-        ListWrapper<MapWrapper<String, Object>> internalSubData = 
-                (ListWrapper<MapWrapper<String, Object>>) data.unwrap();
+        ListWrapper<MapWrapper<String, Object>> internalSubData
+                = (ListWrapper<MapWrapper<String, Object>>) data.unwrap();
 
-        for(MapWrapper<String, Object> item: internalSubData) {
+        //Must bin here. 
+        
+        for (MapWrapper<String, Object> item : internalSubData) {
             this.internalDataset.addValue(
                     (Double) item.get("value"),
                     (String) item.get("row"),
@@ -43,21 +47,28 @@ public class BarChartData extends AbstractBinnedData {
 
     @Override
     protected ChartSubDataWrapper ChartSubDataFactory(MapWrapper.Entry<String, MapWrapper<Integer, String>> file) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    protected MapWrapper<String, Object> parseSingleCsvLine(String fileData, int colIndex) throws ParseException, NumberFormatException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String fileName = file.getKey();
+        return new BarChartSubData(fileName);
     }
 
-    @Override //Must check start and end date, along with 
-    protected void addToSeriesIfValid(MapWrapper<String, Object> seriesData, ChartSubDataWrapper series) {
-        Date candidateDate = (Date) seriesData.get("date");
+    @Override
+    protected MapWrapper<String, Object> parseSingleCsvLine(String csvLine, int colIndex) throws ParseException, NumberFormatException {
+        ListWrapper<String> delimitedData = new ArrayListWrapper(Arrays.asList(csvLine.split(",")));
+        double value = Double.valueOf(delimitedData.get(colIndex));
+        Date parsedDate = createDate(delimitedData);
+
+        MapWrapper<String, Object> trialSeriesData = new HashMapWrapper<>();
+        trialSeriesData.put("date", parsedDate); //Important: Must provide this. 
+        trialSeriesData.put("value", value);
+        return trialSeriesData;
+    }
+
+    @Override //Must check start and end date.
+    protected void addToSeriesIfValid(MapWrapper<String, Object> trialData, ChartSubDataWrapper subData) {
+        Date candidateDate = (Date) trialData.get("date");
         if (candidateDate.compareTo(startDate) >= 0 && candidateDate.compareTo(endDate) <= 0) {
-            series.add(seriesData);
+            subData.add(trialData);
         }
     }
-
-
+    
 }

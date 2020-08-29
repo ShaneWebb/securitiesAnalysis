@@ -1,18 +1,12 @@
 package view.chartdata;
 
-import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Locale;
 import javautilwrappers.ArrayListWrapper;
 import javautilwrappers.HashMapWrapper;
-import javautilwrappers.ItemNotFoundException;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
-import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.general.Dataset;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.MovingAverage;
@@ -66,6 +60,14 @@ public class TimeSeriesData extends AbstractChartData {
         return trialSeriesData;
     }
 
+    @Override //Any data within the start and end will be plotted.
+    protected void addToSeriesIfValid(MapWrapper<String, Object> seriesData, ChartSubDataWrapper series) {
+        Date candidateDate = (Date) seriesData.get("date");
+        if (candidateDate.compareTo(startDate) >= 0 && candidateDate.compareTo(endDate) <= 0) {
+            series.add(seriesData);
+        }
+    }
+    
     @Override
     public Dataset unwrap() {
         return this.internalTimeSeriesCollection;
@@ -76,12 +78,5 @@ public class TimeSeriesData extends AbstractChartData {
         this.internalTimeSeriesCollection.addSeries((TimeSeries)data.unwrap());
     }
 
-    @Override //Any data within the start and end will be plotted.
-    protected void addToSeriesIfValid(MapWrapper<String, Object> seriesData, ChartSubDataWrapper series) {
-        Date candidateDate = (Date) seriesData.get("date");
-        if (candidateDate.compareTo(startDate) >= 0 && candidateDate.compareTo(endDate) <= 0) {
-            series.add(seriesData);
-        }
-    }
 
 }
