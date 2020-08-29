@@ -91,6 +91,11 @@ public class ProgramManager {
                 .help("Plot linear trendlines")
                 .setDefault(false)
                 .actionStoreTrue();
+        
+        plot.addArgument("--stochastic")
+                .help("Make a prediction")
+                .setDefault(false)
+                .actionStoreTrue();
 
         ArgParseWrapper basic = plot.addParser("Basic", "As is plot");
         basic.setDefault("type", Visualizations.BASIC);
@@ -115,7 +120,6 @@ public class ProgramManager {
         bin.addArgument("bins")
                 .help("Number of bins to split the data into.")
                 .type(Integer.class);
-
     }
 
     public static synchronized void setProgramActiveStatus(boolean programIsActive) {

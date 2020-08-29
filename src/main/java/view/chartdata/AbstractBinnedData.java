@@ -17,10 +17,12 @@ public abstract class AbstractBinnedData extends AbstractChartData {
 
     protected final int bins;
     protected DefaultCategoryDataset internalDataset;
+    protected boolean stochastic;
 
     public AbstractBinnedData(MapWrapper<String, Object> parsedArgs) {
         super(parsedArgs);
         this.bins = (int) parsedArgs.get("bins");
+        this.stochastic = (boolean) parsedArgs.get("stochastic");
     }
     
     @Override

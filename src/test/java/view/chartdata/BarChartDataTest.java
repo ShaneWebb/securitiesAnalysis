@@ -59,6 +59,7 @@ public class BarChartDataTest {
         map0.put("endDate", "1/1/2020");
         map0.put("xAxis", "Date");
         map0.put("lineartrend", false);
+        map0.put("stochastic", false);
         map0.put("type", Visualizations.BINNED);
         map0.put("displayType", DisplayTypeBinned.BAR);
         map0.put("bins", 10);

@@ -230,6 +230,7 @@ public class ProgramManagerTest {
         map0.put("endDate", "1/1/2020");
         map0.put("xAxis", "Date");
         map0.put("lineartrend", false);
+        map0.put("stochastic", false);
         
         MapWrapper<String, Object> map1 = new HashMapWrapper<>(map0);
         map1.put("type", Visualizations.BASIC);
@@ -240,6 +241,10 @@ public class ProgramManagerTest {
         map2.put("type", Visualizations.BASIC);
         map2.put("xAxis", "Time");
         map2.put("lineartrend", false);
+        
+        MapWrapper<String, Object> map7 = new HashMapWrapper<>(map0);
+        map7.put("type", Visualizations.BASIC);
+        map7.put("stochastic", true);
         
         MapWrapper<String, Object> map3 = new HashMapWrapper<>(map0);
         map3.put("type", Visualizations.MOVING_AVERAGE);
@@ -267,7 +272,8 @@ public class ProgramManagerTest {
                 Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 MovingAvg", map3),
                 Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 MovingAvg --period 20 --initToIgnore 20", map4),
                 Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 Bin BAR 10", map5),
-                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 Bin PIE 10", map6)
+                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 Bin PIE 10", map6),
+                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 --stochastic Basic", map7)
         );
     }
 
