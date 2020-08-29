@@ -3,40 +3,51 @@ package view.chartdata;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
+import javautilwrappers.ArrayListWrapper;
+import javautilwrappers.HashMapWrapper;
 import javautilwrappers.ItemNotFoundException;
+import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.AbstractDataset;
 import org.jfree.data.general.Dataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 public class PieChartData extends AbstractBinnedData {
-
-    private final DefaultPieDataset internalPieDataSet;
     
-    PieChartData(MapWrapper<String, Object> parsedArgs) {
+    public PieChartData(MapWrapper<String, Object> parsedArgs) {
         super(parsedArgs);
-        this.internalPieDataSet = new DefaultPieDataset();
+        this.internalDataset = new DefaultCategoryDataset();
+    }
+    
+    public PieChartData(MapWrapper<String, Object> parsedArgs, DefaultCategoryDataset internalDataset) {
+        super(parsedArgs);
+        this.internalDataset = internalDataset;
     }
 
     @Override
     public Dataset unwrap() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.internalDataset;
     }
 
     @Override
-    public void addSubDataToInternalCollection(ChartSubDataWrapper data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    protected MapWrapper<String, Object> parseSingleCsvLine(String csvLine, int colIndex) throws ParseException, NumberFormatException {
+        ListWrapper<String> delimitedData = new ArrayListWrapper(Arrays.asList(csvLine.split(",")));
+        double value = Double.valueOf(delimitedData.get(colIndex));
+        Date parsedDate = createDate(delimitedData);
 
-    @Override
-    protected MapWrapper<String, Object> parseSingleCsvLine(String fileData, int colIndex) throws ParseException, NumberFormatException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        MapWrapper<String, Object> trialSeriesData = new HashMapWrapper<>();
+        trialSeriesData.put("date", parsedDate); //Important: Must provide this. 
+        trialSeriesData.put("value", value);
+        return trialSeriesData;
     }
 
     @Override
     protected ChartSubDataWrapper ChartSubDataFactory(MapWrapper.Entry<String, MapWrapper<Integer, String>> file) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String fileName = file.getKey();
+        return new PieChartSubData(fileName);
     }
 
 }
