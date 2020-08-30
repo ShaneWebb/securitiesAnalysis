@@ -1,7 +1,7 @@
 package process;
 
-import datatypes.Report;
 import datatypes.EnvironmentVariables;
+import datatypes.Report;
 import io.console.ArgParseWrapper;
 import io.local.BasicFileReader;
 import javautilwrappers.HashMapWrapper;
