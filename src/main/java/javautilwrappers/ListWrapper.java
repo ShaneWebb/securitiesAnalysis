@@ -10,5 +10,7 @@ public interface ListWrapper<E> extends CollectionWrapper<E> {
     int indexOf(E item) throws ItemNotFoundException;
     
     List<E> unwrap();
+    
+    int size();
 
 }
