@@ -1,13 +1,13 @@
-package main;
+package process;
 
-import io.console.ArgParseWrapper;
-import process.SupportedProcess;
 import datatypes.EnvironmentVariables;
 import datatypes.Report;
+import io.console.ArgParseWrapper;
 import io.database.audit.AuditReportFields;
 import java.util.stream.Stream;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
+import main.Supplier;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -26,9 +26,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import process.DisplayTypeBinned;
-import process.ProgramManager;
-import process.Visualizations;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
