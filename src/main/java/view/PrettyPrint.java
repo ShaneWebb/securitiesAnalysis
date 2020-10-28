@@ -1,7 +1,6 @@
 package view;
 
 import datatypes.Report;
-import main.Main;
 
 public class PrettyPrint {
 
@@ -35,7 +34,6 @@ public class PrettyPrint {
 
     //TODO: Create prettyPrinter, which accepts a displayable object. 
     public void prettyPrinter(Report report) {
-        System.out.println("CLI report coming soon! Use help function instead.");
     }
 
 }

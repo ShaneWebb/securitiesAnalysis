@@ -1,11 +1,10 @@
 package main;
 
-import process.ProgramManager;
-import datatypes.Report;
-import io.database.audit.Auditor;
-import view.*;
 import datatypes.*;
+import io.database.audit.Auditor;
 import java.util.Scanner;
+import process.ProgramManager;
+import view.*;
 
 public class Main {
 
@@ -25,7 +24,7 @@ public class Main {
             EnvironmentVariables.INSTANCE.loadFromFile("environmentvariables.txt");
             Main instance = new Main(
                     Auditor.createFrom(new Auditor.DefaultFactory()),
-                    ProgramManager.createFrom(new ProgramManager.DefaultFactory()),
+                    new ProgramManager(),
                     new PrettyPrint.Builder().build(),
                     new Scanner(System.in));
 

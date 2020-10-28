@@ -15,6 +15,10 @@ public interface MapWrapper<K, V> {
     CollectionWrapper<V> values();
     
     Map<K, V> unwrap();
+    
+    void clear();
+    
+    void putAll(MapWrapper<? extends K, ? extends V> m);
 
     public interface Entry<K, V> {
 

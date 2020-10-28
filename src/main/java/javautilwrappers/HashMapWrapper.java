@@ -1,9 +1,7 @@
 package javautilwrappers;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 public class HashMapWrapper<K, V> extends AbstractMapWrapper<K, V> {
     
@@ -24,6 +22,16 @@ public class HashMapWrapper<K, V> extends AbstractMapWrapper<K, V> {
     
     public HashMapWrapper(MapWrapper<? extends K, ? extends V> map) {
         internalMap = new HashMap<>(map.unwrap());
+    }
+
+    @Override
+    public void clear() {
+        internalMap.clear();
+    }
+
+    @Override
+    public void putAll(MapWrapper<? extends K, ? extends V> map) {
+        internalMap.putAll(map.unwrap());
     }
     
 }

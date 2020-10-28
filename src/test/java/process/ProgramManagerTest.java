@@ -1,13 +1,11 @@
 package process;
 
-import datatypes.EnvironmentVariables;
 import datatypes.Report;
 import io.console.ArgParseWrapper;
 import io.database.audit.AuditReportFields;
 import java.util.stream.Stream;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
-import main.Supplier;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -36,7 +34,7 @@ public class ProgramManagerTest {
 
     @Mock
     private SupportedProcess runOnStart, doNotRunOnStart, processOne, processTwo;
-    
+
     @Mock
     private SupportedProcess placeholder;
 
@@ -50,28 +48,6 @@ public class ProgramManagerTest {
         closeable.close();
     }
 
-    private class TestFactory implements Supplier<ProgramManager> {
-
-        private final HashMapWrapper<String, SupportedProcess> supportedProcesses;
-        private final ArgParseWrapper argParser;
-
-        TestFactory() {
-            supportedProcesses = new HashMapWrapper<>();
-            supportedProcesses.put("runonstart", runOnStart);
-            supportedProcesses.put("doNotRunOnStart", doNotRunOnStart);
-            argParser = new ArgParseWrapper("Test");
-        }
-
-        @Override
-        public ProgramManager get() {
-            return new ProgramManager(
-                    EnvironmentVariables.INSTANCE,
-                    supportedProcesses,
-                    argParser);
-        }
-
-    }
-
     public ProgramManagerTest() {
     }
 
@@ -79,7 +55,12 @@ public class ProgramManagerTest {
     public void testStartAllProcesses() {
         when(runOnStart.runsOnStart()).thenReturn(true);
         when(doNotRunOnStart.runsOnStart()).thenReturn(false);
-        instance = ProgramManager.createFrom(new TestFactory());
+
+        MapWrapper<String, SupportedProcess> supportedProcesses = new HashMapWrapper<>();
+        supportedProcesses.put("runonstart", runOnStart);
+        supportedProcesses.put("doNotRunOnStart", doNotRunOnStart);
+
+        instance = new ProgramManager(supportedProcesses);
         Report auditReport = new Report(AuditReportFields.class);
         instance.setAuditReport(auditReport);
 
@@ -93,19 +74,17 @@ public class ProgramManagerTest {
 
     @Test //Must return a condensed, holistic report.
     public void testGetFullReport() {
-        instance = ProgramManager.createFrom(new TestFactory());
+        instance = new ProgramManager();
         Report auditReport = new Report(AuditReportFields.class);
         instance.setAuditReport(auditReport);
-
         instance.startAllProcesses();
-
         Report fullReport = instance.getFullReport();
         assertNotNull(fullReport);
     }
 
     @Test
     public void testGetProgramActiveStatus() {
-        instance = ProgramManager.createFrom(new TestFactory());
+        instance = new ProgramManager();
         Report auditReport = new Report(AuditReportFields.class);
         instance.setAuditReport(auditReport);
 
@@ -126,36 +105,19 @@ public class ProgramManagerTest {
     @MethodSource("provideCommandAndProcesses")
     public void testRunUserInputCommand(String commandArg, String testMode) throws Exception {
 
-        class LocalTestFactory implements Supplier<ProgramManager> {
+        ArgParseWrapper localArgParser = new ArgParseWrapper("Test");
+        localArgParser.addSubparserHelp("Test sub command help");
+        
+        ArgParseWrapper commandOne = localArgParser.addParser("CommandOne", "Command One Help");
+        commandOne.setDefault("func", processOne);
+        ArgParseWrapper commandTwo = localArgParser.addParser("CommandTwo", "Command One Help");
+        commandTwo.setDefault("func", processTwo);
 
-            private final MapWrapper<String, SupportedProcess> supportedProcesses;
-            private final ArgParseWrapper localArgParser;
+        MapWrapper<String, SupportedProcess> supportedProcesses = new HashMapWrapper<>();
+        supportedProcesses.put("placeholder1", processOne);
+        supportedProcesses.put("placeholder2", processTwo);
 
-            LocalTestFactory() {
-                supportedProcesses = new HashMapWrapper<>();
-                supportedProcesses.put("placeholder1", processOne);
-                supportedProcesses.put("placeholder2", processTwo);
-
-                localArgParser = new ArgParseWrapper("Test");
-                localArgParser.addSubparserHelp("Test sub command help");
-
-                ArgParseWrapper commandOne = localArgParser.addParser("CommandOne", "Command One Help");
-                commandOne.setDefault("func", processOne);
-                ArgParseWrapper commandTwo = localArgParser.addParser("CommandTwo", "Command One Help");
-                commandTwo.setDefault("func", processTwo);
-            }
-
-            @Override
-            public ProgramManager get() {
-                return new ProgramManager(
-                        EnvironmentVariables.INSTANCE,
-                        supportedProcesses,
-                        localArgParser);
-            }
-
-        }
-
-        instance = ProgramManager.createFrom(new LocalTestFactory());
+        instance = new ProgramManager(supportedProcesses, localArgParser);
         instance.runUserInputCommand(commandArg);
 
         switch (testMode) {
@@ -188,38 +150,20 @@ public class ProgramManagerTest {
     @ParameterizedTest
     @MethodSource("provideCommandAndMap")
     public void testInbuiltCommands(String command, HashMapWrapper<String, Object> map) {
-        class LocalTestFactory implements Supplier<ProgramManager> {
 
-            private final HashMapWrapper<String, SupportedProcess> supportedProcesses;
-            private final ArgParseWrapper localArgParser;
+        MapWrapper<String, SupportedProcess> supportedProcesses = new HashMapWrapper<>();
+        supportedProcesses.put("plotter", placeholder);
+        supportedProcesses.put("stopper", placeholder);
 
-            LocalTestFactory() {
-                // Rest is defined in Program Manager.
-                localArgParser = new ArgParseWrapper("Erasmus");
-                
-                // Keys must match the program manager object.
-                supportedProcesses = new HashMapWrapper<>();
-                supportedProcesses.put("plotter", placeholder);
-                supportedProcesses.put("stopper", placeholder);
-            }
-
-            @Override
-            public ProgramManager get() {
-                return new ProgramManager(
-                        EnvironmentVariables.INSTANCE,
-                        supportedProcesses,
-                        localArgParser);
-            }
-        }
-        
-        instance = ProgramManager.createFrom(new LocalTestFactory());
-        instance.runUserInputCommand(command); map.put("func", placeholder);
+        instance = new ProgramManager(supportedProcesses);
+        instance.runUserInputCommand(command);
+        map.put("func", placeholder);
         verify(placeholder).setArgs(map);
-        
+
     }
-    
+
     public static Stream<Arguments> provideCommandAndMap() {
-        
+
         MapWrapper<String, Object> map0 = new HashMapWrapper<>();
         map0.put("files", "A.csv,B.csv");
         map0.put("header", "volume");
@@ -228,41 +172,41 @@ public class ProgramManagerTest {
         map0.put("xAxis", "Date");
         map0.put("lineartrend", false);
         map0.put("stochastic", false);
-        
+
         MapWrapper<String, Object> map1 = new HashMapWrapper<>(map0);
         map1.put("type", Visualizations.BASIC);
         map1.put("xAxis", "Date");
         map1.put("lineartrend", true);
-        
+
         MapWrapper<String, Object> map2 = new HashMapWrapper<>(map0);
         map2.put("type", Visualizations.BASIC);
         map2.put("xAxis", "Time");
         map2.put("lineartrend", false);
-        
+
         MapWrapper<String, Object> map7 = new HashMapWrapper<>(map0);
         map7.put("type", Visualizations.BASIC);
         map7.put("stochastic", true);
-        
+
         MapWrapper<String, Object> map3 = new HashMapWrapper<>(map0);
         map3.put("type", Visualizations.MOVING_AVERAGE);
         map3.put("period", 1);
         map3.put("initToIgnore", 1);
-        
+
         MapWrapper<String, Object> map4 = new HashMapWrapper<>(map0);
         map4.put("type", Visualizations.MOVING_AVERAGE);
         map4.put("period", 20);
         map4.put("initToIgnore", 20);
-        
+
         MapWrapper<String, Object> map5 = new HashMapWrapper<>(map0);
         map5.put("type", Visualizations.BINNED);
         map5.put("displayType", DisplayTypeBinned.BAR);
         map5.put("bins", 10);
-        
+
         MapWrapper<String, Object> map6 = new HashMapWrapper<>(map0);
         map6.put("type", Visualizations.BINNED);
         map6.put("displayType", DisplayTypeBinned.PIE);
         map6.put("bins", 10);
-        
+
         return Stream.of(
                 Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 --lineartrend Basic", map1),
                 Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 --xAxis Time Basic", map2),
@@ -276,8 +220,11 @@ public class ProgramManagerTest {
 
     @Test
     public void testStopAll() {
+        
+        MapWrapper<String, SupportedProcess> supportedProcesses = new HashMapWrapper<>();
+        supportedProcesses.put("runonstart", runOnStart);
 
-        instance = ProgramManager.createFrom(new TestFactory());
+        instance = new ProgramManager(supportedProcesses);
         Report auditReport = new Report(AuditReportFields.class);
         instance.setAuditReport(auditReport);
 

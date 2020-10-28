@@ -1,70 +1,48 @@
 package process;
 
-import datatypes.EnvironmentVariables;
 import datatypes.Report;
 import io.console.ArgParseWrapper;
 import io.local.BasicFileReader;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
-import main.Supplier;
 
 public class ProgramManager {
 
-    public static ProgramManager createFrom(Supplier<ProgramManager> factory) {
-        ProgramManager temp = factory.get();
-        return temp;
-    }
-
-    /**
-     * TODO: Refactor to only be dependent on ArgumentParserWrapper. The startup
-     * procedure should instead call a command, not processes directly.
-     *
-     */
-    private final EnvironmentVariables environmentVariables;
     private final MapWrapper<String, SupportedProcess> supportedProcesses;
     private final ArgParseWrapper argParser;
     private Report auditReport;
 
     private static boolean programIsActive = false;
 
-    public static class DefaultFactory implements Supplier<ProgramManager> {
+    public ProgramManager() {
+        ProgramManager.programIsActive = true;
+        SupportedProcess plotter = new Plotter(new BasicFileReader());
+        SupportedProcess stopper = new Stopper();
+        
+        supportedProcesses = new HashMapWrapper<>();
+        supportedProcesses.put("stopper", stopper);
+        supportedProcesses.put("plotter", plotter);
 
-        private final MapWrapper<String, SupportedProcess> supportedProcesses;
-        private final ArgParseWrapper argParser;
-
-        public DefaultFactory() {
-
-            supportedProcesses = new HashMapWrapper<>();
-            argParser = new ArgParseWrapper("Erasmus");
-
-            SupportedProcess plotter = new Plotter(new BasicFileReader());
-            SupportedProcess stopper = new Stopper();
-            supportedProcesses.put("stopper", stopper);
-            supportedProcesses.put("plotter", plotter);
-
-        }
-
-        @Override
-        public ProgramManager get() {
-            return new ProgramManager(
-                    EnvironmentVariables.INSTANCE,
-                    supportedProcesses,
-                    argParser
-            );
-        }
+        argParser = new ArgParseWrapper("Erasmus");
+        argParser.addSubparserHelp("Sub command help");
+        buildArgParser();
     }
 
-    public ProgramManager(
-            EnvironmentVariables environmentVariables,
-            MapWrapper<String, SupportedProcess> supportedProcessList,
-            ArgParseWrapper argParser) {
-
-        this.environmentVariables = environmentVariables;
-        this.supportedProcesses = supportedProcessList;
-        this.argParser = argParser;
-        ProgramManager.programIsActive = true;
-
+    public ProgramManager(MapWrapper<String, SupportedProcess> supportedProcesses) {
+        this.supportedProcesses = supportedProcesses;
+        argParser = new ArgParseWrapper("Erasmus");
         argParser.addSubparserHelp("Sub command help");
+        buildArgParser();
+    }
+    
+    public ProgramManager(
+            MapWrapper<String, SupportedProcess> supportedProcesses,
+            ArgParseWrapper argParser) {
+        this.supportedProcesses = supportedProcesses;
+        this.argParser = argParser;
+    }
+    
+    private void buildArgParser() {
 
         ArgParseWrapper stop = argParser.addParser("Stop", "Terminate Erasmus");
         stop.setDefault("func", supportedProcesses.get("stopper"));
@@ -91,7 +69,7 @@ public class ProgramManager {
                 .help("Plot linear trendlines")
                 .setDefault(false)
                 .actionStoreTrue();
-        
+
         plot.addArgument("--stochastic")
                 .help("Make a prediction")
                 .setDefault(false)
@@ -106,7 +84,7 @@ public class ProgramManager {
                 .help("Number of time periods for the average.")
                 .type(Integer.class)
                 .setDefault(1);
-        
+
         movAvg.addArgument("--initToIgnore")
                 .help("Number of initial time periods to ignore.")
                 .type(Integer.class)
@@ -122,6 +100,7 @@ public class ProgramManager {
                 .type(Integer.class);
     }
 
+    
     public static synchronized void setProgramActiveStatus(boolean programIsActive) {
         ProgramManager.programIsActive = programIsActive;
     }
@@ -152,7 +131,7 @@ public class ProgramManager {
     public void runUserInputCommand(String inputCommand) {
         try {
             String[] inputCommandParsed = inputCommand.split(" ");
-            HashMapWrapper<String, Object> parsedArgs
+            MapWrapper<String, Object> parsedArgs
                     = argParser.parseArgs(inputCommandParsed);
             SupportedProcess process
                     = (SupportedProcess) parsedArgs.get("func");
