@@ -1,6 +1,5 @@
 package process;
 
-import datatypes.Report;
 import io.console.ArgParseWrapper;
 import io.local.BasicFileReader;
 import javautilwrappers.HashMapWrapper;
@@ -10,7 +9,6 @@ public class ProgramManager {
 
     private final MapWrapper<String, SupportedProcess> supportedProcesses;
     private final ArgParseWrapper argParser;
-    private Report auditReport;
 
     private static boolean programIsActive = false;
 
@@ -109,22 +107,12 @@ public class ProgramManager {
         return ProgramManager.programIsActive;
     }
 
-    public void setAuditReport(Report auditReport) {
-        this.auditReport = auditReport;
-    }
-
     public void startAllProcesses() {
         for (SupportedProcess process : supportedProcesses.values()) {
             if (process.runsOnStart()) {
-                process.setAuditReport(auditReport);
                 process.createThread();
             }
         }
-    }
-
-    public Report getFullReport() {
-        Report fullReport = new Report(FullReportFields.class);
-        return fullReport;
     }
 
     //What to do and how to do it.

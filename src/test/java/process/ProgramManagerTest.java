@@ -1,14 +1,11 @@
 package process;
 
-import datatypes.Report;
 import io.console.ArgParseWrapper;
-import io.database.audit.AuditReportFields;
 import java.util.stream.Stream;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,33 +58,21 @@ public class ProgramManagerTest {
         supportedProcesses.put("doNotRunOnStart", doNotRunOnStart);
 
         instance = new ProgramManager(supportedProcesses);
-        Report auditReport = new Report(AuditReportFields.class);
-        instance.setAuditReport(auditReport);
-
         instance.startAllProcesses();
 
         verify(runOnStart).createThread();
-        verify(runOnStart).setAuditReport(auditReport);
         verify(doNotRunOnStart, never()).createThread();
-        verify(doNotRunOnStart, never()).setAuditReport(auditReport);
     }
 
     @Test //Must return a condensed, holistic report.
     public void testGetFullReport() {
         instance = new ProgramManager();
-        Report auditReport = new Report(AuditReportFields.class);
-        instance.setAuditReport(auditReport);
         instance.startAllProcesses();
-        Report fullReport = instance.getFullReport();
-        assertNotNull(fullReport);
     }
 
     @Test
     public void testGetProgramActiveStatus() {
         instance = new ProgramManager();
-        Report auditReport = new Report(AuditReportFields.class);
-        instance.setAuditReport(auditReport);
-
         instance.startAllProcesses();
 
         Boolean programIsActive;
@@ -215,6 +200,11 @@ public class ProgramManagerTest {
                 Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 Bin BAR 10", map5),
                 Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 Bin PIE 10", map6),
                 Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 --stochastic Basic", map7)
+                //Arguments.of("Visualize --DB A,B 8/21/1981 1/1/2020 MovingAvg", map7)
+                //Arguments.of("Visualize --Portfolio 8/21/1981 1/1/2020", map7)
+                //Arguments.of("Gather", map7)
+                //Arguments.of("Audit", map7)
+                //Arguments.of("Execute", map7)
         );
     }
 
@@ -225,8 +215,6 @@ public class ProgramManagerTest {
         supportedProcesses.put("runonstart", runOnStart);
 
         instance = new ProgramManager(supportedProcesses);
-        Report auditReport = new Report(AuditReportFields.class);
-        instance.setAuditReport(auditReport);
 
         instance.startAllProcesses();
         instance.stopAllProcesses();

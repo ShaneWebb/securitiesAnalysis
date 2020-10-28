@@ -1,6 +1,5 @@
 package process;
 
-import datatypes.Report;
 import javautilwrappers.MapWrapper;
 
 //TODO: Refactor into multiple interfaces, since not all processes need
@@ -8,8 +7,6 @@ import javautilwrappers.MapWrapper;
 public interface SupportedProcess {
   
     public boolean runsOnStart();
-
-    public void setAuditReport(Report auditReport);
 
     public void createThread();
 

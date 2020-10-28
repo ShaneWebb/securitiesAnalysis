@@ -1,13 +1,12 @@
 package process;
 
-import view.chartdata.ChartDataWrapperFactory;
-import datatypes.Report;
 import io.local.BasicFileReader;
 import java.io.IOException;
 import javautilwrappers.*;
-import view.chartdata.ChartDataWrapper;
-import view.chart.ChartWrapperFactory;
 import view.chart.ChartWrapper;
+import view.chart.ChartWrapperFactory;
+import view.chartdata.ChartDataWrapper;
+import view.chartdata.ChartDataWrapperFactory;
 
 public class Plotter implements SupportedProcess {
 
@@ -55,11 +54,6 @@ public class Plotter implements SupportedProcess {
     }
 
 //<editor-fold defaultstate="collapsed" desc="Unused">
-    @Override
-    public void setAuditReport(Report auditReport) {
-
-    }
-
     @Override
     public void createThread() {
 

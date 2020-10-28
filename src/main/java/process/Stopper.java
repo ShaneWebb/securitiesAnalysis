@@ -1,8 +1,6 @@
 
 package process;
 
-import datatypes.Report;
-import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
 
 public class Stopper implements SupportedProcess {
@@ -20,12 +18,7 @@ public class Stopper implements SupportedProcess {
         return false;
     }
 
-    //<editor-fold defaultstate="collapsed" desc="Unused">
-    @Override
-    public void setAuditReport(Report auditReport) {
-        
-    }
-    
+    //<editor-fold defaultstate="collapsed" desc="Unused"> 
     @Override
     public void createThread() {
         

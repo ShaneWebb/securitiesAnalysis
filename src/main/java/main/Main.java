@@ -1,16 +1,11 @@
 package main;
 
-import datatypes.*;
-import io.database.audit.Auditor;
 import java.util.Scanner;
 import process.ProgramManager;
-import view.*;
 
 public class Main {
 
-    private final Auditor auditor;
     private final ProgramManager programManager;
-    private final PrettyPrint prettyPrint;
     private final Scanner scanner;
 
     public static Main createFrom(Supplier<Main> factory) {
@@ -21,11 +16,8 @@ public class Main {
 
         @Override
         public Main get() {
-            EnvironmentVariables.INSTANCE.loadFromFile("environmentvariables.txt");
             Main instance = new Main(
-                    Auditor.createFrom(new Auditor.DefaultFactory()),
                     new ProgramManager(),
-                    new PrettyPrint.Builder().build(),
                     new Scanner(System.in));
 
             return instance;
@@ -34,14 +26,10 @@ public class Main {
     }
 
     public Main(
-            Auditor auditor,
             ProgramManager programManager,
-            PrettyPrint prettyPrint,
             Scanner scanner) {
 
-        this.auditor = auditor;
         this.programManager = programManager;
-        this.prettyPrint = prettyPrint;
         this.scanner = scanner;
     }
 
@@ -51,14 +39,10 @@ public class Main {
     }
 
     public final void run() {
-        Report auditReport = auditor.audit();
-        programManager.setAuditReport(auditReport);
         programManager.startAllProcesses();
 
         Boolean programIsActive = true;
         while (programIsActive) {
-            Report programReport = programManager.getFullReport();
-            prettyPrint.prettyPrinter(programReport);
             if (scanner.hasNext()) {
                 programManager.runUserInputCommand(scanner.nextLine());
             }
