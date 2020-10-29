@@ -65,10 +65,9 @@ public class MainTest {
     @Timeout(value = 50, unit = TimeUnit.MILLISECONDS)
     public void programStateTest() {
         
+        ProgramManager.setProgramActiveStatus(false);
         instance.run();
-        verify(mockProgramManager).startAllProcesses();
         verify(mockProgramManager).runUserInputCommand(inputCommand);
-        verify(mockProgramManager).stopAllProcesses();
 
     }
 

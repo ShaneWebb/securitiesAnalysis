@@ -39,19 +39,15 @@ public class Main {
     }
 
     public final void run() {
-        programManager.startAllProcesses();
 
-        Boolean programIsActive = true;
-        while (programIsActive) {
+        do {
             if (scanner.hasNext()) {
                 programManager.runUserInputCommand(scanner.nextLine());
-            }
-            else {
+            } else {
                 programManager.runUserInputCommand(null);
             }
-            programIsActive = ProgramManager.getProgramActiveStatus();
-        }
-        programManager.stopAllProcesses();
+        } while (ProgramManager.getProgramActiveStatus());
+
     }
 
 }

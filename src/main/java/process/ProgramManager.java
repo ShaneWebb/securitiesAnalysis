@@ -10,10 +10,9 @@ public class ProgramManager {
     private final MapWrapper<String, SupportedProcess> supportedProcesses;
     private final ArgParseWrapper argParser;
 
-    private static boolean programIsActive = false;
+    private static boolean programIsActive = true;
 
     public ProgramManager() {
-        ProgramManager.programIsActive = true;
         SupportedProcess plotter = new Plotter(new BasicFileReader());
         SupportedProcess stopper = new Stopper();
         
@@ -107,14 +106,6 @@ public class ProgramManager {
         return ProgramManager.programIsActive;
     }
 
-    public void startAllProcesses() {
-        for (SupportedProcess process : supportedProcesses.values()) {
-            if (process.runsOnStart()) {
-                process.createThread();
-            }
-        }
-    }
-
     //What to do and how to do it.
     public void runUserInputCommand(String inputCommand) {
         try {
@@ -129,12 +120,6 @@ public class ProgramManager {
             System.out.println(e.getMessage());
         }
 
-    }
-
-    public void stopAllProcesses() {
-        for (SupportedProcess process : supportedProcesses.values()) {
-            process.stopAllThreads();
-        }
     }
 
 }

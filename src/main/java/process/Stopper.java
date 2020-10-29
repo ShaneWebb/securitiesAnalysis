@@ -1,4 +1,3 @@
-
 package process;
 
 import javautilwrappers.MapWrapper;
@@ -12,27 +11,10 @@ public class Stopper implements SupportedProcess {
     public void execute() {
         ProgramManager.setProgramActiveStatus(false);
     }
-    
-    @Override
-    public boolean runsOnStart() {
-        return false;
-    }
 
-    //<editor-fold defaultstate="collapsed" desc="Unused"> 
     @Override
-    public void createThread() {
-        
+    public void setArgs(MapWrapper<String, Object> parsedArgs) throws IllegalArgumentException {
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
-    
-    @Override
-    public void stopAllThreads() {
-        
-    }
-    
-    @Override
-    public void setArgs(MapWrapper<String, Object> parsedArgs) {
-        
-    }
-//</editor-fold>
 
 }

@@ -16,7 +16,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -48,32 +47,14 @@ public class ProgramManagerTest {
     public ProgramManagerTest() {
     }
 
-    @Test
-    public void testStartAllProcesses() {
-        when(runOnStart.runsOnStart()).thenReturn(true);
-        when(doNotRunOnStart.runsOnStart()).thenReturn(false);
-
-        MapWrapper<String, SupportedProcess> supportedProcesses = new HashMapWrapper<>();
-        supportedProcesses.put("runonstart", runOnStart);
-        supportedProcesses.put("doNotRunOnStart", doNotRunOnStart);
-
-        instance = new ProgramManager(supportedProcesses);
-        instance.startAllProcesses();
-
-        verify(runOnStart).createThread();
-        verify(doNotRunOnStart, never()).createThread();
-    }
-
     @Test //Must return a condensed, holistic report.
     public void testGetFullReport() {
         instance = new ProgramManager();
-        instance.startAllProcesses();
     }
 
     @Test
     public void testGetProgramActiveStatus() {
         instance = new ProgramManager();
-        instance.startAllProcesses();
 
         Boolean programIsActive;
         ProgramManager.setProgramActiveStatus(false);
@@ -206,22 +187,6 @@ public class ProgramManagerTest {
                 //Arguments.of("Audit", map7)
                 //Arguments.of("Execute", map7)
         );
-    }
-
-    @Test
-    public void testStopAll() {
-        
-        MapWrapper<String, SupportedProcess> supportedProcesses = new HashMapWrapper<>();
-        supportedProcesses.put("runonstart", runOnStart);
-
-        instance = new ProgramManager(supportedProcesses);
-
-        instance.startAllProcesses();
-        instance.stopAllProcesses();
-
-        verify(runOnStart).stopAllThreads();
-        verify(runOnStart).stopAllThreads();
-
     }
 
 }

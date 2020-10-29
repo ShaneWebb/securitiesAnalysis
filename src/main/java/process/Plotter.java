@@ -48,20 +48,5 @@ public class Plotter implements SupportedProcess {
 
     }
 
-    @Override
-    public boolean runsOnStart() {
-        return false;
-    }
 
-//<editor-fold defaultstate="collapsed" desc="Unused">
-    @Override
-    public void createThread() {
-
-    }
-
-    @Override
-    public void stopAllThreads() {
-
-    }
-//</editor-fold>
 }
