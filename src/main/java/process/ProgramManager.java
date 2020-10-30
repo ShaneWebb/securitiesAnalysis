@@ -46,8 +46,9 @@ public class ProgramManager {
 
         ArgParseWrapper plot = argParser.addParser("Visualize", "Visualize Data");
         plot.setDefault("func", supportedProcesses.get("plotter"));
-        plot.addArgument("files")
-                .help("Comma separated list of CSV files.");
+        plot.addArgument("--files")
+                .help("Comma separated list of CSV files.")
+                .nargs("?");
 
         plot.addArgument("header")
                 .help("Data to plot");

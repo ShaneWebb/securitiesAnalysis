@@ -2,7 +2,6 @@ package io.console;
 
 import javautilwrappers.HashMapWrapper;
 import net.sourceforge.argparse4j.ArgumentParsers;
-import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Argument;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
@@ -41,7 +40,6 @@ public class ArgParseWrapper {
         ArgWrapper wrappedArg = new ArgWrapper(unwrappedArg);
         return wrappedArg;
     }
-    
     
     public ArgParseWrapper setDefault(String string, Object ob) {
         internalParser.setDefault(string, ob);

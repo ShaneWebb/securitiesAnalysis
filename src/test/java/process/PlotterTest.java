@@ -4,7 +4,7 @@ import io.local.BasicFileReader;
 import java.io.IOException;
 import java.util.stream.Stream;
 import javautilwrappers.HashMapWrapper;
-import javautilwrappers.ItemNotFoundException;
+import datatypes.exceptions.ItemNotFoundException;
 import javautilwrappers.MapWrapper;
 import main.Helper;
 import org.junit.jupiter.api.AfterEach;

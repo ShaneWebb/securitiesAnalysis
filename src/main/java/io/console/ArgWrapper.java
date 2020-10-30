@@ -21,6 +21,11 @@ public class ArgWrapper {
         return this;
     }
     
+    public ArgWrapper nargs(int num) {
+        internalArgument = internalArgument.nargs(num);
+        return this;
+    }
+    
     public ArgWrapper actionStoreConst() {
         internalArgument = internalArgument.action(Arguments.storeConst());
         return this;

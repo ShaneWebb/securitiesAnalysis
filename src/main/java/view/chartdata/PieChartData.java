@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Date;
 import javautilwrappers.ArrayListWrapper;
 import javautilwrappers.HashMapWrapper;
-import javautilwrappers.ItemNotFoundException;
+import datatypes.exceptions.ItemNotFoundException;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.category.DefaultCategoryDataset;

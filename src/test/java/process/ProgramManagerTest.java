@@ -29,7 +29,7 @@ public class ProgramManagerTest {
     private ProgramManager instance;
 
     @Mock
-    private SupportedProcess runOnStart, doNotRunOnStart, processOne, processTwo;
+    private SupportedProcess processOne, processTwo;
 
     @Mock
     private SupportedProcess placeholder;
@@ -174,14 +174,15 @@ public class ProgramManagerTest {
         map6.put("bins", 10);
 
         return Stream.of(
-                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 --lineartrend Basic", map1),
-                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 --xAxis Time Basic", map2),
-                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 MovingAvg", map3),
-                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 MovingAvg --period 20 --initToIgnore 20", map4),
-                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 Bin BAR 10", map5),
-                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 Bin PIE 10", map6),
-                Arguments.of("Visualize A.csv,B.csv volume 8/21/1981 1/1/2020 --stochastic Basic", map7)
+                Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 --lineartrend Basic", map1),
+                Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 --xAxis Time Basic", map2),
+                Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 MovingAvg", map3),
+                Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 MovingAvg --period 20 --initToIgnore 20", map4),
+                Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 Bin BAR 10", map5),
+                Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 Bin PIE 10", map6),
+                Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 --stochastic Basic", map7)
                 //Arguments.of("Visualize --DB A,B 8/21/1981 1/1/2020 MovingAvg", map7)
+                //Arguments.of("Import ./data", map7)
                 //Arguments.of("Visualize --Portfolio 8/21/1981 1/1/2020", map7)
                 //Arguments.of("Gather", map7)
                 //Arguments.of("Audit", map7)

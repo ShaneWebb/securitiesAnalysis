@@ -1,6 +1,7 @@
 
 package javautilwrappers;
 
+import datatypes.exceptions.ItemNotFoundException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;

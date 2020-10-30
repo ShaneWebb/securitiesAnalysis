@@ -1,6 +1,7 @@
 
 package javautilwrappers;
 
+import datatypes.exceptions.ItemNotFoundException;
 import java.util.List;
 
 public interface ListWrapper<E> extends CollectionWrapper<E> {

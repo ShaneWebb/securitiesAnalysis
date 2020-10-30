@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 import javautilwrappers.ArrayListWrapper;
 import javautilwrappers.HashMapWrapper;
-import javautilwrappers.ItemNotFoundException;
+import datatypes.exceptions.ItemNotFoundException;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
 

@@ -1,5 +1,5 @@
 
-package javautilwrappers;
+package datatypes.exceptions;
 
 public class ItemNotFoundException extends Exception {
 
