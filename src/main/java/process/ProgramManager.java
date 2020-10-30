@@ -121,8 +121,7 @@ public class ProgramManager {
                     = argParser.parseArgs(inputCommandParsed);
             SupportedProcess process
                     = (SupportedProcess) parsedArgs.get("func");
-            process.setArgs(parsedArgs);
-            process.execute();
+            process.execute(parsedArgs);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

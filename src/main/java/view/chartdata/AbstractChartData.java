@@ -1,5 +1,6 @@
 package view.chartdata;
 
+import datatypes.exceptions.ItemNotFoundException;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -9,7 +10,6 @@ import java.util.Date;
 import java.util.Locale;
 import javautilwrappers.ArrayListWrapper;
 import javautilwrappers.HashMapWrapper;
-import datatypes.exceptions.ItemNotFoundException;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
 
@@ -38,7 +38,9 @@ public abstract class AbstractChartData implements ChartDataWrapper {
     }
 
     @Override
-    public final AbstractChartData convertChartData(MapWrapper<String, MapWrapper<Integer, String>> parsedFiles) throws IOException, NumberFormatException {
+    public final AbstractChartData convertChartData(
+            MapWrapper<String, MapWrapper<Integer, String>> parsedFiles)
+            throws IOException, NumberFormatException {
         ListWrapper<ChartSubDataWrapper> chartData = new ArrayListWrapper<>();
         for (MapWrapper.Entry<String, MapWrapper<Integer, String>> file : parsedFiles.entrySet()) {
             try {

@@ -6,8 +6,6 @@ import javautilwrappers.MapWrapper;
 //all of these features.
 public interface SupportedProcess {
 
-    public void execute() throws Exception;
-
-    public void setArgs(MapWrapper<String, Object> parsedArgs) throws IllegalArgumentException;
+    public void execute(MapWrapper<String, Object> parsedArgs) throws Exception;
     
 }

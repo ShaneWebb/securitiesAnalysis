@@ -1,15 +1,14 @@
 package process;
 
+import datatypes.exceptions.ItemNotFoundException;
 import io.local.BasicFileReader;
 import java.io.IOException;
 import java.util.stream.Stream;
 import javautilwrappers.HashMapWrapper;
-import datatypes.exceptions.ItemNotFoundException;
 import javautilwrappers.MapWrapper;
-import main.Helper;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -68,8 +67,7 @@ public class PlotterTest {
 
         Plotter testPlotter = new Plotter(reader);
         try {
-            testPlotter.setArgs(cliArgs);
-            testPlotter.execute();
+            testPlotter.execute(cliArgs);
             //Helper.pause(5);
         } catch (Exception e) {
             fail(e.getMessage());
@@ -92,8 +90,7 @@ public class PlotterTest {
 
         IOException ioException = assertThrows(IOException.class,
                 () -> {
-                    testPlotter.setArgs(cliArgsInvalid);
-                    testPlotter.execute();
+                    testPlotter.execute(cliArgsInvalid);
                 }
         );
 
@@ -115,8 +112,7 @@ public class PlotterTest {
 
         Plotter testPlotter = new Plotter(reader);
         try {
-            testPlotter.setArgs(cliArgs);
-            testPlotter.execute();
+            testPlotter.execute(cliArgs);
         } catch (Exception e) {
             fail(e);
         }

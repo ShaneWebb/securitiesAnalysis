@@ -2,13 +2,8 @@ package learner.mockito;
 
 import javautilwrappers.HashMapWrapper;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.Mock;
 import static org.mockito.Mockito.verify;
 import org.mockito.MockitoAnnotations;
@@ -32,13 +27,13 @@ public class MockitoArgumentMatcherTest {
     }
 
     @Test
-    public void verifyArgs() {
+    public void verifyArgs() throws Exception {
         SomeClass myClass = new SomeClass(someProcess);
         HashMapWrapper<String, Object> args = new HashMapWrapper<>();
         args.put("Hello", "Kitty");
 
         myClass.myExamplemethod(args);
-        verify(someProcess).setArgs(args);
+        verify(someProcess).execute(args);
 
     }
 
@@ -50,8 +45,8 @@ public class MockitoArgumentMatcherTest {
             this.supportedProcess = supportedProcess;
         }
 
-        public void myExamplemethod(HashMapWrapper<String, Object> map) {
-            supportedProcess.setArgs(map);
+        public void myExamplemethod(HashMapWrapper<String, Object> map) throws Exception {
+            supportedProcess.execute(map);
         }
     }
 

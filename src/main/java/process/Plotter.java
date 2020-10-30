@@ -20,8 +20,12 @@ public class Plotter implements SupportedProcess {
     }
 
     @Override
-    public void execute() throws IOException {
+    public void execute(MapWrapper<String, Object> parsedArgs) throws IOException, IllegalArgumentException {
 
+        files = (String) parsedArgs.get("files");
+        chart = ChartWrapperFactory.createFrom(parsedArgs);
+        chartData = ChartDataWrapperFactory.createFrom(parsedArgs);
+        
         MapWrapper<String, MapWrapper<Integer, String>> parsedFiles;
         parsedFiles = readFiles(files);
         chartData.convertChartData(parsedFiles);
@@ -37,16 +41,5 @@ public class Plotter implements SupportedProcess {
         }
         return parsedFiles;
     }
-
-    @Override
-    public void setArgs(MapWrapper<String, Object> parsedArgs)
-            throws IllegalArgumentException {
-
-        files = (String) parsedArgs.get("files");
-        chart = ChartWrapperFactory.createFrom(parsedArgs);
-        chartData = ChartDataWrapperFactory.createFrom(parsedArgs);
-
-    }
-
-
+    
 }

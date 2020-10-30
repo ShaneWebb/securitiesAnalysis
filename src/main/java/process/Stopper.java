@@ -8,13 +8,8 @@ public class Stopper implements SupportedProcess {
     }
 
     @Override
-    public void execute() {
+    public void execute(MapWrapper<String, Object> parsedArgs) {
         ProgramManager.setProgramActiveStatus(false);
-    }
-
-    @Override
-    public void setArgs(MapWrapper<String, Object> parsedArgs) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
 }

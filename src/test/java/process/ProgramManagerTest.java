@@ -5,8 +5,7 @@ import java.util.stream.Stream;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
 import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,7 +72,7 @@ public class ProgramManagerTest {
 
         ArgumentParserWrapper localArgParser = new ArgumentParserWrapper("Test");
         localArgParser.addSubparserHelp("Test sub command help");
-        
+
         ArgumentParserWrapper commandOne = localArgParser.addSubparser("CommandOne");
         commandOne.setDefault("func", processOne);
         ArgumentParserWrapper commandTwo = localArgParser.addSubparser("CommandTwo");
@@ -85,19 +84,25 @@ public class ProgramManagerTest {
 
         instance = new ProgramManager(supportedProcesses, localArgParser);
         instance.runUserInputCommand(commandArg);
+        
+        MapWrapper<String, Object> parsedArgsOne = new HashMapWrapper<>();
+        parsedArgsOne.put("func", processOne);
+        
+        MapWrapper<String, Object> parsedArgsTwo = new HashMapWrapper<>();
+        parsedArgsTwo.put("func", processTwo);
 
         switch (testMode) {
             case "one":
-                verify(processOne).execute();
-                verify(processTwo, never()).execute();
+                verify(processOne).execute(parsedArgsOne);
+                verify(processTwo, never()).execute(null);
                 break;
             case "two":
-                verify(processOne, never()).execute();
-                verify(processTwo).execute();
+                verify(processOne, never()).execute(null);
+                verify(processTwo).execute(parsedArgsTwo);
                 break;
             case "none":
-                verify(processOne, never()).execute();
-                verify(processTwo, never()).execute();
+                verify(processOne, never()).execute(null);
+                verify(processTwo, never()).execute(null);
         }
 
     }
@@ -115,7 +120,7 @@ public class ProgramManagerTest {
 
     @ParameterizedTest
     @MethodSource("provideCommandAndMap")
-    public void testInbuiltCommands(String command, HashMapWrapper<String, Object> map) {
+    public void testInbuiltCommands(String command, HashMapWrapper<String, Object> map) throws Exception {
 
         MapWrapper<String, SupportedProcess> supportedProcesses = new HashMapWrapper<>();
         supportedProcesses.put("plotter", placeholder);
@@ -124,7 +129,7 @@ public class ProgramManagerTest {
         instance = new ProgramManager(supportedProcesses);
         instance.runUserInputCommand(command);
         map.put("func", placeholder);
-        verify(placeholder).setArgs(map);
+        verify(placeholder).execute(map);
 
     }
 
@@ -150,7 +155,6 @@ public class ProgramManagerTest {
         map2.put("xAxis", "Time");
         map2.put("lineartrend", false);
 
-
         MapWrapper<String, Object> map3 = new HashMapWrapper<>(map0);
         map3.put("type", Visualizations.MOVING_AVERAGE);
         map3.put("period", 1);
@@ -170,11 +174,11 @@ public class ProgramManagerTest {
         map6.put("type", Visualizations.BINNED);
         map6.put("displayType", DisplayTypeBinned.PIE);
         map6.put("bins", 10);
-        
+
         MapWrapper<String, Object> map7 = new HashMapWrapper<>(map0);
         map7.put("type", Visualizations.BASIC);
         map7.put("stochastic", true);
-        
+
         MapWrapper<String, Object> map8 = new HashMapWrapper<>();
         map8.put("type", Visualizations.BASIC);
         map8.put("DB", "A,B");
@@ -195,12 +199,23 @@ public class ProgramManagerTest {
                 Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 Bin PIE 10", map6),
                 Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 --stochastic Basic", map7),
                 Arguments.of("Visualize --DB A,B volume 8/21/1981 1/1/2020 --lineartrend Basic", map8)
-                //Arguments.of("Import ./data", map7)
-                //Arguments.of("Visualize --Portfolio 8/21/1981 1/1/2020", map7)
-                //Arguments.of("Gather", map7)
-                //Arguments.of("Audit", map7)
-                //Arguments.of("Execute", map7)
+        //Arguments.of("Import ./data", map7)
+        //Arguments.of("Visualize --Portfolio 8/21/1981 1/1/2020", map7)
+        //Arguments.of("Gather", map7)
+        //Arguments.of("Audit", map7)
+        //Arguments.of("Execute", map7)
         );
+    }
+
+    @Test
+    public void mutuallyExclusiveArgumentTest() throws Exception {
+        MapWrapper<String, SupportedProcess> supportedProcesses = new HashMapWrapper<>();
+        supportedProcesses.put("plotter", placeholder);
+        supportedProcesses.put("stopper", placeholder);
+
+        instance = new ProgramManager(supportedProcesses);
+        instance.runUserInputCommand("Visualize --DB A,B --files A.csv,B.csv");
+        verify(placeholder, never()).execute(null);
     }
 
 }
