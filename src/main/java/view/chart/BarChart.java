@@ -1,13 +1,11 @@
 package view.chart;
 
-import view.chartdata.ChartDataWrapper;
 import javautilwrappers.MapWrapper;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.time.TimeSeriesCollection;
+import view.chartdata.ChartDataWrapper;
 
 public class BarChart extends AbstractBinnedChart {
 

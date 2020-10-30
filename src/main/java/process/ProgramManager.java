@@ -1,6 +1,6 @@
 package process;
 
-import io.console.ArgParseWrapper;
+import io.console.*;
 import io.local.BasicFileReader;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
@@ -8,7 +8,7 @@ import javautilwrappers.MapWrapper;
 public class ProgramManager {
 
     private final MapWrapper<String, SupportedProcess> supportedProcesses;
-    private final ArgParseWrapper argParser;
+    private final ArgumentParserWrapper argParser;
 
     private static boolean programIsActive = true;
 
@@ -20,36 +20,42 @@ public class ProgramManager {
         supportedProcesses.put("stopper", stopper);
         supportedProcesses.put("plotter", plotter);
 
-        argParser = new ArgParseWrapper("Erasmus");
+        argParser = new ArgumentParserWrapper("Erasmus");
         argParser.addSubparserHelp("Sub command help");
         buildArgParser();
     }
 
     public ProgramManager(MapWrapper<String, SupportedProcess> supportedProcesses) {
         this.supportedProcesses = supportedProcesses;
-        argParser = new ArgParseWrapper("Erasmus");
+        argParser = new ArgumentParserWrapper("Erasmus");
         argParser.addSubparserHelp("Sub command help");
         buildArgParser();
     }
     
     public ProgramManager(
             MapWrapper<String, SupportedProcess> supportedProcesses,
-            ArgParseWrapper argParser) {
+            ArgumentParserWrapper argParser) {
         this.supportedProcesses = supportedProcesses;
         this.argParser = argParser;
     }
     
     private void buildArgParser() {
 
-        ArgParseWrapper stop = argParser.addParser("Stop", "Terminate Erasmus");
+        ArgumentParserWrapper stop = argParser.addSubparser("Stop");
         stop.setDefault("func", supportedProcesses.get("stopper"));
 
-        ArgParseWrapper plot = argParser.addParser("Visualize", "Visualize Data");
+        ArgumentParserWrapper plot = argParser.addSubparser("Visualize");
         plot.setDefault("func", supportedProcesses.get("plotter"));
-        plot.addArgument("--files")
-                .help("Comma separated list of CSV files.")
-                .nargs("?");
-
+        
+        MutuallyExclusiveGroupWrapper dataSource = plot.addMutuallyExclusiveGroup();
+        dataSource.addArgument("--files")
+                .type(String.class)
+                .help("Comma separated list of CSV files.");
+        
+        dataSource.addArgument("--DB")
+                .type(String.class)
+                .help("Read from a database. Specify ticker(s)");
+        
         plot.addArgument("header")
                 .help("Data to plot");
 
@@ -73,10 +79,10 @@ public class ProgramManager {
                 .setDefault(false)
                 .actionStoreTrue();
 
-        ArgParseWrapper basic = plot.addParser("Basic", "As is plot");
+        ArgumentParserWrapper basic = plot.addSubparser("Basic");
         basic.setDefault("type", Visualizations.BASIC);
 
-        ArgParseWrapper movAvg = plot.addParser("MovingAvg", "Moving Average");
+        ArgumentParserWrapper movAvg = plot.addSubparser("MovingAvg");
         movAvg.setDefault("type", Visualizations.MOVING_AVERAGE);
         movAvg.addArgument("--period")
                 .help("Number of time periods for the average.")
@@ -88,7 +94,7 @@ public class ProgramManager {
                 .type(Integer.class)
                 .setDefault(1);
 
-        ArgParseWrapper bin = plot.addParser("Bin", "Price binning");
+        ArgumentParserWrapper bin = plot.addSubparser("Bin");
         bin.setDefault("type", Visualizations.BINNED);
         bin.addArgument("displayType")
                 .help("Way to display the binned data.")

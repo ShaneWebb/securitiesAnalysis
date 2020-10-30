@@ -1,6 +1,6 @@
 package process;
 
-import io.console.ArgParseWrapper;
+import io.console.ArgumentParserWrapper;
 import java.util.stream.Stream;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
@@ -71,12 +71,12 @@ public class ProgramManagerTest {
     @MethodSource("provideCommandAndProcesses")
     public void testRunUserInputCommand(String commandArg, String testMode) throws Exception {
 
-        ArgParseWrapper localArgParser = new ArgParseWrapper("Test");
+        ArgumentParserWrapper localArgParser = new ArgumentParserWrapper("Test");
         localArgParser.addSubparserHelp("Test sub command help");
         
-        ArgParseWrapper commandOne = localArgParser.addParser("CommandOne", "Command One Help");
+        ArgumentParserWrapper commandOne = localArgParser.addSubparser("CommandOne");
         commandOne.setDefault("func", processOne);
-        ArgParseWrapper commandTwo = localArgParser.addParser("CommandTwo", "Command One Help");
+        ArgumentParserWrapper commandTwo = localArgParser.addSubparser("CommandTwo");
         commandTwo.setDefault("func", processTwo);
 
         MapWrapper<String, SupportedProcess> supportedProcesses = new HashMapWrapper<>();
@@ -138,6 +138,7 @@ public class ProgramManagerTest {
         map0.put("xAxis", "Date");
         map0.put("lineartrend", false);
         map0.put("stochastic", false);
+        map0.put("DB", null);
 
         MapWrapper<String, Object> map1 = new HashMapWrapper<>(map0);
         map1.put("type", Visualizations.BASIC);
@@ -149,9 +150,6 @@ public class ProgramManagerTest {
         map2.put("xAxis", "Time");
         map2.put("lineartrend", false);
 
-        MapWrapper<String, Object> map7 = new HashMapWrapper<>(map0);
-        map7.put("type", Visualizations.BASIC);
-        map7.put("stochastic", true);
 
         MapWrapper<String, Object> map3 = new HashMapWrapper<>(map0);
         map3.put("type", Visualizations.MOVING_AVERAGE);
@@ -172,6 +170,21 @@ public class ProgramManagerTest {
         map6.put("type", Visualizations.BINNED);
         map6.put("displayType", DisplayTypeBinned.PIE);
         map6.put("bins", 10);
+        
+        MapWrapper<String, Object> map7 = new HashMapWrapper<>(map0);
+        map7.put("type", Visualizations.BASIC);
+        map7.put("stochastic", true);
+        
+        MapWrapper<String, Object> map8 = new HashMapWrapper<>();
+        map8.put("type", Visualizations.BASIC);
+        map8.put("DB", "A,B");
+        map8.put("files", null);
+        map8.put("header", "volume");
+        map8.put("startDate", "8/21/1981");
+        map8.put("endDate", "1/1/2020");
+        map8.put("xAxis", "Date");
+        map8.put("lineartrend", true);
+        map8.put("stochastic", false);
 
         return Stream.of(
                 Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 --lineartrend Basic", map1),
@@ -180,8 +193,8 @@ public class ProgramManagerTest {
                 Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 MovingAvg --period 20 --initToIgnore 20", map4),
                 Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 Bin BAR 10", map5),
                 Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 Bin PIE 10", map6),
-                Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 --stochastic Basic", map7)
-                //Arguments.of("Visualize --DB A,B 8/21/1981 1/1/2020 MovingAvg", map7)
+                Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 --stochastic Basic", map7),
+                Arguments.of("Visualize --DB A,B volume 8/21/1981 1/1/2020 --lineartrend Basic", map8)
                 //Arguments.of("Import ./data", map7)
                 //Arguments.of("Visualize --Portfolio 8/21/1981 1/1/2020", map7)
                 //Arguments.of("Gather", map7)
