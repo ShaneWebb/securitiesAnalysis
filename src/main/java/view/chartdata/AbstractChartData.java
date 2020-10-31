@@ -12,6 +12,8 @@ import javautilwrappers.ArrayListWrapper;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
+import process.datatypes.ParsedData;
+import process.datatypes.ParsedFile;
 
 public abstract class AbstractChartData implements ChartDataWrapper {
 
@@ -39,10 +41,18 @@ public abstract class AbstractChartData implements ChartDataWrapper {
 
     @Override
     public final AbstractChartData convertChartData(
-            MapWrapper<String, MapWrapper<Integer, String>> parsedFiles)
+            ParsedData data)
             throws IOException, NumberFormatException {
+
+        MapWrapper<String, MapWrapper<Integer, String>> fileMap;
+        if (data instanceof ParsedFile) {
+            fileMap = data.getData();
+        } else {
+            return null;
+        }
+
         ListWrapper<ChartSubDataWrapper> chartData = new ArrayListWrapper<>();
-        for (MapWrapper.Entry<String, MapWrapper<Integer, String>> file : parsedFiles.entrySet()) {
+        for (MapWrapper.Entry<String, MapWrapper<Integer, String>> file : fileMap.entrySet()) {
             try {
                 ChartSubDataWrapper series = buildSeries(file);
                 chartData.add(series);
@@ -67,7 +77,7 @@ public abstract class AbstractChartData implements ChartDataWrapper {
             subData.add(trialData);
         }
     }
-    
+
     protected final void assembleData(ListWrapper<ChartSubDataWrapper> chartData) {
         for (ChartSubDataWrapper series : chartData) {
             this.addSubDataToInternalCollection(series);
@@ -94,7 +104,7 @@ public abstract class AbstractChartData implements ChartDataWrapper {
         contentsCopy.remove(HEADER_LINE);
         for (String fileData : contentsCopy.values()) {
             MapWrapper<String, Object> line = parseSingleCsvLine(fileData, colIndex);
-            if(line.get("date") == null) {
+            if (line.get("date") == null) {
                 throw new IllegalArgumentException("Overriden csv parser must provide a Date key value");
             }
             addToSeriesIfValid(line, series);
