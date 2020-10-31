@@ -1,8 +1,9 @@
 package process;
 
-import io.local.BasicFileReader;
+import io.local.ExternalDataReader;
 import java.io.IOException;
 import javautilwrappers.*;
+import process.datatypes.ParsedData;
 import view.chart.ChartWrapper;
 import view.chart.ChartWrapperFactory;
 import view.chartdata.ChartDataWrapper;
@@ -10,36 +11,29 @@ import view.chartdata.ChartDataWrapperFactory;
 
 public class Plotter implements SupportedProcess {
 
-    private String files;
-    private final BasicFileReader reader;
-    private ChartWrapper chart;
-    private ChartDataWrapper chartData;
+    private final ExternalDataReader reader;
 
-    public Plotter(BasicFileReader reader) {
+    public Plotter(ExternalDataReader reader) {
         this.reader = reader;
     }
 
     @Override
     public void execute(MapWrapper<String, Object> parsedArgs) throws IOException, IllegalArgumentException {
 
-        files = (String) parsedArgs.get("files");
-        chart = ChartWrapperFactory.createFrom(parsedArgs);
-        chartData = ChartDataWrapperFactory.createFrom(parsedArgs);
         
-        MapWrapper<String, MapWrapper<Integer, String>> parsedFiles;
-        parsedFiles = readFiles(files);
-        chartData.convertChartData(parsedFiles);
-        chart.generateVisual(chartData);
-    }
-
-    private MapWrapper<String, MapWrapper<Integer, String>> readFiles(String files) throws IOException {
-        String[] delimitedFiles = files.split(",");
-        MapWrapper<String, MapWrapper<Integer, String>> parsedFiles
-                = new HashMapWrapper<>();
-        for (String file : delimitedFiles) {
-            parsedFiles.put(file, reader.read(file));
+        ChartWrapper chart = ChartWrapperFactory.createFrom(parsedArgs);
+        ChartDataWrapper chartData = ChartDataWrapperFactory.createFrom(parsedArgs);
+        
+        if (parsedArgs.get("files") == null) {
+            ParsedData data = reader.readDB(parsedArgs);
+            chartData.convertChartData(data);
+        } else {
+            String files = (String) parsedArgs.get("files");
+            ParsedData data = reader.readFiles(files);
+            chartData.convertChartData(data);
         }
-        return parsedFiles;
+        
+        chart.generateVisual(chartData);
     }
     
 }

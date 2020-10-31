@@ -9,21 +9,33 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
+import process.datatypes.ParsedDatabase;
+import process.datatypes.ParsedFile;
 
 //assigns variables accordingly. 
-public class BasicFileReader {
+public class ExternalDataReader {
 
     private Charset charset;
 
-    public BasicFileReader() {
+    public ExternalDataReader() {
         this.charset = StandardCharsets.UTF_8;
     }
 
-    public BasicFileReader(String fileName) {
+    public ExternalDataReader(String fileName) {
         this.charset = StandardCharsets.UTF_8;
     }
 
-    public MapWrapper<Integer, String> read(String filePath1) throws IOException {
+    public ParsedFile readFiles(String files) throws IOException {
+        String[] delimitedFiles = files.split(",");
+        MapWrapper<String, MapWrapper<Integer, String>> parsedFiles
+                = new HashMapWrapper<>();
+        for (String file : delimitedFiles) {
+            parsedFiles.put(file, readFile(file));
+        }
+        return new ParsedFile(parsedFiles);
+    }
+    
+    private MapWrapper<Integer, String> readFile(String filePath1) throws IOException {
 
         MapWrapper<Integer, String> fileByLine = new HashMapWrapper<>();
         try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(filePath1), charset)) {
@@ -39,6 +51,11 @@ public class BasicFileReader {
 
         return fileByLine;
 
+    }
+    
+    public ParsedDatabase readDB(
+            MapWrapper<String, Object> parsedArgs) throws IOException {
+        throw new UnsupportedOperationException("Not implemented yet!");
     }
 
 }
