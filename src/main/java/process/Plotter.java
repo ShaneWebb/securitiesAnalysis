@@ -11,28 +11,22 @@ import view.chartdata.ChartDataWrapperFactory;
 
 public class Plotter implements SupportedProcess {
 
-    private final ExternalDataReader reader;
+    private final ExternalDataReaderFactory factory;
 
-    public Plotter(ExternalDataReader reader) {
-        this.reader = reader;
+    public Plotter(ExternalDataReaderFactory factory) {
+        this.factory = factory;
     }
 
     @Override
     public void execute(MapWrapper<String, Object> parsedArgs) throws IOException, IllegalArgumentException {
 
-        
         ChartWrapper chart = ChartWrapperFactory.createFrom(parsedArgs);
         ChartDataWrapper chartData = ChartDataWrapperFactory.createFrom(parsedArgs);
+        ExternalDataReader reader = factory.createFrom(parsedArgs);
         
-        if (parsedArgs.get("files") == null) {
-            ParsedData data = reader.readDB(parsedArgs);
-            chartData.convertChartData(data);
-        } else {
-            ParsedData data = reader.readFiles(parsedArgs);
-            chartData.convertChartData(data);
-        }
-        
+        ParsedData data = reader.read(parsedArgs);
+        chartData.convertChartData(data);
         chart.generateVisual(chartData);
     }
-    
+
 }

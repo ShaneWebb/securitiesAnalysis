@@ -1,7 +1,6 @@
 package process;
 
 import io.console.*;
-import io.local.ExternalDataReader;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
 
@@ -13,7 +12,7 @@ public class ProgramManager {
     private static boolean programIsActive = true;
 
     public ProgramManager() {
-        SupportedProcess plotter = new Plotter(new ExternalDataReader());
+        SupportedProcess plotter = new Plotter(new RealExternalDataReaderFactory());
         SupportedProcess stopper = new Stopper();
         
         supportedProcesses = new HashMapWrapper<>();

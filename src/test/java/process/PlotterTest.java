@@ -24,6 +24,15 @@ public class PlotterTest {
     @Mock
     private ExternalDataReader reader;
     
+    class TestExternalDataReaderFactory implements ExternalDataReaderFactory {
+
+        @Override
+        public ExternalDataReader createFrom(MapWrapper<String, Object> parsedArgs) {
+            return reader;
+        }
+        
+    }
+    
     public PlotterTest() {
     }
 
@@ -60,10 +69,10 @@ public class PlotterTest {
     private void basicExecute(
             ParsedData data, 
             MapWrapper<String, Object> cliArgs) throws IOException {
-        when(reader.readFiles(cliArgs)).thenReturn((ParsedFile) data);
+        when(reader.read(cliArgs)).thenReturn((ParsedFile) data);
         //when(reader.readDB(cliArgs)).thenReturn(null);
 
-        Plotter testPlotter = new Plotter(reader);
+        Plotter testPlotter = new Plotter(new TestExternalDataReaderFactory());
         try {
             testPlotter.execute(cliArgs);
             //Helper.pause(5);
@@ -81,9 +90,9 @@ public class PlotterTest {
         cliArgs.put("startDate", "1/1/2100");
         cliArgs.put("endDate", "1/1/2100");
 
-        when(reader.readFiles(cliArgs)).thenReturn((ParsedFile) csvData);
+        when(reader.read(cliArgs)).thenReturn((ParsedFile) csvData);
 
-        Plotter testPlotter = new Plotter(reader);
+        Plotter testPlotter = new Plotter(new TestExternalDataReaderFactory());
         try {
             testPlotter.execute(cliArgs);
         } catch (Exception e) {
