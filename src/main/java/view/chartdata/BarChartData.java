@@ -1,6 +1,5 @@
 package view.chartdata;
 
-import java.text.ParseException;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.Dataset;
@@ -28,11 +27,6 @@ public class BarChartData extends AbstractBinnedData {
     protected ChartSubDataWrapper ChartSubDataFactory(MapWrapper.Entry<String, MapWrapper<Integer, String>> file) {
         String fileName = file.getKey();
         return new BarChartSubData(fileName);
-    }
-
-    @Override
-    protected void postProcessData(MapWrapper<String, Object> item, String csvLine) throws ParseException, NumberFormatException {
-
     }
 
 }

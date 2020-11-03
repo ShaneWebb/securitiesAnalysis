@@ -64,11 +64,6 @@ public abstract class AbstractChartData implements ChartDataWrapper {
         return this;
     }
 
-    //Must implement method for specific chart to parse a data line properly.
-    protected abstract void postProcessData(
-            MapWrapper<String, Object> item, String line)
-            throws ParseException, NumberFormatException;
-
     //Must create the correct sub data structure.
     protected abstract ChartSubDataWrapper ChartSubDataFactory(
             MapWrapper.Entry<String, MapWrapper<Integer, String>> file);
@@ -113,7 +108,6 @@ public abstract class AbstractChartData implements ChartDataWrapper {
             MapWrapper<String, Object> line = new HashMapWrapper<>();
             line.put("date", parsedDate); //Important: Must provide this. 
             line.put("value", value);
-            postProcessData(line, fileData);
             
             if (line.get("date") == null) {
                 final String exceptionMessage

@@ -1,13 +1,9 @@
 package view.chartdata;
 
-import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Date;
 import javautilwrappers.ArrayListWrapper;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.general.Dataset;
-import org.jfree.data.time.Day;
 import org.jfree.data.time.MovingAverage;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -43,13 +39,6 @@ public class TimeSeriesData extends AbstractChartData {
     protected ChartSubDataWrapper ChartSubDataFactory(MapWrapper.Entry<String, MapWrapper<Integer, String>> file) {
         ChartSubDataWrapper series = new TimeSeriesSubData(file.getKey());
         return series;
-    }
-
-    @Override
-    protected void postProcessData(MapWrapper<String, Object> item, String csvLine) throws ParseException, NumberFormatException {
-        ListWrapper<String> delimitedData = new ArrayListWrapper(Arrays.asList(csvLine.split(",")));
-        Date parsedDate = createDate(delimitedData);
-        item.put("day", new Day(parsedDate));
     }
 
     @Override

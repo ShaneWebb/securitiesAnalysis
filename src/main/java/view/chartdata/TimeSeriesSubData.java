@@ -1,6 +1,7 @@
 
 package view.chartdata;
 
+import java.util.Date;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
@@ -19,7 +20,7 @@ public class TimeSeriesSubData implements ChartSubDataWrapper {
     
     @Override
     public void add(MapWrapper data) {
-        internalSeries.add((Day) data.get("day"), (double) data.get("value"));
+        internalSeries.add(new Day((Date) data.get("date")), (double) data.get("value"));
     }
     
     @Override
