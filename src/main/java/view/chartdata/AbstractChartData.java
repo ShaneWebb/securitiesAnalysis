@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import javautilwrappers.ArrayListWrapper;
@@ -64,8 +65,8 @@ public abstract class AbstractChartData implements ChartDataWrapper {
     }
 
     //Must implement method for specific chart to parse a data line properly.
-    protected abstract MapWrapper<String, Object> parseSingleCsvLine(
-            String csvLine) 
+    protected abstract void postProcessData(
+            MapWrapper<String, Object> item, String line)
             throws ParseException, NumberFormatException;
 
     //Must create the correct sub data structure.
@@ -80,7 +81,7 @@ public abstract class AbstractChartData implements ChartDataWrapper {
     }
 
     protected final Date createDate(
-            ListWrapper<String> delimitedData) 
+            ListWrapper<String> delimitedData)
             throws ParseException {
         String dateStr = delimitedData.get(X_INDEX);
         DateFormat df = new SimpleDateFormat(FILE_DATE_FORMAT, Locale.ENGLISH);
@@ -97,22 +98,29 @@ public abstract class AbstractChartData implements ChartDataWrapper {
 
     private ChartSubDataWrapper populateSeries(
             MapWrapper.Entry<String, MapWrapper<Integer, String>> file,
-            ChartSubDataWrapper series) 
+            ChartSubDataWrapper series)
             throws NumberFormatException, ItemNotFoundException, ParseException {
 
-        MapWrapper<Integer, String> contents = 
-                new HashMapWrapper(file.getValue());
+        MapWrapper<Integer, String> contents
+                = new HashMapWrapper(file.getValue());
         for (String fileData : contents.values()) {
-            MapWrapper<String, Object> line = parseSingleCsvLine(fileData);
+            
+            final int TEMP_DATA_INDEX = 1;
+            ListWrapper<String> delimitedData = new ArrayListWrapper(Arrays.asList(fileData.split(",")));
+            double value = Double.valueOf(delimitedData.get(TEMP_DATA_INDEX));
+            Date parsedDate = createDate(delimitedData);
+
+            MapWrapper<String, Object> line = new HashMapWrapper<>();
+            line.put("date", parsedDate); //Important: Must provide this. 
+            line.put("value", value);
+            postProcessData(line, fileData);
+            
             if (line.get("date") == null) {
-                final String exceptionMessage = 
-                        "Overridden csv parser must provide a Date key value";
+                final String exceptionMessage
+                        = "Overridden csv parser must provide a Date key value";
                 throw new IllegalArgumentException(exceptionMessage);
             }
-            //Date candidateDate = (Date) trialData.get("date");
-            //if (candidateDate.compareTo(startDate) >= 0 && candidateDate.compareTo(endDate) <= 0) {
             series.add(line);
-            //}
         }
 
         return series;

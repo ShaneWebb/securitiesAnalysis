@@ -2,11 +2,6 @@
 package view.chartdata;
 
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Date;
-import javautilwrappers.ArrayListWrapper;
-import javautilwrappers.HashMapWrapper;
-import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.Dataset;
@@ -29,16 +24,8 @@ public class PieChartData extends AbstractBinnedData {
     }
 
     @Override
-    protected MapWrapper<String, Object> parseSingleCsvLine(String csvLine) throws ParseException, NumberFormatException {
-        ListWrapper<String> delimitedData = new ArrayListWrapper(Arrays.asList(csvLine.split(",")));
-        final int TEMP_DATA_INDEX = 1;
-        double value = Double.valueOf(delimitedData.get(TEMP_DATA_INDEX));
-        Date parsedDate = createDate(delimitedData);
+    protected void postProcessData(MapWrapper<String, Object> item, String csvLine) throws ParseException, NumberFormatException {
 
-        MapWrapper<String, Object> trialSeriesData = new HashMapWrapper<>();
-        trialSeriesData.put("date", parsedDate); //Important: Must provide this. 
-        trialSeriesData.put("value", value);
-        return trialSeriesData;
     }
 
     @Override
