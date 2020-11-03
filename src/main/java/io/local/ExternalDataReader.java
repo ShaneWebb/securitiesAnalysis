@@ -8,7 +8,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 import javautilwrappers.ArrayListWrapper;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
@@ -19,6 +24,8 @@ import process.datatypes.ParsedFile;
 public class ExternalDataReader {
 
     private Charset charset;
+    private static final String FILE_DATE_FORMAT = "yyyy-MM-dd";
+    private static final String CLI_DATE_FORMAT = "MM/dd/yyyy";
 
     public ExternalDataReader() {
         this.charset = StandardCharsets.UTF_8;
@@ -30,24 +37,30 @@ public class ExternalDataReader {
 
     public ParsedFile readFiles(MapWrapper<String, Object> parsedArgs)
             throws IOException {
-        
+
         String files = (String) parsedArgs.get("files");
         String[] delimitedFiles = files.split(",");
         MapWrapper<String, MapWrapper<Integer, String>> parsedFiles
                 = new HashMapWrapper<>();
         for (String file : delimitedFiles) {
-            parsedFiles.put(file, readFile(file, (String) parsedArgs.get("header")));
+            final MapWrapper<Integer, String> fileData
+                    = readFile(file, (String) parsedArgs.get("header"),
+                            (String) parsedArgs.get("startDate"),
+                            (String) parsedArgs.get("endDate"));
+
+            parsedFiles.put(file, fileData);
         }
         return new ParsedFile(parsedFiles);
     }
-    
-    //TODO: Refactor to require parsedArgs.
-    private MapWrapper<Integer, String> readFile(String filePath1, String header)
+
+    private MapWrapper<Integer, String> readFile(
+            String filePath1, String header,
+            String startDateStr, String endDateStr)
             throws IOException {
 
         MapWrapper<Integer, String> fileByLine = new HashMapWrapper<>();
         try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(filePath1), charset)) {
-            
+
             int index;
             String firstLine = bufferedReader.readLine();
             if (firstLine != null) {
@@ -55,24 +68,34 @@ public class ExternalDataReader {
             } else {
                 throw new IOException("File is empty!");
             }
-            
+
+            DateFormat dfFile = new SimpleDateFormat(FILE_DATE_FORMAT, Locale.ENGLISH);
+            DateFormat dfCli = new SimpleDateFormat(CLI_DATE_FORMAT, Locale.ENGLISH);
+
+            Date startDate = dfCli.parse(startDateStr);
+            Date endDate = dfCli.parse(endDateStr);
+
             int i = 1;
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] splitLine = line.split(",");
                 String value = splitLine[index];
                 String date = splitLine[0];
-                fileByLine.put(i, date + "," + value);
-                ++i;
+                Date parsedDate = dfFile.parse(date);
+                if (parsedDate.compareTo(startDate) >= 0 && parsedDate.compareTo(endDate) <= 0) {
+                    fileByLine.put(i, date + "," + value);
+                    ++i;
+                }
+
             }
-        } catch (IOException | ItemNotFoundException ex) {
+        } catch (IOException | ItemNotFoundException | ParseException ex) {
             throw new IOException(ex);
         }
 
         return fileByLine;
 
     }
-    
+
     public ParsedDatabase readDB(
             MapWrapper<String, Object> parsedArgs) throws IOException {
         throw new UnsupportedOperationException("Not implemented yet!");

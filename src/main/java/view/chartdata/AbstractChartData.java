@@ -72,16 +72,6 @@ public abstract class AbstractChartData implements ChartDataWrapper {
     protected abstract ChartSubDataWrapper ChartSubDataFactory(
             MapWrapper.Entry<String, MapWrapper<Integer, String>> file);
 
-    //May override to adjust selection criterion.
-    protected void addToSeriesIfValid(
-            MapWrapper<String, Object> trialData, 
-            ChartSubDataWrapper subData) {
-        Date candidateDate = (Date) trialData.get("date");
-        if (candidateDate.compareTo(startDate) >= 0 && candidateDate.compareTo(endDate) <= 0) {
-            subData.add(trialData);
-        }
-    }
-
     protected final void assembleData(
             ListWrapper<ChartSubDataWrapper> chartData) {
         for (ChartSubDataWrapper series : chartData) {
@@ -119,7 +109,10 @@ public abstract class AbstractChartData implements ChartDataWrapper {
                         "Overridden csv parser must provide a Date key value";
                 throw new IllegalArgumentException(exceptionMessage);
             }
-            addToSeriesIfValid(line, series);
+            //Date candidateDate = (Date) trialData.get("date");
+            //if (candidateDate.compareTo(startDate) >= 0 && candidateDate.compareTo(endDate) <= 0) {
+            series.add(line);
+            //}
         }
 
         return series;
