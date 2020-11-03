@@ -28,8 +28,7 @@ public class Plotter implements SupportedProcess {
             ParsedData data = reader.readDB(parsedArgs);
             chartData.convertChartData(data);
         } else {
-            String files = (String) parsedArgs.get("files");
-            ParsedData data = reader.readFiles(files);
+            ParsedData data = reader.readFiles(parsedArgs);
             chartData.convertChartData(data);
         }
         

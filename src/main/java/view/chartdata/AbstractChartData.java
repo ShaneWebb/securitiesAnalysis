@@ -65,7 +65,7 @@ public abstract class AbstractChartData implements ChartDataWrapper {
 
     //Must implement method for specific chart to parse a data line properly.
     protected abstract MapWrapper<String, Object> parseSingleCsvLine(
-            String csvLine, int colIndex) 
+            String csvLine) 
             throws ParseException, NumberFormatException;
 
     //Must create the correct sub data structure.
@@ -113,10 +113,10 @@ public abstract class AbstractChartData implements ChartDataWrapper {
         MapWrapper<Integer, String> contents = 
                 new HashMapWrapper(file.getValue());
         for (String fileData : contents.values()) {
-            MapWrapper<String, Object> line = parseSingleCsvLine(fileData, 1);
+            MapWrapper<String, Object> line = parseSingleCsvLine(fileData);
             if (line.get("date") == null) {
                 final String exceptionMessage = 
-                        "Overriden csv parser must provide a Date key value";
+                        "Overridden csv parser must provide a Date key value";
                 throw new IllegalArgumentException(exceptionMessage);
             }
             addToSeriesIfValid(line, series);

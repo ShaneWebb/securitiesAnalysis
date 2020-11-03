@@ -2,10 +2,7 @@ package view.chartdata;
 
 import java.text.ParseException;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import javautilwrappers.ArrayListWrapper;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.ListWrapper;
@@ -39,9 +36,10 @@ public class BarChartData extends AbstractBinnedData {
     }
 
     @Override
-    protected MapWrapper<String, Object> parseSingleCsvLine(String csvLine, int colIndex) throws ParseException, NumberFormatException {
+    protected MapWrapper<String, Object> parseSingleCsvLine(String csvLine) throws ParseException, NumberFormatException {
         ListWrapper<String> delimitedData = new ArrayListWrapper(Arrays.asList(csvLine.split(",")));
-        double value = Double.valueOf(delimitedData.get(colIndex));
+        final int TEMP_DATA_INDEX = 1;
+        double value = Double.valueOf(delimitedData.get(TEMP_DATA_INDEX));
         Date parsedDate = createDate(delimitedData);
 
         MapWrapper<String, Object> trialSeriesData = new HashMapWrapper<>();

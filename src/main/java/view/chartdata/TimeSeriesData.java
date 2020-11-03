@@ -47,9 +47,10 @@ public class TimeSeriesData extends AbstractChartData {
     }
 
     @Override
-    protected MapWrapper<String, Object> parseSingleCsvLine(String csvLine, int colIndex) throws ParseException, NumberFormatException {
+    protected MapWrapper<String, Object> parseSingleCsvLine(String csvLine) throws ParseException, NumberFormatException {
         ListWrapper<String> delimitedData = new ArrayListWrapper(Arrays.asList(csvLine.split(",")));
-        double value = Double.valueOf(delimitedData.get(colIndex));
+        final int TEMP_DATA_INDEX = 1;
+        double value = Double.valueOf(delimitedData.get(TEMP_DATA_INDEX));
         Date parsedDate = createDate(delimitedData);
         
         MapWrapper<String, Object> trialSeriesData = new HashMapWrapper<>();

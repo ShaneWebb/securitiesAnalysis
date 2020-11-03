@@ -60,7 +60,7 @@ public class PlotterTest {
     private void basicExecute(
             ParsedData data, 
             MapWrapper<String, Object> cliArgs) throws IOException {
-        when(reader.readFiles("A.csv,B.csv")).thenReturn((ParsedFile) data);
+        when(reader.readFiles(cliArgs)).thenReturn((ParsedFile) data);
         //when(reader.readDB(cliArgs)).thenReturn(null);
 
         Plotter testPlotter = new Plotter(reader);
@@ -81,7 +81,7 @@ public class PlotterTest {
         cliArgs.put("startDate", "1/1/2100");
         cliArgs.put("endDate", "1/1/2100");
 
-        when(reader.readFiles("A.csv,B.csv")).thenReturn((ParsedFile) csvData);
+        when(reader.readFiles(cliArgs)).thenReturn((ParsedFile) csvData);
 
         Plotter testPlotter = new Plotter(reader);
         try {
@@ -120,11 +120,11 @@ public class PlotterTest {
         csvData.put("B.csv", bCsvData);
         
         //aCsvData.put(1, "date,volume,open,close,high,low,adjclose");
-        aCsvData.put(2, "2019-04-18,2874100");
-        aCsvData.put(3, "2019-04-17,4472000");
+        aCsvData.put(1, "2019-04-18,2874100");
+        aCsvData.put(2, "2019-04-17,4472000");
         //bCsvData.put(1, "date,volume,open,close,high,low,adjclose");
-        bCsvData.put(2, "2019-04-18,146800");
-        bCsvData.put(3, "2019-04-17,245600");
+        bCsvData.put(1, "2019-04-18,146800");
+        bCsvData.put(2, "2019-04-17,245600");
 
         ParsedFile fileData = new ParsedFile(csvData);
         //ParsedDatabase dbData = new ParsedDatabase(null);
