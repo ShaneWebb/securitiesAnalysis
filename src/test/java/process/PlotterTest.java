@@ -1,6 +1,5 @@
 package process;
 
-import datatypes.exceptions.ItemNotFoundException;
 import io.local.ExternalDataReader;
 import java.io.IOException;
 import java.util.stream.Stream;
@@ -75,28 +74,6 @@ public class PlotterTest {
 
     @ParameterizedTest
     @MethodSource("provideExecuteArgs")
-    public void testExecuteExceptions(MapWrapper<String, Object> cliArgs,
-            ParsedData data) throws Exception {
-
-        when(reader.readFiles("A.csv,B.csv")).thenReturn((ParsedFile) data);
-
-        Plotter testPlotter = new Plotter(reader);
-
-        MapWrapper<String, Object> cliArgsInvalid = new HashMapWrapper(cliArgs);
-        cliArgsInvalid.put("header", "IDoNotExist");
-
-        IOException ioException = assertThrows(IOException.class,
-                () -> {
-                    testPlotter.execute(cliArgsInvalid);
-                }
-        );
-
-        assertEquals(ItemNotFoundException.class, ioException.getCause().getClass());
-
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideExecuteArgs")
     public void testEmptySeries(MapWrapper<String, Object> cliArgs,
             ParsedData csvData) 
             throws Exception {
@@ -142,12 +119,12 @@ public class PlotterTest {
         csvData.put("A.csv", aCsvData);
         csvData.put("B.csv", bCsvData);
         
-        aCsvData.put(1, "date,volume,open,close,high,low,adjclose");
-        aCsvData.put(2, "2019-04-18,2874100,75.73000336,76.16999817,76.54000092,75.30999756,76.16999817");
-        aCsvData.put(3, "2019-04-17,4472000,78.15000153,75.43000031,78.31999969,74.45999908,75.43000031");
-        bCsvData.put(1, "date,volume,open,close,high,low,adjclose");
-        bCsvData.put(2, "2019-04-18,146800,53.86000061,53.93999863,54.24000168,53.72999954,53.93999863");
-        bCsvData.put(3, "2019-04-17,245600,54.27000046,53.95000076,54.54000092,53.20999908,53.95000076");
+        //aCsvData.put(1, "date,volume,open,close,high,low,adjclose");
+        aCsvData.put(2, "2019-04-18,2874100");
+        aCsvData.put(3, "2019-04-17,4472000");
+        //bCsvData.put(1, "date,volume,open,close,high,low,adjclose");
+        bCsvData.put(2, "2019-04-18,146800");
+        bCsvData.put(3, "2019-04-17,245600");
 
         ParsedFile fileData = new ParsedFile(csvData);
         //ParsedDatabase dbData = new ParsedDatabase(null);

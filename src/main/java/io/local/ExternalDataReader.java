@@ -35,6 +35,7 @@ public class ExternalDataReader {
         return new ParsedFile(parsedFiles);
     }
     
+    //TODO: Refactor to require parsedArgs.
     private MapWrapper<Integer, String> readFile(String filePath1) throws IOException {
 
         MapWrapper<Integer, String> fileByLine = new HashMapWrapper<>();
@@ -48,7 +49,8 @@ public class ExternalDataReader {
         } catch (IOException ex) {
             throw ex;
         }
-
+        
+        fileByLine.remove(1);
         return fileByLine;
 
     }

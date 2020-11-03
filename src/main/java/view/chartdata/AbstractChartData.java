@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import javautilwrappers.ArrayListWrapper;
@@ -65,60 +64,65 @@ public abstract class AbstractChartData implements ChartDataWrapper {
     }
 
     //Must implement method for specific chart to parse a data line properly.
-    protected abstract MapWrapper<String, Object> parseSingleCsvLine(String csvLine, int colIndex) throws ParseException, NumberFormatException;
+    protected abstract MapWrapper<String, Object> parseSingleCsvLine(
+            String csvLine, int colIndex) 
+            throws ParseException, NumberFormatException;
 
     //Must create the correct sub data structure.
-    protected abstract ChartSubDataWrapper ChartSubDataFactory(MapWrapper.Entry<String, MapWrapper<Integer, String>> file);
+    protected abstract ChartSubDataWrapper ChartSubDataFactory(
+            MapWrapper.Entry<String, MapWrapper<Integer, String>> file);
 
     //May override to adjust selection criterion.
-    protected void addToSeriesIfValid(MapWrapper<String, Object> trialData, ChartSubDataWrapper subData) {
+    protected void addToSeriesIfValid(
+            MapWrapper<String, Object> trialData, 
+            ChartSubDataWrapper subData) {
         Date candidateDate = (Date) trialData.get("date");
         if (candidateDate.compareTo(startDate) >= 0 && candidateDate.compareTo(endDate) <= 0) {
             subData.add(trialData);
         }
     }
 
-    protected final void assembleData(ListWrapper<ChartSubDataWrapper> chartData) {
+    protected final void assembleData(
+            ListWrapper<ChartSubDataWrapper> chartData) {
         for (ChartSubDataWrapper series : chartData) {
             this.addSubDataToInternalCollection(series);
         }
     }
 
-    protected final Date createDate(ListWrapper<String> delimitedData) throws ParseException {
+    protected final Date createDate(
+            ListWrapper<String> delimitedData) 
+            throws ParseException {
         String dateStr = delimitedData.get(X_INDEX);
         DateFormat df = new SimpleDateFormat(FILE_DATE_FORMAT, Locale.ENGLISH);
         Date parsedDate = df.parse(dateStr);
         return parsedDate;
     }
 
-    private ChartSubDataWrapper buildSeries(MapWrapper.Entry<String, MapWrapper<Integer, String>> file) throws ItemNotFoundException, ParseException, NumberFormatException {
+    private ChartSubDataWrapper buildSeries(
+            MapWrapper.Entry<String, MapWrapper<Integer, String>> file)
+            throws ItemNotFoundException, ParseException, NumberFormatException {
         ChartSubDataWrapper series = ChartSubDataFactory(file);
         return populateSeries(file, series);
     }
 
-    private ChartSubDataWrapper populateSeries(MapWrapper.Entry<String, MapWrapper<Integer, String>> file, ChartSubDataWrapper series) throws NumberFormatException, ItemNotFoundException, ParseException {
-        MapWrapper<Integer, String> originalContents = new HashMapWrapper(file.getValue());
-        int colIndex = findHeaderIndex(originalContents);
+    private ChartSubDataWrapper populateSeries(
+            MapWrapper.Entry<String, MapWrapper<Integer, String>> file,
+            ChartSubDataWrapper series) 
+            throws NumberFormatException, ItemNotFoundException, ParseException {
 
-        MapWrapper<Integer, String> contentsCopy = new HashMapWrapper(originalContents);
-        contentsCopy.remove(HEADER_LINE);
-        for (String fileData : contentsCopy.values()) {
-            MapWrapper<String, Object> line = parseSingleCsvLine(fileData, colIndex);
+        MapWrapper<Integer, String> contents = 
+                new HashMapWrapper(file.getValue());
+        for (String fileData : contents.values()) {
+            MapWrapper<String, Object> line = parseSingleCsvLine(fileData, 1);
             if (line.get("date") == null) {
-                throw new IllegalArgumentException("Overriden csv parser must provide a Date key value");
+                final String exceptionMessage = 
+                        "Overriden csv parser must provide a Date key value";
+                throw new IllegalArgumentException(exceptionMessage);
             }
             addToSeriesIfValid(line, series);
         }
 
         return series;
-    }
-
-    private int findHeaderIndex(MapWrapper<Integer, String> contents) throws ItemNotFoundException {
-        String fileHeader = contents.get(HEADER_LINE);
-        ListWrapper<String> delimitedHeaders
-                = new ArrayListWrapper(Arrays.asList(fileHeader.split(",")));
-        int colIndex = delimitedHeaders.indexOf(header);
-        return colIndex;
     }
 
 }
