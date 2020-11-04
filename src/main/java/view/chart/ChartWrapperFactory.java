@@ -14,11 +14,7 @@ public class ChartWrapperFactory {
             case BASIC:
                 return new TimeSeriesChart(parsedArgs);
             case MOVING_AVERAGE:
-                TimeSeriesChart chart = new TimeSeriesChart(parsedArgs);
-                chart.setPeriod((int) parsedArgs.get(SupportedArgs.period));
-                chart.setPeriod((int) parsedArgs.get(SupportedArgs.initToIgnore));
-                chart.setShowMovingAvg(true);
-                return chart;
+                return new MovingAverageChart(parsedArgs);
             case BINNED:
                 DisplayTypeBinned displayType = (DisplayTypeBinned) parsedArgs.get(SupportedArgs.displayType);
                 switch (displayType) {
