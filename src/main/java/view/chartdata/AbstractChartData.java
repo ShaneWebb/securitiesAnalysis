@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import javautilwrappers.ArrayListWrapper;
@@ -14,7 +13,6 @@ import javautilwrappers.HashMapWrapper;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
 import process.datatypes.ParsedData;
-import process.datatypes.ParsedFile;
 
 public abstract class AbstractChartData implements ChartDataWrapper {
 
@@ -45,15 +43,11 @@ public abstract class AbstractChartData implements ChartDataWrapper {
             ParsedData data)
             throws IOException, NumberFormatException {
 
-        MapWrapper<String, MapWrapper<Integer, String>> fileMap;
-        if (data instanceof ParsedFile) {
-            fileMap = data.getData();
-        } else {
-            return null;
-        }
+        MapWrapper<String, MapWrapper<Integer, MapWrapper<String, Object>>> fileMap = data.getData();
+
 
         ListWrapper<ChartSubDataWrapper> chartData = new ArrayListWrapper<>();
-        for (MapWrapper.Entry<String, MapWrapper<Integer, String>> file : fileMap.entrySet()) {
+        for (MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> file : fileMap.entrySet()) {
             try {
                 ChartSubDataWrapper series = buildSeries(file);
                 chartData.add(series);
@@ -67,7 +61,7 @@ public abstract class AbstractChartData implements ChartDataWrapper {
 
     //Must create the correct sub data structure.
     protected abstract ChartSubDataWrapper ChartSubDataFactory(
-            MapWrapper.Entry<String, MapWrapper<Integer, String>> file);
+            MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> file);
 
     protected final void assembleData(
             ListWrapper<ChartSubDataWrapper> chartData) {
@@ -86,36 +80,22 @@ public abstract class AbstractChartData implements ChartDataWrapper {
     }
 
     private ChartSubDataWrapper buildSeries(
-            MapWrapper.Entry<String, MapWrapper<Integer, String>> file)
+            MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> file)
             throws ItemNotFoundException, ParseException, NumberFormatException {
         ChartSubDataWrapper series = ChartSubDataFactory(file);
         return populateSeries(file, series);
     }
 
     private ChartSubDataWrapper populateSeries(
-            MapWrapper.Entry<String, MapWrapper<Integer, String>> file,
+            MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> file,
             ChartSubDataWrapper series)
             throws NumberFormatException, ItemNotFoundException, ParseException {
 
-        MapWrapper<Integer, String> contents
+        MapWrapper<Integer, MapWrapper<String, Object>> contents
                 = new HashMapWrapper(file.getValue());
-        for (String fileData : contents.values()) {
-            
-            final int TEMP_DATA_INDEX = 1;
-            ListWrapper<String> delimitedData = new ArrayListWrapper(Arrays.asList(fileData.split(",")));
-            double value = Double.valueOf(delimitedData.get(TEMP_DATA_INDEX));
-            Date parsedDate = createDate(delimitedData);
-
-            MapWrapper<String, Object> line = new HashMapWrapper<>();
-            line.put("date", parsedDate); //Important: Must provide this. 
-            line.put("value", value);
-            
-            if (line.get("date") == null) {
-                final String exceptionMessage
-                        = "Overridden csv parser must provide a Date key value";
-                throw new IllegalArgumentException(exceptionMessage);
-            }
-            series.add(line);
+        for (MapWrapper<String, Object> fileData : contents.values()) {
+           
+            series.add(fileData);
         }
 
         return series;

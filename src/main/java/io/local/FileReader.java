@@ -41,10 +41,10 @@ public class FileReader implements ExternalDataReader {
 
         String files = (String) parsedArgs.get(SupportedArgs.files);
         String[] delimitedFiles = files.split(",");
-        MapWrapper<String, MapWrapper<Integer, String>> parsedFiles
+        MapWrapper<String, MapWrapper<Integer, MapWrapper<String, Object>>> parsedFiles
                 = new HashMapWrapper<>();
         for (String file : delimitedFiles) {
-            final MapWrapper<Integer, String> fileData
+            final MapWrapper<Integer, MapWrapper<String, Object>> fileData
                     = readFile(file, (String) parsedArgs.get(SupportedArgs.header),
                             (String) parsedArgs.get(SupportedArgs.startDate),
                             (String) parsedArgs.get(SupportedArgs.endDate));
@@ -54,12 +54,12 @@ public class FileReader implements ExternalDataReader {
         return new ParsedFile(parsedFiles);
     }
 
-    private MapWrapper<Integer, String> readFile(
+    private MapWrapper<Integer, MapWrapper<String, Object>> readFile(
             String filePath1, String header,
             String startDateStr, String endDateStr)
             throws IOException {
 
-        MapWrapper<Integer, String> fileByLine = new HashMapWrapper<>();
+        MapWrapper<Integer, MapWrapper<String, Object>> fileByLine = new HashMapWrapper<>();
         try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(filePath1), charset)) {
 
             int index;
@@ -80,11 +80,18 @@ public class FileReader implements ExternalDataReader {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] splitLine = line.split(",");
-                String value = splitLine[index];
+                
+                double value = Double.valueOf(splitLine[index]);
                 String date = splitLine[0];
                 Date parsedDate = dfFile.parse(date);
+                
+                
+                
                 if (parsedDate.compareTo(startDate) >= 0 && parsedDate.compareTo(endDate) <= 0) {
-                    fileByLine.put(i, date + "," + value);
+                    MapWrapper<String, Object> parsedLine = new HashMapWrapper<>();
+                    parsedLine.put("date", parsedDate);
+                    parsedLine.put("value", value);
+                    fileByLine.put(i, parsedLine);
                     ++i;
                 }
 

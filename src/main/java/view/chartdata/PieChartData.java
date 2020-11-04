@@ -24,7 +24,7 @@ public class PieChartData extends AbstractBinnedData {
     }
 
     @Override
-    protected ChartSubDataWrapper ChartSubDataFactory(MapWrapper.Entry<String, MapWrapper<Integer, String>> file) {
+    protected ChartSubDataWrapper ChartSubDataFactory(MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> file) {
         String fileName = file.getKey();
         return new PieChartSubData(fileName);
     }

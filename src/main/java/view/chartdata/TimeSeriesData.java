@@ -37,7 +37,7 @@ public class TimeSeriesData extends AbstractChartData {
     }
 
     @Override
-    protected ChartSubDataWrapper ChartSubDataFactory(MapWrapper.Entry<String, MapWrapper<Integer, String>> file) {
+    protected ChartSubDataWrapper ChartSubDataFactory(MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> file) {
         ChartSubDataWrapper series = new TimeSeriesSubData(file.getKey());
         return series;
     }
