@@ -2,6 +2,7 @@ package io.local;
 
 //TODO: Create a file reader class, which accepts a 
 import datatypes.exceptions.ItemNotFoundException;
+import io.console.SupportedArgs;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -35,18 +36,18 @@ public class FileReader implements ExternalDataReader {
     }
 
     @Override
-    public ParsedFile read(MapWrapper<String, Object> parsedArgs)
+    public ParsedFile read(MapWrapper<SupportedArgs, Object> parsedArgs)
             throws IOException {
 
-        String files = (String) parsedArgs.get("files");
+        String files = (String) parsedArgs.get(SupportedArgs.files);
         String[] delimitedFiles = files.split(",");
         MapWrapper<String, MapWrapper<Integer, String>> parsedFiles
                 = new HashMapWrapper<>();
         for (String file : delimitedFiles) {
             final MapWrapper<Integer, String> fileData
-                    = readFile(file, (String) parsedArgs.get("header"),
-                            (String) parsedArgs.get("startDate"),
-                            (String) parsedArgs.get("endDate"));
+                    = readFile(file, (String) parsedArgs.get(SupportedArgs.header),
+                            (String) parsedArgs.get(SupportedArgs.startDate),
+                            (String) parsedArgs.get(SupportedArgs.endDate));
 
             parsedFiles.put(file, fileData);
         }

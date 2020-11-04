@@ -1,18 +1,19 @@
 
 package view.chartdata;
 
+import io.console.SupportedArgs;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.Dataset;
 
 public class PieChartData extends AbstractBinnedData {
     
-    public PieChartData(MapWrapper<String, Object> parsedArgs) {
+    public PieChartData(MapWrapper<SupportedArgs, Object> parsedArgs) {
         super(parsedArgs);
         this.internalDataset = new DefaultCategoryDataset();
     }
     
-    public PieChartData(MapWrapper<String, Object> parsedArgs, DefaultCategoryDataset internalDataset) {
+    public PieChartData(MapWrapper<SupportedArgs, Object> parsedArgs, DefaultCategoryDataset internalDataset) {
         super(parsedArgs);
         this.internalDataset = internalDataset;
     }

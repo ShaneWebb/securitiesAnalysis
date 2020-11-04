@@ -1,18 +1,19 @@
 package view.chartdata;
 
+import io.console.SupportedArgs;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.Dataset;
 
 public class BarChartData extends AbstractBinnedData {
 
-    public BarChartData(MapWrapper<String, Object> parsedArgs) {
+    public BarChartData(MapWrapper<SupportedArgs, Object> parsedArgs) {
         super(parsedArgs);
         this.internalDataset = new DefaultCategoryDataset();
     }
 
     public BarChartData(
-            MapWrapper<String, Object> parsedArgs,
+            MapWrapper<SupportedArgs, Object> parsedArgs,
             DefaultCategoryDataset internalDataset) {
         super(parsedArgs);
         this.internalDataset = internalDataset;

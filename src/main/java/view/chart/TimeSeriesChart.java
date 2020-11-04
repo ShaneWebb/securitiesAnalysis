@@ -1,13 +1,13 @@
 package view.chart;
 
-import view.chartdata.ChartDataWrapper;
-import view.chartdata.TimeSeriesData;
+import io.console.SupportedArgs;
 import javautilwrappers.MapWrapper;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.time.TimeSeriesCollection;
 import process.Visualizations;
+import view.chartdata.ChartDataWrapper;
+import view.chartdata.TimeSeriesData;
 
 public class TimeSeriesChart extends AbstractChart {
 
@@ -15,14 +15,14 @@ public class TimeSeriesChart extends AbstractChart {
     private int initIgnore, period;
     private boolean showMovingAvg, showLinearTrend;
 
-    public TimeSeriesChart(MapWrapper<String, Object> parsedArgs) {
+    public TimeSeriesChart(MapWrapper<SupportedArgs, Object> parsedArgs) {
         super(
-                (String) parsedArgs.get("header"),
-                (Visualizations) parsedArgs.get("type"));
+                (String) parsedArgs.get(SupportedArgs.header),
+                (Visualizations) parsedArgs.get(SupportedArgs.type));
 
         this.showMovingAvg = false;
-        this.showLinearTrend = (boolean) parsedArgs.get("lineartrend");
-        this.xAxis = (String) parsedArgs.get("xAxis");
+        this.showLinearTrend = (boolean) parsedArgs.get(SupportedArgs.lineartrend);
+        this.xAxis = (String) parsedArgs.get(SupportedArgs.xAxis);
 
     }
 

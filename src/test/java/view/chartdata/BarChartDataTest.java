@@ -1,18 +1,17 @@
 package view.chartdata;
 
+import io.console.SupportedArgs;
 import javautilwrappers.ArrayListWrapper;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -26,7 +25,7 @@ public class BarChartDataTest {
 
     private final BarChartData data;
     private final DefaultCategoryDataset dataset;
-    private final MapWrapper<String, Object> map0;
+    private final MapWrapper<SupportedArgs, Object> map0;
 
     private AutoCloseable closeable;
 
@@ -53,16 +52,16 @@ public class BarChartDataTest {
         dataset.addValue(2.0, "Row 2", "Column 3");
 
         map0 = new HashMapWrapper<>();
-        map0.put("files", "A.csv,B.csv");
-        map0.put("header", "volume");
-        map0.put("startDate", "8/21/1981");
-        map0.put("endDate", "1/1/2020");
-        map0.put("xAxis", "Date");
-        map0.put("lineartrend", false);
-        map0.put("stochastic", false);
-        map0.put("type", Visualizations.BINNED);
-        map0.put("displayType", DisplayTypeBinned.BAR);
-        map0.put("bins", 10);
+        map0.put(SupportedArgs.files, "A.csv,B.csv");
+        map0.put(SupportedArgs.header, "volume");
+        map0.put(SupportedArgs.startDate, "8/21/1981");
+        map0.put(SupportedArgs.endDate, "1/1/2020");
+        map0.put(SupportedArgs.xAxis, "Date");
+        map0.put(SupportedArgs.lineartrend, false);
+        map0.put(SupportedArgs.stochastic, false);
+        map0.put(SupportedArgs.type, Visualizations.BINNED);
+        map0.put(SupportedArgs.displayType, DisplayTypeBinned.BAR);
+        map0.put(SupportedArgs.bins, 10);
 
         data = new BarChartData(map0, dataset);
     }

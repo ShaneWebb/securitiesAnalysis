@@ -1,25 +1,26 @@
 package view.chart;
 
+import io.console.SupportedArgs;
 import javautilwrappers.MapWrapper;
 import process.DisplayTypeBinned;
 import process.Visualizations;
 
 public class ChartWrapperFactory {
 
-    public static ChartWrapper createFrom(MapWrapper<String, Object> parsedArgs) {
+    public static ChartWrapper createFrom(MapWrapper<SupportedArgs, Object> parsedArgs) {
 
-        Visualizations visualization = (Visualizations) parsedArgs.get("type");
+        Visualizations visualization = (Visualizations) parsedArgs.get(SupportedArgs.type);
         switch (visualization) {
             case BASIC:
                 return new TimeSeriesChart(parsedArgs);
             case MOVING_AVERAGE:
                 TimeSeriesChart chart = new TimeSeriesChart(parsedArgs);
-                chart.setPeriod((int) parsedArgs.get("period"));
-                chart.setPeriod((int) parsedArgs.get("initToIgnore"));
+                chart.setPeriod((int) parsedArgs.get(SupportedArgs.period));
+                chart.setPeriod((int) parsedArgs.get(SupportedArgs.initToIgnore));
                 chart.setShowMovingAvg(true);
                 return chart;
             case BINNED:
-                DisplayTypeBinned displayType = (DisplayTypeBinned) parsedArgs.get("displayType");
+                DisplayTypeBinned displayType = (DisplayTypeBinned) parsedArgs.get(SupportedArgs.displayType);
                 switch (displayType) {
                     case BAR:
                         return new BarChart(parsedArgs);

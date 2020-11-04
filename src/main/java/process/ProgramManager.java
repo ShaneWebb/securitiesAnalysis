@@ -116,10 +116,10 @@ public class ProgramManager {
     public void runUserInputCommand(String inputCommand) {
         try {
             String[] inputCommandParsed = inputCommand.split(" ");
-            MapWrapper<String, Object> parsedArgs
+            MapWrapper<SupportedArgs, Object> parsedArgs
                     = argParser.parseArgs(inputCommandParsed);
             SupportedProcess process
-                    = (SupportedProcess) parsedArgs.get("func");
+                    = (SupportedProcess) parsedArgs.get(SupportedArgs.func);
             process.execute(parsedArgs);
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -1,5 +1,6 @@
 package process;
 
+import io.console.SupportedArgs;
 import io.local.ExternalDataReader;
 import java.io.IOException;
 import javautilwrappers.*;
@@ -18,7 +19,7 @@ public class Plotter implements SupportedProcess {
     }
 
     @Override
-    public void execute(MapWrapper<String, Object> parsedArgs) 
+    public void execute(MapWrapper<SupportedArgs, Object> parsedArgs) 
             throws IOException, IllegalArgumentException {
 
         ChartWrapper chart = ChartWrapperFactory.createFrom(parsedArgs);

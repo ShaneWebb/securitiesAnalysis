@@ -1,7 +1,9 @@
 package process;
 
 import io.console.ArgumentParserWrapper;
+import io.console.SupportedArgs;
 import java.util.stream.Stream;
+import javautilwrappers.EnumMapWrapper;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
 import org.junit.jupiter.api.AfterEach;
@@ -85,11 +87,13 @@ public class ProgramManagerTest {
         instance = new ProgramManager(supportedProcesses, localArgParser);
         instance.runUserInputCommand(commandArg);
         
-        MapWrapper<String, Object> parsedArgsOne = new HashMapWrapper<>();
-        parsedArgsOne.put("func", processOne);
+        MapWrapper<SupportedArgs, Object> parsedArgsOne = 
+                new EnumMapWrapper<>(SupportedArgs.class);
+        parsedArgsOne.put(SupportedArgs.func, processOne);
         
-        MapWrapper<String, Object> parsedArgsTwo = new HashMapWrapper<>();
-        parsedArgsTwo.put("func", processTwo);
+        MapWrapper<SupportedArgs, Object> parsedArgsTwo = 
+                new EnumMapWrapper<>(SupportedArgs.class);
+        parsedArgsTwo.put(SupportedArgs.func, processTwo);
 
         switch (testMode) {
             case "one":
@@ -120,7 +124,7 @@ public class ProgramManagerTest {
 
     @ParameterizedTest
     @MethodSource("provideCommandAndMap")
-    public void testInbuiltCommands(String command, HashMapWrapper<String, Object> map) throws Exception {
+    public void testInbuiltCommands(String command, MapWrapper<SupportedArgs, Object> map) throws Exception {
 
         MapWrapper<String, SupportedProcess> supportedProcesses = new HashMapWrapper<>();
         supportedProcesses.put("plotter", placeholder);
@@ -128,67 +132,67 @@ public class ProgramManagerTest {
 
         instance = new ProgramManager(supportedProcesses);
         instance.runUserInputCommand(command);
-        map.put("func", placeholder);
+        map.put(SupportedArgs.func, placeholder);
         verify(placeholder).execute(map);
 
     }
 
     public static Stream<Arguments> provideCommandAndMap() {
 
-        MapWrapper<String, Object> map0 = new HashMapWrapper<>();
-        map0.put("files", "A.csv,B.csv");
-        map0.put("header", "volume");
-        map0.put("startDate", "8/21/1981");
-        map0.put("endDate", "1/1/2020");
-        map0.put("xAxis", "Date");
-        map0.put("lineartrend", false);
-        map0.put("stochastic", false);
-        map0.put("DB", null);
+        MapWrapper<SupportedArgs, Object> map0 = new EnumMapWrapper<>(SupportedArgs.class);
+        map0.put(SupportedArgs.files, "A.csv,B.csv");
+        map0.put(SupportedArgs.header, "volume");
+        map0.put(SupportedArgs.startDate, "8/21/1981");
+        map0.put(SupportedArgs.endDate, "1/1/2020");
+        map0.put(SupportedArgs.xAxis, "Date");
+        map0.put(SupportedArgs.lineartrend, false);
+        map0.put(SupportedArgs.stochastic, false);
+        map0.put(SupportedArgs.DB, null);
 
-        MapWrapper<String, Object> map1 = new HashMapWrapper<>(map0);
-        map1.put("type", Visualizations.BASIC);
-        map1.put("xAxis", "Date");
-        map1.put("lineartrend", true);
+        MapWrapper<SupportedArgs, Object> map1 = new EnumMapWrapper<>(map0);
+        map1.put(SupportedArgs.type, Visualizations.BASIC);
+        map1.put(SupportedArgs.xAxis, "Date");
+        map1.put(SupportedArgs.lineartrend, true);
 
-        MapWrapper<String, Object> map2 = new HashMapWrapper<>(map0);
-        map2.put("type", Visualizations.BASIC);
-        map2.put("xAxis", "Time");
-        map2.put("lineartrend", false);
+        MapWrapper<SupportedArgs, Object> map2 = new EnumMapWrapper<>(map0);
+        map2.put(SupportedArgs.type, Visualizations.BASIC);
+        map2.put(SupportedArgs.xAxis, "Time");
+        map2.put(SupportedArgs.lineartrend, false);
 
-        MapWrapper<String, Object> map3 = new HashMapWrapper<>(map0);
-        map3.put("type", Visualizations.MOVING_AVERAGE);
-        map3.put("period", 1);
-        map3.put("initToIgnore", 1);
+        MapWrapper<SupportedArgs, Object> map3 = new EnumMapWrapper<>(map0);
+        map3.put(SupportedArgs.type, Visualizations.MOVING_AVERAGE);
+        map3.put(SupportedArgs.period, 1);
+        map3.put(SupportedArgs.initToIgnore, 1);
 
-        MapWrapper<String, Object> map4 = new HashMapWrapper<>(map0);
-        map4.put("type", Visualizations.MOVING_AVERAGE);
-        map4.put("period", 20);
-        map4.put("initToIgnore", 20);
+        MapWrapper<SupportedArgs, Object> map4 = new EnumMapWrapper<>(map0);
+        map4.put(SupportedArgs.type, Visualizations.MOVING_AVERAGE);
+        map4.put(SupportedArgs.period, 20);
+        map4.put(SupportedArgs.initToIgnore, 20);
 
-        MapWrapper<String, Object> map5 = new HashMapWrapper<>(map0);
-        map5.put("type", Visualizations.BINNED);
-        map5.put("displayType", DisplayTypeBinned.BAR);
-        map5.put("bins", 10);
+        MapWrapper<SupportedArgs, Object> map5 = new EnumMapWrapper<>(map0);
+        map5.put(SupportedArgs.type, Visualizations.BINNED);
+        map5.put(SupportedArgs.displayType, DisplayTypeBinned.BAR);
+        map5.put(SupportedArgs.bins, 10);
 
-        MapWrapper<String, Object> map6 = new HashMapWrapper<>(map0);
-        map6.put("type", Visualizations.BINNED);
-        map6.put("displayType", DisplayTypeBinned.PIE);
-        map6.put("bins", 10);
+        MapWrapper<SupportedArgs, Object> map6 = new EnumMapWrapper<>(map0);
+        map6.put(SupportedArgs.type, Visualizations.BINNED);
+        map6.put(SupportedArgs.displayType, DisplayTypeBinned.PIE);
+        map6.put(SupportedArgs.bins, 10);
 
-        MapWrapper<String, Object> map7 = new HashMapWrapper<>(map0);
-        map7.put("type", Visualizations.BASIC);
-        map7.put("stochastic", true);
+        MapWrapper<SupportedArgs, Object> map7 = new EnumMapWrapper<>(map0);
+        map7.put(SupportedArgs.type, Visualizations.BASIC);
+        map7.put(SupportedArgs.stochastic, true);
 
-        MapWrapper<String, Object> map8 = new HashMapWrapper<>();
-        map8.put("type", Visualizations.BASIC);
-        map8.put("DB", "A,B");
-        map8.put("files", null);
-        map8.put("header", "volume");
-        map8.put("startDate", "8/21/1981");
-        map8.put("endDate", "1/1/2020");
-        map8.put("xAxis", "Date");
-        map8.put("lineartrend", true);
-        map8.put("stochastic", false);
+        MapWrapper<SupportedArgs, Object> map8 = new EnumMapWrapper<>(SupportedArgs.class);
+        map8.put(SupportedArgs.type, Visualizations.BASIC);
+        map8.put(SupportedArgs.DB, "A,B");
+        map8.put(SupportedArgs.files, null);
+        map8.put(SupportedArgs.header, "volume");
+        map8.put(SupportedArgs.startDate, "8/21/1981");
+        map8.put(SupportedArgs.endDate, "1/1/2020");
+        map8.put(SupportedArgs.xAxis, "Date");
+        map8.put(SupportedArgs.lineartrend, true);
+        map8.put(SupportedArgs.stochastic, false);
 
         return Stream.of(
                 Arguments.of("Visualize --files A.csv,B.csv volume 8/21/1981 1/1/2020 --lineartrend Basic", map1),

@@ -1,7 +1,7 @@
 package view.chartdata;
 
+import io.console.SupportedArgs;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.SortedSet;
@@ -19,10 +19,10 @@ public abstract class AbstractBinnedData extends AbstractChartData {
     protected DefaultCategoryDataset internalDataset;
     protected boolean stochastic;
 
-    public AbstractBinnedData(MapWrapper<String, Object> parsedArgs) {
+    public AbstractBinnedData(MapWrapper<SupportedArgs, Object> parsedArgs) {
         super(parsedArgs);
-        this.bins = (int) parsedArgs.get("bins");
-        this.stochastic = (boolean) parsedArgs.get("stochastic");
+        this.bins = (int) parsedArgs.get(SupportedArgs.bins);
+        this.stochastic = (boolean) parsedArgs.get(SupportedArgs.stochastic);
     }
 
     @Override

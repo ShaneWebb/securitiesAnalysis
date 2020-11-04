@@ -1,14 +1,15 @@
 package view.chart;
 
-import view.chartdata.ChartDataWrapper;
+import io.console.SupportedArgs;
 import javautilwrappers.MapWrapper;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.util.TableOrder;
 import org.jfree.data.category.DefaultCategoryDataset;
+import view.chartdata.ChartDataWrapper;
 
 public class PieChart extends AbstractBinnedChart {
 
-    public PieChart(MapWrapper<String, Object> parsedArgs) {
+    public PieChart(MapWrapper<SupportedArgs, Object> parsedArgs) {
         super(parsedArgs);
     }
 

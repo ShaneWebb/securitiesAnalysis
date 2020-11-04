@@ -1,13 +1,9 @@
 package learner.java.classtype;
 
 import learner.java.enums.FruitEnums;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class ClassTypeTest {
 
@@ -31,6 +27,14 @@ public class ClassTypeTest {
             return myClassField;
         }
        
+    }
+    
+    @Test
+    @Disabled
+    public void classCastingTest() {
+        double myDouble = 1.111;
+        int someCastTest = Integer.class.cast(myDouble);
+        assertEquals(1,someCastTest);
     }
 
 }

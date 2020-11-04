@@ -1,5 +1,6 @@
 package view.chartdata;
 
+import io.console.SupportedArgs;
 import javautilwrappers.ArrayListWrapper;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
@@ -12,7 +13,7 @@ public class TimeSeriesData extends AbstractChartData {
 
     private final TimeSeriesCollection internalTimeSeriesCollection;
 
-    public TimeSeriesData(MapWrapper<String, Object> parsedArgs) {
+    public TimeSeriesData(MapWrapper<SupportedArgs, Object> parsedArgs) {
         super(parsedArgs);
         this.internalTimeSeriesCollection = new TimeSeriesCollection();
     }

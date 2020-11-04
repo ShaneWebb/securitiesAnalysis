@@ -1,5 +1,6 @@
 package view.chart;
 
+import io.console.SupportedArgs;
 import javautilwrappers.MapWrapper;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -9,7 +10,7 @@ import view.chartdata.ChartDataWrapper;
 
 public class BarChart extends AbstractBinnedChart {
 
-    public BarChart(MapWrapper<String, Object> parsedArgs) {
+    public BarChart(MapWrapper<SupportedArgs, Object> parsedArgs) {
         super(parsedArgs);
     }
 

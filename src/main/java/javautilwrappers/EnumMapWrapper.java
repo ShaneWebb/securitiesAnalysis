@@ -8,4 +8,12 @@ public class EnumMapWrapper<K extends Enum<K>, V> extends AbstractMapWrapper<K, 
         internalMap = new EnumMap(keyType);
     }
     
+    public EnumMapWrapper(EnumMap<K, ? extends V> map) {
+        internalMap = new EnumMap(map);
+    }
+    
+    public EnumMapWrapper(MapWrapper<K, ? extends V> map) {
+        internalMap = new EnumMap(map.unwrap());
+    }
+    
 }
