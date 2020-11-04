@@ -18,7 +18,8 @@ public class Plotter implements SupportedProcess {
     }
 
     @Override
-    public void execute(MapWrapper<String, Object> parsedArgs) throws IOException, IllegalArgumentException {
+    public void execute(MapWrapper<String, Object> parsedArgs) 
+            throws IOException, IllegalArgumentException {
 
         ChartWrapper chart = ChartWrapperFactory.createFrom(parsedArgs);
         ChartDataWrapper chartData = ChartDataWrapperFactory.createFrom(parsedArgs);

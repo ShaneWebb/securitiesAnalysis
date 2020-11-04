@@ -9,7 +9,7 @@ class RealExternalDataReaderFactory implements ExternalDataReaderFactory {
     
     @Override
     public ExternalDataReader createFrom(MapWrapper<String, Object> parsedArgs) {
-        if (parsedArgs.get("file") == null) {
+        if (parsedArgs.get("files") == null) {
             return new DatabaseReader();
         } else {
             return new FileReader();

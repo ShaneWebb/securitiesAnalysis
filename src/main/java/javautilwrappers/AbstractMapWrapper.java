@@ -14,15 +14,25 @@ public abstract class AbstractMapWrapper<K, V> implements MapWrapper<K, V> {
     }
 
     @Override
+    public void clear() {
+        internalMap.clear();
+    }
+
+    @Override
     public V put(K key, V value) {
         return internalMap.put(key, value);
+    }
+
+    @Override
+    public void putAll(MapWrapper<? extends K, ? extends V> map) {
+        internalMap.putAll(map.unwrap());
     }
 
     @Override
     public V get(K key) {
         return internalMap.get(key);
     }
-    
+
     @Override
     public V remove(K key) {
         return internalMap.remove(key);
@@ -54,7 +64,7 @@ public abstract class AbstractMapWrapper<K, V> implements MapWrapper<K, V> {
 
         return collection;
     }
-    
+
     @Override
     public Map<K, V> unwrap() {
         return internalMap;
