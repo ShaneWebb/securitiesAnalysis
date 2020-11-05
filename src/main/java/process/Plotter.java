@@ -4,7 +4,7 @@ import io.console.SupportedArgs;
 import io.local.ExternalDataReader;
 import java.io.IOException;
 import javautilwrappers.*;
-import process.datatypes.ParsedData;
+import io.datatypes.ParsedData;
 import view.chart.ChartWrapper;
 import view.chart.ChartWrapperFactory;
 import view.chartdata.ChartDataWrapper;

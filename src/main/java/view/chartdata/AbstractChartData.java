@@ -12,7 +12,7 @@ import javautilwrappers.ArrayListWrapper;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
-import process.datatypes.ParsedData;
+import io.datatypes.ParsedData;
 
 public abstract class AbstractChartData implements ChartDataWrapper {
 

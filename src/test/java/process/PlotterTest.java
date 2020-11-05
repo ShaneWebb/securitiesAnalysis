@@ -19,8 +19,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
-import process.datatypes.ParsedData;
-import process.datatypes.ParsedFile;
+import io.datatypes.ParsedData;
+import io.datatypes.ParsedFile;
 
 public class PlotterTest {
 

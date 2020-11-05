@@ -3,7 +3,7 @@ package io.local;
 import io.console.SupportedArgs;
 import java.io.IOException;
 import javautilwrappers.MapWrapper;
-import process.datatypes.ParsedFile;
+import io.datatypes.ParsedFile;
 
 public class DatabaseReader implements ExternalDataReader{
 
