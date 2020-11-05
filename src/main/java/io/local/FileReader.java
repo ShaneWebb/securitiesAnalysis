@@ -85,7 +85,6 @@ public class FileReader implements ExternalDataReader {
             throws ItemNotFoundException, IOException, NumberFormatException, ParseException {
         
         generateParsers();
-        
         String firstLine = bufferedReader.readLine();
         
         int index = findHeaderIndex(firstLine);

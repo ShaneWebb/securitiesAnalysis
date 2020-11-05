@@ -1,6 +1,5 @@
 package io.console;
 
-import jdk.internal.HotSpotIntrinsicCandidate;
 import net.sourceforge.argparse4j.inf.Argument;
 import net.sourceforge.argparse4j.inf.ArgumentContainer;
 import net.sourceforge.argparse4j.inf.Subparsers;
@@ -14,7 +13,6 @@ public abstract class ArgumentContainerWrapper {
     protected ArgumentContainer internalArgumentContainer;
     protected Subparsers internalSubparsers;
 
-    @HotSpotIntrinsicCandidate
     public ArgumentContainerWrapper() {
     }
 
