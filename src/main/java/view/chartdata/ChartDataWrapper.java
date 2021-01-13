@@ -6,7 +6,7 @@ import org.jfree.data.general.Dataset;
 
 public interface ChartDataWrapper {
 
-    AbstractChartData convert(ParsedData data) 
+    void convert(ParsedData data) 
             throws IOException, NumberFormatException;
     
     Dataset unwrap();

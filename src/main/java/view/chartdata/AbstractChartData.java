@@ -39,7 +39,7 @@ public abstract class AbstractChartData implements ChartDataWrapper {
     }
 
     @Override
-    public final AbstractChartData convert(ParsedData data)
+    public final void convert(ParsedData data)
             throws IOException, NumberFormatException {
 
         MapWrapper<String, MapWrapper<Integer, MapWrapper<String, Object>>> fileMap = data.getData();
@@ -55,7 +55,6 @@ public abstract class AbstractChartData implements ChartDataWrapper {
             }
         }
         assembleData(chartData);
-        return this;
     }
 
     //Must create the correct sub data structure.
