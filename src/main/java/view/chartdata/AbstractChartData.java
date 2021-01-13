@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import javautilwrappers.ArrayListWrapper;
+import javautilwrappers.CollectionWrapper;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
@@ -18,9 +19,10 @@ public abstract class AbstractChartData implements ChartDataWrapper {
 
     protected String header;
     protected Date startDate, endDate;
+    protected final String CLI_DATE_FORMAT, FILE_DATE_FORMAT;
+    
     protected static final int HEADER_LINE = 1;
     protected static final int X_INDEX = 0;
-    protected final String CLI_DATE_FORMAT, FILE_DATE_FORMAT;
 
     public AbstractChartData(MapWrapper<SupportedArgs, Object> parsedArgs) {
         this.FILE_DATE_FORMAT = "yyyy-MM-dd";
@@ -44,7 +46,6 @@ public abstract class AbstractChartData implements ChartDataWrapper {
 
         MapWrapper<String, MapWrapper<Integer, MapWrapper<String, Object>>> fileMap = data.getData();
 
-
         ListWrapper<ChartSubDataWrapper> chartData = new ArrayListWrapper<>();
         for (MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> file : fileMap.entrySet()) {
             try {
@@ -62,7 +63,7 @@ public abstract class AbstractChartData implements ChartDataWrapper {
             MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> file);
 
     protected final void assembleData(
-            ListWrapper<ChartSubDataWrapper> chartData) {
+            CollectionWrapper<ChartSubDataWrapper> chartData) {
         for (ChartSubDataWrapper series : chartData) {
             this.addSubDataToInternalCollection(series);
         }

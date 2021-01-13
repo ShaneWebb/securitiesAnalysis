@@ -13,5 +13,4 @@ public interface ChartDataWrapper {
     
     void addSubDataToInternalCollection(ChartSubDataWrapper data);
     
-    
 }

@@ -49,7 +49,7 @@ public class TimeSeriesData extends AbstractChartData {
 
     @Override
     public void addSubDataToInternalCollection(ChartSubDataWrapper data) {
-        this.internalTimeSeriesCollection.addSeries((TimeSeries)data.unwrap());
+        internalTimeSeriesCollection.addSeries((TimeSeries) data.unwrap());
     }
 
 
