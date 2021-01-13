@@ -70,7 +70,8 @@ public class ProgramManagerTest {
 
     @ParameterizedTest
     @MethodSource("provideCommandAndProcesses")
-    public void testRunUserInputCommand(String commandArg, String testMode) throws Exception {
+    public void testRunUserInputCommand(String commandArg, String testMode) 
+            throws Exception {
 
         ArgumentParserWrapper localArgParser = new ArgumentParserWrapper("Test");
         localArgParser.addSubparserHelp("Test sub command help");
@@ -124,7 +125,8 @@ public class ProgramManagerTest {
 
     @ParameterizedTest
     @MethodSource("provideCommandAndMap")
-    public void testInbuiltCommands(String command, MapWrapper<SupportedArgs, Object> map) throws Exception {
+    public void testInbuiltCommands(String command, MapWrapper<SupportedArgs, Object> map) 
+            throws Exception {
 
         MapWrapper<String, SupportedProcess> supportedProcesses = new HashMapWrapper<>();
         supportedProcesses.put("plotter", placeholder);

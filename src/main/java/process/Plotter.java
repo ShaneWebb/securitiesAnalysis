@@ -28,7 +28,7 @@ public class Plotter implements SupportedProcess {
         ExternalDataReader reader = factory.createFrom(parsedArgs);
         ParsedData data = reader.read(parsedArgs);
         
-        chartData.convertChartData(data);
+        chartData.convert(data);
         chart.generateVisual(chartData);
     }
 

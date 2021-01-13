@@ -1,12 +1,13 @@
 package view.chartdata;
 
+import io.datatypes.ParsedData;
 import java.io.IOException;
 import org.jfree.data.general.Dataset;
-import io.datatypes.ParsedData;
 
 public interface ChartDataWrapper {
 
-    AbstractChartData convertChartData(ParsedData data) throws IOException, NumberFormatException;;
+    AbstractChartData convert(ParsedData data) 
+            throws IOException, NumberFormatException;
     
     Dataset unwrap();
     
