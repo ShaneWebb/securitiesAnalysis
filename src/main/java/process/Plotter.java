@@ -1,10 +1,10 @@
 package process;
 
 import io.console.SupportedArgs;
+import io.datatypes.ParsedData;
 import io.local.ExternalDataReader;
 import java.io.IOException;
 import javautilwrappers.*;
-import io.datatypes.ParsedData;
 import view.chart.ChartWrapper;
 import view.chart.ChartWrapperFactory;
 import view.chartdata.ChartDataWrapper;
@@ -24,9 +24,10 @@ public class Plotter implements SupportedProcess {
 
         ChartWrapper chart = ChartWrapperFactory.createFrom(parsedArgs);
         ChartDataWrapper chartData = ChartDataWrapperFactory.createFrom(parsedArgs);
-        ExternalDataReader reader = factory.createFrom(parsedArgs);
         
+        ExternalDataReader reader = factory.createFrom(parsedArgs);
         ParsedData data = reader.read(parsedArgs);
+        
         chartData.convertChartData(data);
         chart.generateVisual(chartData);
     }
