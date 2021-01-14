@@ -44,10 +44,12 @@ public abstract class AbstractChartData implements ChartDataWrapper {
     public final void convert(ParsedData data)
             throws IOException, NumberFormatException {
 
-        MapWrapper<String, MapWrapper<Integer, MapWrapper<String, Object>>> fileMap = data.getData();
+        MapWrapper<String, MapWrapper<Integer, MapWrapper<String, Object>>> 
+                fileMap = data.getData();
 
         ListWrapper<ChartSubDataWrapper> chartData = new ArrayListWrapper<>();
-        for (MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> file : fileMap.entrySet()) {
+        for (MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> 
+                file : fileMap.entrySet()) {
             try {
                 ChartSubDataWrapper series = buildSeries(file);
                 chartData.add(series);

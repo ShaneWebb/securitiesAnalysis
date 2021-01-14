@@ -31,8 +31,20 @@ public abstract class AbstractBinnedData extends AbstractChartData {
         ListWrapper<MapWrapper<String, Object>> processedSubData
                 = processSubData(data);
         
-        String fileName = ((AbstractBinnedSubData) data).getFileName();
+        processStochastic(data, processedSubData);
 
+        for (MapWrapper<String, Object> item : processedSubData) {
+            internalDataset.addValue(
+                    (Integer) item.get("value"),
+                    (String) item.get("row"),
+                    (String) item.get("col"));
+        }
+    }
+
+    private void processStochastic(
+            ChartSubDataWrapper data,
+            ListWrapper<MapWrapper<String, Object>> processedSubData) {
+        String fileName = ((AbstractBinnedSubData) data).getFileName();
         int size = processedSubData.size();
         if (stochastic && size > 1) {
             int valuesAbove = 0, valuesBelow = 0;
@@ -57,16 +69,10 @@ public abstract class AbstractBinnedData extends AbstractChartData {
             processedSubData.add(mapAboveFuture);
             
         }
-
-        for (MapWrapper<String, Object> item : processedSubData) {
-            this.internalDataset.addValue(
-                    (Integer) item.get("value"),
-                    (String) item.get("row"),
-                    (String) item.get("col"));
-        }
     }
 
-    private ListWrapper<MapWrapper<String, Object>> processSubData(ChartSubDataWrapper data) {
+    private ListWrapper<MapWrapper<String, Object>> processSubData(
+            ChartSubDataWrapper data) {
         ListWrapper<MapWrapper<String, Object>> internalSubData
                 = (ListWrapper<MapWrapper<String, Object>>) data.unwrap();
         MapWrapper<String, Integer> rangesMap = buildRangesMap(internalSubData);
@@ -84,7 +90,8 @@ public abstract class AbstractBinnedData extends AbstractChartData {
         return processedSubData;
     }
 
-    private SortedSet<String> getSortedKeySet(MapWrapper<String, Integer> rangesMap) {
+    private SortedSet<String> getSortedKeySet(
+            MapWrapper<String, Integer> rangesMap) {
         Comparator<String> comparator = (String o1, String o2) -> {
             String[] o1delimited = o1.split(" ");
             String[] o2delimited = o2.split(" ");
@@ -97,7 +104,8 @@ public abstract class AbstractBinnedData extends AbstractChartData {
         return keys;
     }
 
-    private MapWrapper<String, Integer> buildRangesMap(ListWrapper<MapWrapper<String, Object>> internalSubData) {
+    private MapWrapper<String, Integer> buildRangesMap(
+            ListWrapper<MapWrapper<String, Object>> internalSubData) {
         MapWrapper<String, Integer> rangesMap = new HashMapWrapper<>();
         RangeFinder finder = rangeFinderFactory(internalSubData);
         for (MapWrapper<String, Object> item : internalSubData) {
@@ -117,7 +125,8 @@ public abstract class AbstractBinnedData extends AbstractChartData {
         return rangesMap;
     }
 
-    public RangeFinder rangeFinderFactory(ListWrapper<MapWrapper<String, Object>> internalSubData) {
+    public RangeFinder rangeFinderFactory(
+            ListWrapper<MapWrapper<String, Object>> internalSubData) {
         double max = Double.NEGATIVE_INFINITY, min = Double.POSITIVE_INFINITY;
         for (MapWrapper<String, Object> item : internalSubData) {
             double trialValue = (Double) item.get("value");
