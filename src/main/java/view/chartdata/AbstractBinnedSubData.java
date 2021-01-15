@@ -1,13 +1,14 @@
 
 package view.chartdata;
 
+import java.util.Iterator;
 import javautilwrappers.ArrayListWrapper;
-import javautilwrappers.ListWrapper;
+import javautilwrappers.CollectionWrapper;
 import javautilwrappers.MapWrapper;
 
-public class AbstractBinnedSubData implements ChartSubDataWrapper{
+public class AbstractBinnedSubData<T> implements ChartSubDataWrapper{
     
-    protected final ListWrapper<MapWrapper<String, Object>> internalSubData;
+    protected final CollectionWrapper<MapWrapper<String, Object>> internalSubData;
     protected final String fileName;
 
     public String getFileName() {
@@ -27,6 +28,29 @@ public class AbstractBinnedSubData implements ChartSubDataWrapper{
     @Override
     public final Object unwrap() {
         return this.internalSubData;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new subdataIterator<>();
+    }
+    
+    public class subdataIterator<T> implements Iterator<T> {
+
+        private final Iterator internalIterator = internalSubData.iterator();
+        
+        @Override
+        public boolean hasNext() {
+            return internalIterator.hasNext();
+        }
+
+        @Override
+        public T next() {
+            MapWrapper<String, Object> map =
+                    (MapWrapper<String, Object>) internalIterator.next();
+            return (T) map.get("value");
+        }
+        
     }
 
 }

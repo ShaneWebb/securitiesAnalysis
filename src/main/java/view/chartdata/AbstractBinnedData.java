@@ -30,7 +30,7 @@ public abstract class AbstractBinnedData extends AbstractChartData {
 
         ListWrapper<MapWrapper<String, Object>> processedSubData
                 = processSubData(data);
-        
+
         processStochastic(data, processedSubData);
 
         for (MapWrapper<String, Object> item : processedSubData) {
@@ -55,7 +55,7 @@ public abstract class AbstractBinnedData extends AbstractChartData {
                     valuesAbove += (int) processedSubData.get(i).get("value");
                 }
             }
-            
+
             MapWrapper<String, Object> mapAboveFuture = new HashMapWrapper<>();
             MapWrapper<String, Object> mapBelowFuture = new HashMapWrapper<>();
             mapAboveFuture.put("col", fileName + " Expected");
@@ -64,29 +64,36 @@ public abstract class AbstractBinnedData extends AbstractChartData {
             mapBelowFuture.put("col", fileName + " Expected");
             mapBelowFuture.put("row", "Below");
             mapBelowFuture.put("value", valuesAbove); //Intentional
-            
+
             processedSubData.add(mapBelowFuture);
             processedSubData.add(mapAboveFuture);
-            
+
         }
     }
 
     private ListWrapper<MapWrapper<String, Object>> processSubData(
             ChartSubDataWrapper data) {
+
         ListWrapper<MapWrapper<String, Object>> internalSubData
                 = (ListWrapper<MapWrapper<String, Object>>) data.unwrap();
+
         MapWrapper<String, Integer> rangesMap = buildRangesMap(internalSubData);
+
         SortedSet<String> keys = getSortedKeySet(rangesMap);
+
         ListWrapper<MapWrapper<String, Object>> processedSubData
                 = new ArrayListWrapper<>();
+
         String fileName = ((AbstractBinnedSubData) data).getFileName();
+
         for (String key : keys) {
             MapWrapper<String, Object> tempMap = new HashMapWrapper<>();
+            tempMap.put("value", rangesMap.get(key));
             tempMap.put("row", key);
             tempMap.put("col", fileName);
-            tempMap.put("value", rangesMap.get(key));
             processedSubData.add(tempMap);
         }
+
         return processedSubData;
     }
 
@@ -104,6 +111,29 @@ public abstract class AbstractBinnedData extends AbstractChartData {
         return keys;
     }
 
+    private MapWrapper<String, Integer> buildRangesMap(
+            ChartSubDataWrapper<Double> data) {
+
+        MapWrapper<String, Integer> rangesMap = new HashMapWrapper<>();
+        RangeFinder finder = rangeFinderFactory(data);
+        for (double item : data) {
+            String range = finder.getRange((int) item);
+            if (range == null) {
+                //The mathematical calculation will very rarely fail to bin
+                //a value due to rounding error.
+                continue;
+            }
+            Integer count = rangesMap.get(range);
+            if (count == null) {
+                rangesMap.put(range, 1);
+            } else {
+                rangesMap.put(range, ++count);
+            }
+        }
+        return rangesMap;
+    }
+
+    @Deprecated
     private MapWrapper<String, Integer> buildRangesMap(
             ListWrapper<MapWrapper<String, Object>> internalSubData) {
         MapWrapper<String, Integer> rangesMap = new HashMapWrapper<>();
@@ -125,6 +155,22 @@ public abstract class AbstractBinnedData extends AbstractChartData {
         return rangesMap;
     }
 
+    public RangeFinder rangeFinderFactory(ChartSubDataWrapper<Double> data) {
+        double max = Double.NEGATIVE_INFINITY, min = Double.POSITIVE_INFINITY;
+        for (double item : data) {
+            double trialValue = item;
+            if (trialValue > max) {
+                max = trialValue;
+            }
+            if (trialValue < min) {
+                min = trialValue;
+            }
+        }
+        RangeFinder finder = new RangeFinder(min, max, bins);
+        return finder;
+    }
+
+    @Deprecated
     public RangeFinder rangeFinderFactory(
             ListWrapper<MapWrapper<String, Object>> internalSubData) {
         double max = Double.NEGATIVE_INFINITY, min = Double.POSITIVE_INFINITY;
