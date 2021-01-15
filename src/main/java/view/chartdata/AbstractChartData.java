@@ -20,7 +20,7 @@ public abstract class AbstractChartData implements ChartDataWrapper {
     protected String header;
     protected Date startDate, endDate;
     protected final String CLI_DATE_FORMAT, FILE_DATE_FORMAT;
-    
+
     protected static final int HEADER_LINE = 1;
     protected static final int X_INDEX = 0;
 
@@ -44,12 +44,10 @@ public abstract class AbstractChartData implements ChartDataWrapper {
     public final void convert(ParsedData data)
             throws IOException, NumberFormatException {
 
-        MapWrapper<String, MapWrapper<Integer, MapWrapper<String, Object>>> 
-                fileMap = data.getData();
+        MapWrapper<String, MapWrapper<Integer, MapWrapper<String, Object>>> fileMap = data.getData();
 
         ListWrapper<ChartSubDataWrapper> chartData = new ArrayListWrapper<>();
-        for (MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> 
-                file : fileMap.entrySet()) {
+        for (MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> file : fileMap.entrySet()) {
             try {
                 ChartSubDataWrapper series = buildSeries(file);
                 chartData.add(series);
@@ -61,8 +59,13 @@ public abstract class AbstractChartData implements ChartDataWrapper {
     }
 
     //Must create the correct sub data structure.
+    @Deprecated
     protected abstract ChartSubDataWrapper ChartSubDataFactory(
             MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> file);
+
+    protected ChartSubDataWrapper ChartSubDataFactory(ParsedData data) {
+        throw new UnsupportedOperationException("TODO");
+    }
 
     protected final void assembleData(
             CollectionWrapper<ChartSubDataWrapper> chartData) {
@@ -80,6 +83,13 @@ public abstract class AbstractChartData implements ChartDataWrapper {
         return parsedDate;
     }
 
+//    private ChartSubDataWrapper buildSeries(ParsedData data) 
+//            throws ItemNotFoundException, ParseException, NumberFormatException {
+//        ChartSubDataWrapper series = ChartSubDataFactory(data);
+//        return populateSeries(data, series);
+//    }
+
+    @Deprecated
     private ChartSubDataWrapper buildSeries(
             MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> file)
             throws ItemNotFoundException, ParseException, NumberFormatException {
@@ -87,6 +97,22 @@ public abstract class AbstractChartData implements ChartDataWrapper {
         return populateSeries(file, series);
     }
 
+//    private ChartSubDataWrapper populateSeries(
+//            ParsedData file,
+//            ChartSubDataWrapper series)
+//            throws NumberFormatException, ItemNotFoundException, ParseException {
+//
+//        MapWrapper<Integer, MapWrapper<String, Object>> contents
+//                = new HashMapWrapper(file.getValue());
+//        for (MapWrapper<String, Object> fileData : contents.values()) {
+//
+//            series.add(fileData);
+//        }
+//
+//        return series;
+//    }
+
+    @Deprecated
     private ChartSubDataWrapper populateSeries(
             MapWrapper.Entry<String, MapWrapper<Integer, MapWrapper<String, Object>>> file,
             ChartSubDataWrapper series)
@@ -95,7 +121,7 @@ public abstract class AbstractChartData implements ChartDataWrapper {
         MapWrapper<Integer, MapWrapper<String, Object>> contents
                 = new HashMapWrapper(file.getValue());
         for (MapWrapper<String, Object> fileData : contents.values()) {
-           
+
             series.add(fileData);
         }
 
