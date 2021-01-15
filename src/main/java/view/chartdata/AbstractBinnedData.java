@@ -74,10 +74,7 @@ public abstract class AbstractBinnedData extends AbstractChartData {
     private ListWrapper<MapWrapper<String, Object>> processSubData(
             ChartSubDataWrapper data) {
 
-        ListWrapper<MapWrapper<String, Object>> internalSubData
-                = (ListWrapper<MapWrapper<String, Object>>) data.unwrap();
-
-        MapWrapper<String, Integer> rangesMap = buildRangesMap(internalSubData);
+        MapWrapper<String, Integer> rangesMap = buildRangesMap(data);
 
         SortedSet<String> keys = getSortedKeySet(rangesMap);
 
@@ -133,49 +130,10 @@ public abstract class AbstractBinnedData extends AbstractChartData {
         return rangesMap;
     }
 
-    @Deprecated
-    private MapWrapper<String, Integer> buildRangesMap(
-            ListWrapper<MapWrapper<String, Object>> internalSubData) {
-        MapWrapper<String, Integer> rangesMap = new HashMapWrapper<>();
-        RangeFinder finder = rangeFinderFactory(internalSubData);
-        for (MapWrapper<String, Object> item : internalSubData) {
-            String range = finder.getRange((int) ((double) item.get("value")));
-            if (range == null) {
-                //The mathematical calculation will very rarely fail to bin
-                //a value due to rounding error.
-                continue;
-            }
-            Integer count = rangesMap.get(range);
-            if (count == null) {
-                rangesMap.put(range, 1);
-            } else {
-                rangesMap.put(range, ++count);
-            }
-        }
-        return rangesMap;
-    }
-
     public RangeFinder rangeFinderFactory(ChartSubDataWrapper<Double> data) {
         double max = Double.NEGATIVE_INFINITY, min = Double.POSITIVE_INFINITY;
         for (double item : data) {
             double trialValue = item;
-            if (trialValue > max) {
-                max = trialValue;
-            }
-            if (trialValue < min) {
-                min = trialValue;
-            }
-        }
-        RangeFinder finder = new RangeFinder(min, max, bins);
-        return finder;
-    }
-
-    @Deprecated
-    public RangeFinder rangeFinderFactory(
-            ListWrapper<MapWrapper<String, Object>> internalSubData) {
-        double max = Double.NEGATIVE_INFINITY, min = Double.POSITIVE_INFINITY;
-        for (MapWrapper<String, Object> item : internalSubData) {
-            double trialValue = (Double) item.get("value");
             if (trialValue > max) {
                 max = trialValue;
             }

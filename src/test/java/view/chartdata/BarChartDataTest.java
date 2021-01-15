@@ -1,9 +1,7 @@
 package view.chartdata;
 
 import io.console.SupportedArgs;
-import javautilwrappers.ArrayListWrapper;
 import javautilwrappers.HashMapWrapper;
-import javautilwrappers.ListWrapper;
 import javautilwrappers.MapWrapper;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.junit.jupiter.api.AfterEach;
@@ -97,16 +95,17 @@ public class BarChartDataTest {
 
     @Test
     public void rangeFindBuilderTest() {
-        ListWrapper<MapWrapper<String, Object>> internalSubData
-                = new ArrayListWrapper<>();
+        
+        ChartSubDataWrapper subdata = new BarChartSubData("someFile");
 
         for (int i = 0; i <= 500; ++i) {
             MapWrapper<String, Object> tempMap = new HashMapWrapper<>();
             tempMap.put("value", (double) i);
-            internalSubData.add(tempMap);
+            subdata.add(tempMap);
         }
+        
         //Note: data internally specifies the number of bins of 10.
-        AbstractBinnedData.RangeFinder range = data.rangeFinderFactory(internalSubData);
+        AbstractBinnedData.RangeFinder range = data.rangeFinderFactory(subdata);
         String[] expectedResults = {
             "0 - 50",
             "50 - 100",
