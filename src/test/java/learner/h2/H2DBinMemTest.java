@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class H2DBTest {
+public class H2DBinMemTest {
 
     private Connection inMemConn;
     private Statement stmt;
