@@ -20,7 +20,7 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import io.datatypes.ParsedData;
-import io.datatypes.ParsedFile;
+import io.datatypes.ParsedInfo;
 
 public class PlotterTest {
 
@@ -77,7 +77,7 @@ public class PlotterTest {
     private void basicExecute(
             ParsedData data,
             MapWrapper<SupportedArgs, Object> cliArgs) throws IOException {
-        when(reader.read(cliArgs)).thenReturn((ParsedFile) data);
+        when(reader.read(cliArgs)).thenReturn((ParsedInfo) data);
         //when(reader.readDB(cliArgs)).thenReturn(null);
 
         Plotter testPlotter = new Plotter(new TestExternalDataReaderFactory());
@@ -98,7 +98,7 @@ public class PlotterTest {
         cliArgs.put(SupportedArgs.startDate, "1/1/2100");
         cliArgs.put(SupportedArgs.endDate, "1/1/2100");
 
-        when(reader.read(cliArgs)).thenReturn((ParsedFile) csvData);
+        when(reader.read(cliArgs)).thenReturn((ParsedInfo) csvData);
 
         Plotter testPlotter = new Plotter(new TestExternalDataReaderFactory());
         try {
@@ -149,7 +149,7 @@ public class PlotterTest {
         bCsvData.put(1, bLine1);
         bCsvData.put(2, bLine2);
 
-        ParsedFile fileData = new ParsedFile(csvData);
+        ParsedInfo fileData = new ParsedInfo(csvData);
 
         return Stream.of(
                 Arguments.of(filecliArgs, fileData)

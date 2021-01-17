@@ -4,7 +4,7 @@ import java.util.Date;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
 
-public class ParsedFile<K, V> implements ParsedData<Integer, MapWrapper<String, Object>> {
+public class ParsedInfo<K, V> implements ParsedData<Integer, MapWrapper<String, Object>> {
 
     private String name;
     private MapWrapper<K, V> internalMap;
@@ -12,7 +12,7 @@ public class ParsedFile<K, V> implements ParsedData<Integer, MapWrapper<String, 
     private MapWrapper<Date, String> strMap;
     private MapWrapper<String, ParsedData> dataMap;
 
-    public ParsedFile(String name) {
+    public ParsedInfo(String name) {
         this.name = name;
         this.internalMap = new HashMapWrapper<>();
         this.numsMap = new HashMapWrapper<>();
@@ -26,7 +26,7 @@ public class ParsedFile<K, V> implements ParsedData<Integer, MapWrapper<String, 
 
     private MapWrapper<String, MapWrapper<Integer, MapWrapper<String, Object>>> data;
 
-    public ParsedFile(MapWrapper<String, MapWrapper<Integer, MapWrapper<String, Object>>> data) {
+    public ParsedInfo(MapWrapper<String, MapWrapper<Integer, MapWrapper<String, Object>>> data) {
         this.data = data;
     }
 
