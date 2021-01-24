@@ -13,7 +13,7 @@ public class BarChart extends AbstractBinnedChart {
     public BarChart(MapWrapper<SupportedArgs, Object> parsedArgs) {
         super(parsedArgs);
     }
-
+    
     @Override
     public void generateVisual(ChartDataWrapper dataset) {
         DefaultCategoryDataset data = (DefaultCategoryDataset) dataset.unwrap();

@@ -1,6 +1,8 @@
 package process;
 
 import io.console.SupportedArgs;
+import io.datatypes.ParsedData;
+import io.datatypes.ParsedInfo;
 import io.local.ExternalDataReader;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -19,8 +21,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
-import io.datatypes.ParsedData;
-import io.datatypes.ParsedInfo;
 
 public class PlotterTest {
 
@@ -119,7 +119,7 @@ public class PlotterTest {
         filecliArgs.put(SupportedArgs.endDate, "1/1/2020");
         filecliArgs.put(SupportedArgs.lineartrend, true);
         filecliArgs.put(SupportedArgs.type, Visualizations.BASIC);
-
+        
         MapWrapper<String, MapWrapper<Integer, MapWrapper<String, Object>>> csvData = new HashMapWrapper<>();
         MapWrapper<Integer, MapWrapper<String, Object>> aCsvData = new HashMapWrapper<>();
         MapWrapper<Integer, MapWrapper<String, Object>> bCsvData = new HashMapWrapper<>();
