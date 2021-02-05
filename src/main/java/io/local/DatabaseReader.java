@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import javautilwrappers.HashMapWrapper;
 import javautilwrappers.MapWrapper;
-
+ 
 public class DatabaseReader extends AbstractDataReader {
 
     private Connection conn;
